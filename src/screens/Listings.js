@@ -40,6 +40,7 @@ const styles = StyleSheet.create({
     //justifyContent: 'center',
   },
   header: {
+    //paddingTop: 30,
     alignItems: "center", 
     paddingBottom: 20, 
     backgroundColor: "rgb(17 24 39)",

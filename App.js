@@ -1,12 +1,16 @@
 import { View, Text, StyleSheet } from 'react-native'
-import UserLogin from "./src/components/UserLogin"
-import Listings from './src/components/Listings'
+import UserLogin from "./src/screens/UserLogin"
+import Listings from './src/screens/Listings'
+import UserRegistration from './src/screens/UserRegistration'
+import { NavigationContainer } from "@react-navigation/native"
 
 function App() {
   return (
-    <View style={styles.container}>
-      <UserLogin />
-    </View>
+    <NavigationContainer>
+      <View style={styles.container}>
+        <UserLogin />
+      </View>
+    </NavigationContainer>
   )
 }
 

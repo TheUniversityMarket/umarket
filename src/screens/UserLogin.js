@@ -1,20 +1,45 @@
 import { useState } from "react"
 import { Text, View, StyleSheet, SafeAreaView, TextInput, Pressable } from "react-native"
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 function UserLogin() {
-  const companyName = "UMarket";
+  const companyName = "UMarket"; //name of company
   const [name, setEmail] = useState('');
+
+  function button(text) {
+    return (
+        <Pressable style={ ({ pressed }) => [
+            styles.button,
+            pressed && {backgroundColor: "green"}
+            ]}>
+            <Text style={styles.buttonText}>{text}</Text>
+        </Pressable>
+    )
+  }
 
   return (
     <SafeAreaView style={styles.safeContainer}>
       <View style={styles.container}>
+    {/*
+        <View style={styles.sloganContainer}>
+            <Text style={styles.slogan}>
+                Re-market The Way UMarket
+            </Text>
+        </View>
+    */}
+
+        <View style={styles.body}>
+        {/* Overarching body that wraps around login window */}
+
         <View style={styles.title}>
+            {/* Wrapper for title (AKA company name) */}
           <Text style={styles.compName}>
             {companyName}
           </Text>
         </View>
-        <View style={styles.login}>
 
+        <View style={styles.login}>
+        {/* Wrapper for login entries */}
 
           <View style={styles.loginEmail}>
             <Text style={styles.email}>
@@ -30,7 +55,7 @@ function UserLogin() {
             </View>
           </View>
           <View>
-
+            {/* ^ Displays email entry */}
 
           <View style={styles.loginPassword}>
             <Text style={styles.password}>
@@ -43,16 +68,27 @@ function UserLogin() {
           autoCapitalize="none" secureTextEntry>  
               </TextInput>
             </View>
+            <View style={{ alignItems: "flex-end" }}>
+                <Pressable>
+                    <Text style={{ color: "rgb(34 197 94)", fontSize: 13 }}>forgot password?</Text>
+                </Pressable>
+            </View>
           </View>
           </View>
+            {/* ^ Displays password entry */}
 
+            {button("Login")}
+            {/* login button */}
 
-            <Pressable style={styles.loginButton}>
-              <Text style={styles.loginButtonText}>Login</Text>
-            </Pressable>
+            <Text style={{ color: "rgb(34 197 94)", marginTop: 7, marginBottom: 7, fontWeight: "bold" }}>or</Text>
 
+            {button("Sign Up")}
 
         </View>
+
+        </View>
+
+
       </View>
     </SafeAreaView>
   )
@@ -66,8 +102,23 @@ const styles = StyleSheet.create({
   container: {
     flex: 1
   },
-  title: {
+  /*
+  sloganContainer: {
+    alignItems: "center",
+  },
+  slogan: {
+    color: "rgb(34 197 94)",
+    fontWeight: "bold",
+    fontSize: 30,
+    textAlign: "center",
+  },
+  */
+  body:{
     flex: 1,
+    justifyContent: "center",
+  },
+  title: {
+    //flex: 1,
     justifyContent: "flex-end",
     alignItems: "center",
   },
@@ -78,7 +129,7 @@ const styles = StyleSheet.create({
   },
   login: {
     justifyContent: "top",
-    flex: 1,
+    //flex: 1,
     alignItems: "center",
   },
   loginEmail: {
@@ -99,11 +150,13 @@ const styles = StyleSheet.create({
   emailInput: {
     paddingTop: 4,
     fontSize: 15,
-    textAlign: 'center',
+    paddingLeft: 5
+    //textAlign: 'center',
   },
   loginPassword: {
     marginTop: 10,
     //flexDirection: "row",
+    marginBottom: 17,
   },
   password: {
     fontSize: 22,
@@ -116,21 +169,23 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     width: 275,
     height: 25,
+    marginBottom: 7,
   },
   passwordInput: {
     paddingTop: 4,
     fontSize: 15,
-    textAlign: "center",
+    //textAlign: "center",
+    paddingLeft: 5,
   },
-  loginButton: {
+  button: {
     borderRadius: 3,
     alignItems: "center",
     width: 275,
-    marginTop: 17,
+    marginTop: 0,
     backgroundColor: "rgb(34 197 94)",
     padding: 7,
   },
-  loginButtonText: {
+  buttonText: {
     fontWeight: "bold",
     color: "rgb(17 24 39)",
     fontSize: 22,
