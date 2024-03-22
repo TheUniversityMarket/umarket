@@ -6,7 +6,7 @@ function UserLogin() {
   const companyName = "UMarket"; //name of company
   const [name, setEmail] = useState('');
 
-  function button(text) {
+  function button(text: String) {
     return (
         <Pressable style={ ({ pressed }) => [
             styles.button,
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
     color: "rgb(34 197 94)",
   },
   login: {
-    justifyContent: "top",
+    //justifyContent: "top",
     //flex: 1,
     alignItems: "center",
   },
