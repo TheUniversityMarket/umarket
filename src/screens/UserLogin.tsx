@@ -1,8 +1,9 @@
 import { useState } from "react"
 import { Text, View, StyleSheet, SafeAreaView, TextInput, Pressable } from "react-native"
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { NavigationContainer } from "@react-navigation/native";
 
-function UserLogin() {
+function UserLogin({ navigation }) {
   const companyName = "UMarket"; //name of company
   const [name, setEmail] = useState('');
 
@@ -77,12 +78,22 @@ function UserLogin() {
           </View>
             {/* ^ Displays password entry */}
 
-            {button("Login")}
+            <Pressable style={ ({ pressed }) => [
+              styles.button,
+              pressed && {backgroundColor: "green"}
+            ]} onPress={() => navigation.navigate('Listings')}>
+              <Text style={styles.buttonText}>Login</Text>
+            </Pressable>
             {/* login button */}
 
             <Text style={{ color: "rgb(34 197 94)", marginTop: 7, marginBottom: 7, fontWeight: "bold" }}>or</Text>
 
-            {button("Sign Up")}
+            <Pressable style={ ({ pressed }) => [
+            styles.button,
+            pressed && {backgroundColor: "green"}
+            ]}>
+            <Text style={styles.buttonText}>Sign Up</Text>
+          </Pressable>
 
         </View>
 
