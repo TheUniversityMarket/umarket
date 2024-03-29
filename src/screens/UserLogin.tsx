@@ -1,7 +1,5 @@
 import { useState } from "react"
 import { Text, View, StyleSheet, SafeAreaView, TextInput, Pressable } from "react-native"
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { NavigationContainer } from "@react-navigation/native";
 
 function UserLogin({ navigation }) {
   const companyName = "UMarket"; //name of company
@@ -71,7 +69,7 @@ function UserLogin({ navigation }) {
             </View>
             <View style={{ alignItems: "flex-end" }}>
                 <Pressable>
-                    <Text style={{ color: "rgb(34 197 94)", fontSize: 13 }}>forgot password?</Text>
+                    <Text style={{ color: "#00CC00", fontSize: 13 }}>forgot password?</Text>
                 </Pressable>
             </View>
           </View>
@@ -81,7 +79,7 @@ function UserLogin({ navigation }) {
             <Pressable style={ ({ pressed }) => [
               styles.button,
               pressed && {backgroundColor: "green"}
-            ]} onPress={() => navigation.navigate('Listings')}>
+            ]} onPress={() => navigation.navigate('Home')}>
               <Text style={styles.buttonText}>Login</Text>
             </Pressable>
             {/* login button */}
@@ -91,7 +89,9 @@ function UserLogin({ navigation }) {
             <Pressable style={ ({ pressed }) => [
             styles.button,
             pressed && {backgroundColor: "green"}
-            ]}>
+            ]}
+            onPress={() => navigation.navigate('Registration')}
+            >
             <Text style={styles.buttonText}>Sign Up</Text>
           </Pressable>
 
@@ -108,7 +108,7 @@ function UserLogin({ navigation }) {
 const styles = StyleSheet.create({
   safeContainer: {
     flex: 1,
-    backgroundColor: "rgb(17 24 39)",
+    backgroundColor: "white",
   },
   container: {
     flex: 1
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
   compName: {
     fontWeight: "bold",
     fontSize: 73,
-    color: "rgb(34 197 94)",
+    color: "#22c55e",
   },
   login: {
     //justifyContent: "top",
@@ -153,10 +153,11 @@ const styles = StyleSheet.create({
     paddingRight: 10,
   },
   emailInputContainer: {
+    padding: 7,
     borderRadius: 3,
-    backgroundColor: "white",
+    backgroundColor: "#e5e7eb",
     width: 275,
-    height: 25,
+    height: 50,
   },
   emailInput: {
     paddingTop: 4,
@@ -165,7 +166,7 @@ const styles = StyleSheet.create({
     //textAlign: 'center',
   },
   loginPassword: {
-    marginTop: 10,
+    //marginTop: 10,
     //flexDirection: "row",
     marginBottom: 17,
   },
@@ -176,10 +177,11 @@ const styles = StyleSheet.create({
     paddingRight: 10,
   },
   passwordInputContainer: {
+    padding: 7,
     borderRadius: 3,
-    backgroundColor: "white",
+    backgroundColor: "#e5e7eb",
     width: 275,
-    height: 25,
+    height: 50,
     marginBottom: 7,
   },
   passwordInput: {
@@ -193,12 +195,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: 275,
     marginTop: 0,
-    backgroundColor: "rgb(34 197 94)",
+    backgroundColor: "#22c55e",
     padding: 7,
   },
   buttonText: {
     fontWeight: "bold",
-    color: "rgb(17 24 39)",
+    color: "white",
     fontSize: 22,
   }
 })
