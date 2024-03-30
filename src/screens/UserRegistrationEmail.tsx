@@ -1,8 +1,10 @@
 import { Text, View, StyleSheet, SafeAreaView, Pressable, ImageBackground, Dimensions } from "react-native"
 import { TextInput } from "react-native";
+import { FontAwesome6 } from '@expo/vector-icons';
+import { FontAwesome5 } from '@expo/vector-icons';
 
 //const school = "https://images.genius.com/018e964bd737e5d4600162dbcac48ce5.1000x1000x1.png" // School image will vary with different schools if we decide to expand later on.
-const school = "https://www.htmlcsscolor.com/preview/gallery/111827.png"
+const school = "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Solid_white_bordered.svg/2048px-Solid_white_bordered.svg.png"
 
 const { width, height } = Dimensions.get('window');
 const [shortDimension, longDimension] = width < height ? [width, height] : [height, width];
@@ -24,15 +26,55 @@ function moderateVerticalScale(size: number, factor = 0.5) {
     return size + (verticalScale(size) - size) * factor;
 }
 
+let buttonProperties = {
+    color1: "rgb(17 24 39)",
+    color2: "rgb(34 197 94)"
+}
+
+function changeColor() {
+    let x = buttonProperties.color1
+    buttonProperties.color1 = buttonProperties.color2
+    buttonProperties.color2 = x
+}
+
 function UserRegistrationEmail() {
     const companyName = "UMarket";
+
     return (
         <SafeAreaView style={styles.safeContainer}>
             <View style={styles.container}>
-                <ImageBackground source={{uri: school}} style={styles.schoolBackGround}>
+                {/* <ImageBackground source={{uri: school}} style={styles.schoolBackGround}>
                     <Text style={styles.signUp}>UMarket</Text>
-                </ImageBackground>
+                </ImageBackground> */}
+                <View style={styles.header}>
+                    <Text style={styles.signUp}>UMarket</Text>
+                </View>
                 <View style={styles.registrationContainer}>
+                    <Text style={{fontWeight: "bold", fontSize: 25, marginBottom: 7, color:"rgb(17 24 39)"}}>Account Type</Text>
+                    <View style={{flexDirection: "row", gap: 30, marginBottom: verticalScale(7)}}>
+                        <Pressable style={ ({ pressed }) => [
+                        {backgroundColor: "rgb(34 197 94)", padding: 13,borderRadius: 100, alignItems: "center"},
+                        pressed && changeColor()
+                        ]}>
+                            <View>
+                                <FontAwesome5 name="user-alt" size={24} color={buttonProperties.color1} />
+                            </View>
+                            <View style={{alignItems: "center", marginTop: 3}}>
+                                <Text style={{fontWeight: "bold", color: "rgb(17 24 39)"}}>Single</Text>
+                            </View>
+                        </Pressable>
+                        <Pressable style={ ({ pressed }) => [
+                        {backgroundColor: "rgb(34 197 94)", padding: 13,borderRadius: 100, alignItems: "center"},
+                        pressed && {backgroundColor: "rgb(17 24 39)"}
+                        ]}>
+                            <View>
+                                <FontAwesome6 name="user-group" size={24} color="rgb(17 24 39)" />
+                            </View>
+                            <View style={{alignItems: "center", marginTop: 3}}>
+                                <Text style={{fontWeight: "bold", color: "rgb(17 24 39)"}}>Group</Text>
+                            </View>
+                        </Pressable>
+                    </View>
                     <TextInput style={styles.emailInput} placeholder="Enter School Email" keyboardType="email-address" />
                     <Pressable style={ ({ pressed }) => [
                         styles.button,
@@ -49,18 +91,25 @@ function UserRegistrationEmail() {
 const styles = StyleSheet.create({
     safeContainer: {
         flex: 1,
-        backgroundColor: "rgb(17 24 39)"
+        backgroundColor: "white"
     },
     container: {
         flex: 1, 
         justifyContent: "space-between",
     },
-    schoolBackGround: {
+    header: {
         height: moderateScale(200),
         width: "100%",
-        justifyContent: "center",
+        justifyContent: "flex-end",
         alignItems: "center",
+        
     },
+    // schoolBackGround: {
+    //     height: moderateScale(200),
+    //     width: "100%",
+    //     justifyContent: "center",
+    //     alignItems: "center",
+    // },
     signUp: {
         fontSize: scale(73),
         color: "rgb(34 197 94)",

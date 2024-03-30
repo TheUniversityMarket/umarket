@@ -1,9 +1,11 @@
 import { View, Text, StyleSheet } from 'react-native'
 import UserLogin from "./src/screens/UserLogin"
 import Listings from './src/screens/Listings'
-import UserRegistration from './src/screens/UserRegistration'
+import UserRegistrationEmail from './src/screens/UserRegistrationEmail'
 import Post from './src/screens/Post'
 import Settings from './src/screens/Settings'
+import { AntDesign } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 
 import { enableScreens } from 'react-native-screens'
 import { FontAwesome5 } from '@expo/vector-icons';
@@ -14,6 +16,7 @@ import { NavigationContainer, TabRouter } from "@react-navigation/native"
 import { createStackNavigator } from '@react-navigation/stack'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { useRoute } from '@react-navigation/native';
+import Page from './src/screens/Page'
 
 const Stack = createStackNavigator()
 const Tab = createBottomTabNavigator()
@@ -29,9 +32,10 @@ function Home() {
       activeTintColor: '#22cc5e',
       inactiveTintColor: 'gray',
     }}>
-      <Tab.Screen name={'Listings'} component={Listings} options={{headerShown: false}} />
-      <Tab.Screen name={'Post'} component={Post} options={{headerShown: false}} />
-      <Tab.Screen name ={'Settings'} component={Settings} options={{headerShown: false}}/>
+      <Tab.Screen name={'Listings'} component={Listings} options={{headerShown: false, tabBarIcon: ({focused}) => {return <FontAwesome5 name="shopping-cart" size={focused ? 27 : 23} color={focused ? "#22cc5e" : "black"} />} }} />
+      <Tab.Screen name={'Post'} component={Post} options={{headerShown: false, tabBarIcon: ({focused}) => {return <AntDesign name="pluscircleo" size={focused ? 27 : 23} color={focused ? "#22cc5e" : "black"} />} }} />
+      <Tab.Screen name={'Settings'} component={Settings} options={{headerShown: false, tabBarIcon: ({focused}) => {return <Ionicons name="settings-sharp" size={focused ? 27 : 23} color={focused ? "#22cc5e" : "black"} />}}}/>
+      {/* <Tab.Screen name={'Page'} component={Page} options={{headerShown: false}}/> */}
     </Tab.Navigator>
   )
 }
@@ -41,7 +45,8 @@ function App() {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen name={'Login/SignUp'} component={UserLogin} options={{headerShown: false}} />
-        <Stack.Screen name={'Registration'} component={UserRegistration} options={{headerShown: false}} />
+        <Stack.Screen name={'AccountType'} component={UserRegistrationEmail} options={{headerShown: false}} />
+        <Stack.Screen name={'Registration'} component={UserRegistrationEmail} options={{headerShown: false}} />
         <Stack.Screen name={'Home'} component={Home} options={{headerShown: false}}/>
         {/*<Stack.Screen name={'Listings'} component={Listings} options={{headerShown: false}} />*/}
       </Stack.Navigator>

@@ -1,7 +1,28 @@
 import { StatusBar } from 'expo-status-bar'
-import { StyleSheet, Text, View, SafeAreaView, ScrollView, Image, FlatList, Dimensions } from 'react-native'
+import { StyleSheet, Text, View, SafeAreaView, ScrollView, Image, FlatList, Dimensions, useWindowDimensions } from 'react-native'
 import { AntDesign } from '@expo/vector-icons';
+// import { scale, verticalScale, moderateScale, moderateVerticalScale } from "/Users/jevontwitty/Documents/GitHub/UMarket/src/components/Scaling"
 // import { FlatList } from 'react-native-gesture-handler';
+
+const { width, height } = Dimensions.get('window');
+const [shortDimension, longDimension] = width < height ? [width, height] : [height, width];
+
+//Default guideline sizes are based on standard ~5" screen mobile device
+const guidelineBaseWidth = 350;
+const guidelineBaseHeight = 680;
+
+function scale(size: number) {
+    return shortDimension / guidelineBaseWidth * size;
+}
+function verticalScale(size: number) {
+    return longDimension / guidelineBaseHeight * size;
+}
+function moderateScale(size: number, factor = 0.5) {
+    return size + (scale(size) - size) * factor;
+}
+function moderateVerticalScale(size: number, factor = 0.5) {
+    return size + (verticalScale(size) - size) * factor;
+}
 
 function Item(props) {
   const { id, title, image, description, price, tags} = props
@@ -9,14 +30,13 @@ function Item(props) {
     <View style={styles.item}>
       <View style={{flexDirection: "row", justifyContent: "space-between"}}>
         <View>
-          <Text style={{fontWeight: "bold"}}>{title}</Text>
+          <Text style={{fontWeight: "bold", fontSize: moderateScale(13)}}>{title}</Text>
         </View>
         <View>
-          <Text>{price}</Text>
+          <Text style={{fontSize: moderateScale(13)}}>{price}</Text>
         </View>
       </View>
-      <Image style={{ width: 195, height: 200, borderRadius: 0, marginTop: 10, borderWidth: 3, borderColor: "#e5e7eb"}} source={{uri: image}}/>
-      <Text style={{width: 195, backgroundColor: "#e5e7eb", padding: 7}}>{description}</Text>
+      <Image style={{ width: moderateScale(155), height: moderateVerticalScale(170), borderRadius: 0, marginTop: 10, borderWidth: 3, borderColor: "rgb(34 197 94)"}} source={{uri: image}}/>
     </View>
   )
 }
@@ -79,8 +99,9 @@ const SectionedDATA = [
   }
  ];
 
-const width = Dimensions.get('window').width
-const numberOfColumns = Math.round(width/215)
+//const width = Dimensions.get('window').width
+const numberOfColumns = Math.round(width/215
+)
 
 function Listings() {
   console.log(width)
@@ -111,7 +132,7 @@ function Listings() {
                     {companyName}
                 </Text>
                 <View style={styles.search}>
-                  <AntDesign name="search1" size={24} color="#22c55e" />
+                  <AntDesign name="search1" size={moderateScale(24)} color="rgb(34 197 94)" />
                 </View>
                 <StatusBar style="auto" />
             </View>
@@ -128,7 +149,7 @@ function Listings() {
                   keyExtractor={(item) => item.id}
                   ItemSeparatorComponent={() => <View style={{height: 30}}/>}
                   ListEmptyComponent={Empty}
-                  numColumns={Math.round(width/215)}
+                  numColumns={Math.round(width/moderateScale(215))}
                   />
               {/* </ScrollView> */}
             </View>
@@ -140,7 +161,7 @@ function Listings() {
 const styles = StyleSheet.create({
   safeContainer: {
     flex: 1,
-    backgroundColor: "rgb(17 24 39)"
+    backgroundColor: "white"
   },
   container: {
     flex: 1,
@@ -149,15 +170,16 @@ const styles = StyleSheet.create({
     //justifyContent: 'center',
   },
   header: {
+    justifyContent: "center",
     //paddingTop: 30,
     alignItems: "center", 
     paddingBottom: 20, 
-    backgroundColor: "rgb(17 24 39)",
+    backgroundColor: "white",
     //bottom: 15,
   },
   compName: {
-    fontSize: 37,
-    color: "#22c55e",
+    fontSize: scale(37),
+    color: "rgb(34 197 94)",
     fontWeight: "bold",
   },
   search: {
@@ -197,6 +219,7 @@ const styles = StyleSheet.create({
   page: {
     flex: 1,
     alignContent: "center",
+    alignItems: "center",
     //borderWidth: 1,
     // borderColor: "red",
     //flexDirection: "row",
