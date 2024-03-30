@@ -112,7 +112,7 @@ function UserLogin({ navigation }) {
             styles.button,
             pressed && {backgroundColor: "green"}
             ]}
-            onPress={() => navigation.navigate('AccountType')}
+            onPress={() => navigation.navigate('UserRegistrationEmail')}
             >
             <Text style={styles.buttonText}>Sign Up</Text>
           </Pressable>

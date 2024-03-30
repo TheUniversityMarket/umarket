@@ -50,8 +50,8 @@ function UserRegistrationEmail() {
                     <Text style={styles.signUp}>UMarket</Text>
                 </View>
                 <View style={styles.registrationContainer}>
-                    <Text style={{fontWeight: "bold", fontSize: 25, marginBottom: 7, color:"rgb(17 24 39)"}}>Account Type</Text>
-                    <View style={{flexDirection: "row", gap: 30, marginBottom: verticalScale(7)}}>
+                    <Text style={{fontWeight: "bold", fontSize: 25, marginBottom: 17, color:"rgb(17 24 39)"}}>Account Type</Text>
+                    <View style={{flexDirection: "row", gap: 30, marginBottom: verticalScale(17)}}>
                         <Pressable style={ ({ pressed }) => [
                         {backgroundColor: "rgb(34 197 94)", padding: 13,borderRadius: 100, alignItems: "center"},
                         pressed && changeColor()

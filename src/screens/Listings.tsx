@@ -1,6 +1,8 @@
 import { StatusBar } from 'expo-status-bar'
-import { StyleSheet, Text, View, SafeAreaView, ScrollView, Image, FlatList, Dimensions, useWindowDimensions } from 'react-native'
+import { StyleSheet, Text, View, SafeAreaView, ScrollView, Image, FlatList, Dimensions, useWindowDimensions, Pressable } from 'react-native'
 import { AntDesign } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+
 // import { scale, verticalScale, moderateScale, moderateVerticalScale } from "/Users/jevontwitty/Documents/GitHub/UMarket/src/components/Scaling"
 // import { FlatList } from 'react-native-gesture-handler';
 
@@ -36,7 +38,7 @@ function Item(props) {
           <Text style={{fontSize: moderateScale(13)}}>{price}</Text>
         </View>
       </View>
-      <Image style={{ width: moderateScale(155), height: moderateVerticalScale(170), borderRadius: 0, marginTop: 10, borderWidth: 3, borderColor: "rgb(34 197 94)"}} source={{uri: image}}/>
+      <Image style={{ width: moderateScale(155), height: moderateVerticalScale(170), borderRadius: 0, marginTop: 10, borderWidth: 0, borderColor: "rgb(34 197 94)"}} source={{uri: image}}/>
     </View>
   )
 }
@@ -105,9 +107,16 @@ const numberOfColumns = Math.round(width/215
 
 function Listings() {
   console.log(width)
+  const navigation = useNavigation()
   function renderItem({item}) {
     return (
-      <Item id={item.id} title={item.title} image={item.image} description={item.description} price={item.price} tags={item.tags}/>
+      <Pressable style={ ({ pressed }) => [
+        {borderRadius: 10},
+        pressed && {backgroundColor: "rgb(34 197 94)"}
+        ]}
+        onPress={() => navigation.navigate('ListingItem', { item })}>
+        <Item id={item.id} title={item.title} image={item.image} description={item.description} price={item.price} tags={item.tags}/>
+      </Pressable>
     )
   }
 

@@ -4,6 +4,8 @@ import Listings from './src/screens/Listings'
 import UserRegistrationEmail from './src/screens/UserRegistrationEmail'
 import Post from './src/screens/Post'
 import Settings from './src/screens/Settings'
+import ListingItem from './src/screens/ListingItem'
+
 import { AntDesign } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -16,7 +18,6 @@ import { NavigationContainer, TabRouter } from "@react-navigation/native"
 import { createStackNavigator } from '@react-navigation/stack'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { useRoute } from '@react-navigation/native';
-import Page from './src/screens/Page'
 
 const Stack = createStackNavigator()
 const Tab = createBottomTabNavigator()
@@ -45,9 +46,10 @@ function App() {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen name={'Login/SignUp'} component={UserLogin} options={{headerShown: false}} />
-        <Stack.Screen name={'AccountType'} component={UserRegistrationEmail} options={{headerShown: false}} />
+        <Stack.Screen name={'UserRegistrationEmail'} component={UserRegistrationEmail} options={{headerShown: false}} />
         <Stack.Screen name={'Registration'} component={UserRegistrationEmail} options={{headerShown: false}} />
         <Stack.Screen name={'Home'} component={Home} options={{headerShown: false}}/>
+        <Stack.Screen name={'ListingItem'} component={ListingItem} options={{headerShown: false}}/>
         {/*<Stack.Screen name={'Listings'} component={Listings} options={{headerShown: false}} />*/}
       </Stack.Navigator>
     </NavigationContainer>
