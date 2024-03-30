@@ -4,11 +4,11 @@ import { TextInput } from "react-native";
 function Post() {
     const companyName = "UMarket";
     return (
-        <SafeAreaView>
-            <View>
+        // <SafeAreaView>
+        //     <View>
                 
-            </View>
-        </SafeAreaView>
+        //     </View>
+        // </SafeAreaView>
     )
 }
 
