@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import { StatusBar } from 'expo-status-bar'
 import { StyleSheet, Text, View, SafeAreaView, ScrollView, Image, FlatList, Dimensions, useWindowDimensions, Pressable } from 'react-native'
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { TextInput } from 'react-native-gesture-handler';
 
 // import { scale, verticalScale, moderateScale, moderateVerticalScale } from "/Users/jevontwitty/Documents/GitHub/UMarket/src/components/Scaling"
 // import { FlatList } from 'react-native-gesture-handler';
@@ -26,19 +28,40 @@ function moderateVerticalScale(size: number, factor = 0.5) {
     return size + (verticalScale(size) - size) * factor;
 }
 
+function returnTags(tagList) {
+  let stringReturn = ""
+  for (let i=0; i<tagList.length; i++) {
+      stringReturn += "#" + tagList[i]
+  }
+  return stringReturn
+}
+
 function Item(props) {
   const { id, title, image, description, price, tags} = props
   return (
     <View style={styles.item}>
       <View style={{flexDirection: "row", justifyContent: "space-between"}}>
-        <View>
-          <Text style={{fontWeight: "bold", fontSize: moderateScale(13)}}>{title}</Text>
-        </View>
-        <View>
-          <Text style={{fontSize: moderateScale(13)}}>{price}</Text>
-        </View>
       </View>
-      <Image style={{ width: moderateScale(155), height: moderateVerticalScale(170), borderRadius: 0, marginTop: 10, borderWidth: 0, borderColor: "rgb(34 197 94)"}} source={{uri: image}}/>
+      <Image style={{ width: moderateScale(155), height: moderateVerticalScale(170), borderRadius: 0, marginTop: 10, borderWidth: 0, borderColor: "rgb(34 197 94)"}} source={{uri: image}} />
+      <View style={{width: moderateScale(155), backgroundColor:"#e5e7eb", padding: 10 }}>
+        <View>
+            <View>
+                <View style={{}}>
+                    <Text style={{fontWeight: "bold", fontSize: moderateScale(17) }}>{title}</Text>
+                </View>
+                <Text style={{marginBottom: 10, fontSize: moderateScale(10)}}>
+                    {returnTags(tags)}
+                </Text>
+            </View>
+        </View>
+        <View style={{marginTop: 3}}>
+            <View>
+                <Text style={{fontSize: moderateScale(13)}}>
+                    Price: {price}
+                </Text>
+            </View>
+        </View>
+    </View>
     </View>
   )
 }
@@ -112,7 +135,7 @@ function Listings() {
     return (
       <Pressable style={ ({ pressed }) => [
         {borderRadius: 10},
-        pressed && {backgroundColor: "rgb(34 197 94)"}
+        pressed && {backgroundColor: "rgb(34 197 94)",}
         ]}
         onPress={() => navigation.navigate('ListingItem', { item })}>
         <Item id={item.id} title={item.title} image={item.image} description={item.description} price={item.price} tags={item.tags}/>
@@ -133,6 +156,7 @@ function Listings() {
   //   )
   // }
 
+
   return (
     <SafeAreaView style={styles.safeContainer}>
         <View style={styles.container}>
@@ -140,8 +164,13 @@ function Listings() {
                 <Text style={styles.compName}>
                     {companyName}
                 </Text>
-                <View style={styles.search}>
-                  <AntDesign name="search1" size={moderateScale(24)} color="rgb(34 197 94)" />
+                <View style={{width: "100%"}}>
+                  <View style={styles.search}>
+                    <AntDesign name="search1" size={24} color="rgb(34 197 94)" />
+                    <TextInput placeholder="search..." style={{fontSize: 20, marginLeft: 3, width: "90%"}}>
+
+                    </TextInput>
+                  </View>
                 </View>
                 <StatusBar style="auto" />
             </View>
@@ -192,12 +221,14 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   search: {
-    alignSelf: "stretch",
+    width: "86%",
+    backgroundColor: "#e5e7eb",
+    borderRadius: 10,
     //borderWidth: 1,
     //borderColor: "red",
     flexDirection: "row",
-    justifyContent: "flex-end",
-    paddingRight: 17,
+    padding: 10,
+    marginLeft: 30,
   },
   shoppingCart: {
     //backgroundColor: "black",
@@ -235,6 +266,7 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
   },
   item: {
+    overflow: "hidden",
     padding: 0,
     marginVertical: 8,
     marginHorizontal: 10,
