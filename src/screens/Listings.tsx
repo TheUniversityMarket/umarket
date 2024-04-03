@@ -76,7 +76,7 @@ function Empty() {
   )
 }
 
-const companyName = "UMarket"
+const companyName = "Market"
 // const microwave = "/Users/jevontwitty/Documents/GitHub/UMarket/Images/Microwave.jpg"
 const microwave = "https://images.craigslist.org/00Q0Q_clz03CCkybF_0CI0t2_600x450.jpg"
 // const fridge = "/Users/jevontwitty/Documents/GitHub/UMarket/Images/Fridge.webp"
@@ -161,16 +161,14 @@ function Listings() {
     <SafeAreaView style={styles.safeContainer}>
         <View style={styles.container}>
             <View style={styles.header}>
+                <Image style={styles.logo} source={require('./assets/logo.jpg')}></Image>
                 <Text style={styles.compName}>
                     {companyName}
                 </Text>
-                <View style={{width: "100%"}}>
-                  <View style={styles.search}>
-                    <AntDesign name="search1" size={24} color="rgb(34 197 94)" />
-                    <TextInput placeholder="search..." style={{fontSize: 20, marginLeft: 3, width: "90%"}}>
-
-                    </TextInput>
-                  </View>
+                <View style={styles.search}>
+                  <AntDesign name="search1" size={24} color="rgb(34 197 94)" />
+                  <TextInput placeholder="Search for product, service, tag, etc..." placeholderTextColor={'#A9A9A9'} style={{fontSize: 20, marginLeft: 10, width: "90%"}}>
+                  </TextInput>
                 </View>
                 <StatusBar style="auto" />
             </View>
@@ -208,27 +206,45 @@ const styles = StyleSheet.create({
     //justifyContent: 'center',
   },
   header: {
-    justifyContent: "center",
+    //justifyContent: "center",
     //paddingTop: 30,
-    alignItems: "center", 
+    alignItems: "center",
     paddingBottom: 20, 
     backgroundColor: "white",
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    borderBottomWidth: 1,
+    borderBottomColor: "#d3d3d3",
     //bottom: 15,
   },
+  logo: {
+    width: 40,
+    height: 60,
+    marginLeft: 40,
+    marginTop: 17,
+  },
   compName: {
-    fontSize: scale(37),
+    fontSize: scale(17),
     color: "rgb(34 197 94)",
     fontWeight: "bold",
+    width: "20%",
+    marginTop: 15,
+    paddingTop: 0,
   },
   search: {
-    width: "86%",
-    backgroundColor: "#e5e7eb",
-    borderRadius: 10,
-    //borderWidth: 1,
-    //borderColor: "red",
+    width: "55%",
+    borderWidth: 1,
+    borderColor: "#A9A9A9",
+    backgroundColor: "#fbfbfb",
+    borderRadius: 5,
     flexDirection: "row",
     padding: 10,
-    marginLeft: 30,
+    marginTop: 15,
+    height: 50,
+    alignItems: "center",
+    justifyContent: "flex-start",
+    marginRight: 600,
+    marginLeft: 40,
   },
   shoppingCart: {
     //backgroundColor: "black",
