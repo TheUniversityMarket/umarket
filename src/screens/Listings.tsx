@@ -156,54 +156,44 @@ function Listings() {
   //   )
   // }
 
-  if (width > 375) {
-    return (
-      <SafeAreaView style={styles.safeContainer}>
-          <View style={styles.container}>
-              <View style={styles.header}>
-                  <Text style={styles.compName}>
-                      {companyName}
-                  </Text>
-                  <View style={{width: "100%"}}>
-                    <View style={styles.search}>
-                      <AntDesign name="search1" size={24} color="rgb(34 197 94)" />
-                      <TextInput placeholder="search..." style={{fontSize: 20, marginLeft: 3, width: "90%"}}>
 
-                      </TextInput>
-                    </View>
+  return (
+    <SafeAreaView style={styles.safeContainer}>
+        <View style={styles.container}>
+            <View style={styles.header}>
+                <Text style={styles.compName}>
+                    {companyName}
+                </Text>
+                <View style={{width: "100%"}}>
+                  <View style={styles.search}>
+                    <AntDesign name="search1" size={24} color="rgb(34 197 94)" />
+                    <TextInput placeholder="search..." style={{fontSize: 20, marginLeft: 3, width: "90%"}}>
+
+                    </TextInput>
                   </View>
-                  <StatusBar style="auto" />
-              </View>
-              <View style={styles.page}>
-                {/* <ScrollView> */}
-                  {/* {listing("Mac", laptop)}
+                </View>
+                <StatusBar style="auto" />
+            </View>
+            <View style={styles.page}>
+              {/* <ScrollView> */}
+                {/* {listing("Mac", laptop)}
 
-                  {listing("Refrigerator", fridge)}
+                {listing("Refrigerator", fridge)}
 
-                  {listing("Microwave", microwave)} */}
-                  <FlatList
-                    data={DATA}
-                    renderItem={renderItem}
-                    keyExtractor={(item) => item.id}
-                    ItemSeparatorComponent={() => <View style={{height: 30}}/>}
-                    ListEmptyComponent={Empty}
-                    numColumns={Math.round(width/moderateScale(215))}
-                    />
-                {/* </ScrollView> */}
-              </View>
-          </View>
-      </SafeAreaView>
-    );
-  }
-  else {
-    return (
-      <SafeAreaView>
-        <View>
-
+                {listing("Microwave", microwave)} */}
+                <FlatList
+                  data={DATA}
+                  renderItem={renderItem}
+                  keyExtractor={(item) => item.id}
+                  ItemSeparatorComponent={() => <View style={{height: 30}}/>}
+                  ListEmptyComponent={Empty}
+                  numColumns={Math.round(width/moderateScale(215))}
+                  />
+              {/* </ScrollView> */}
+            </View>
         </View>
-      </SafeAreaView>
-    )
-  }
+    </SafeAreaView>
+  );
 }
 
 const styles = StyleSheet.create({
