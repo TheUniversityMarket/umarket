@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, SafeAreaView, ScrollView, Image, FlatList, Dime
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { TextInput } from 'react-native-gesture-handler';
-import { SearchBar } from "/Users/nmoor/UMarket/umarket/src/components/SearchBar";
+import SearchBar from "/Users/nmoor/UMarket/umarket/src/components/SearchBar";
 
 // import { scale, verticalScale, moderateScale, moderateVerticalScale } from "/Users/jevontwitty/Documents/GitHub/UMarket/src/components/Scaling"
 // import { FlatList } from 'react-native-gesture-handler';
@@ -44,14 +44,14 @@ function Item(props: { id: any; title: any; image: any; description: any; price:
       <View style={{flexDirection: "row", justifyContent: "space-between"}}>
       </View>
       <Image style={{ width: moderateScale(155), height: moderateVerticalScale(170), borderRadius: 0, marginTop: 10, borderWidth: 0, borderColor: "rgb(34 197 94)"}} source={{uri: image}} />
-      <View style={{backgroundColor: "rgb(34 197 94)", position: "absolute", left:6, bottom:13, padding: 3, borderRadius: 24}}>
-        <Text style={{fontWeight: "bold", fontSize: moderateScale(13), color:"white"}}>{title}</Text>
+      <View style={{backgroundColor: "rgb(34 197 94)", position: "absolute", left:6, bottom:13, padding: 7, borderRadius: 24}}>
+        <Text style={{fontFamily: 'Roboto', fontWeight: "bold", fontSize: moderateScale(10), color:"white"}}>{title}</Text>
       </View>
       <View>
         <Text style={{marginBottom: 10, fontSize: moderateScale(10), position:"absolute"}}>{returnTags(tags)}</Text>
       </View>
-      <View style={{backgroundColor: "rgb(34 197 94)", position: "absolute", right:8, bottom:16, padding: 3, borderRadius: 24}}>
-        <Text style={{fontSize: moderateScale(11), color:"white"}}> 
+      <View style={{backgroundColor: "rgb(34 197 94)", position: "absolute", right:8, bottom:16, padding: 7, borderRadius: 24}}>
+        <Text style={{fontSize: moderateScale(10), color:"white"}}> 
          {price}
         </Text>
       </View>
@@ -141,12 +141,16 @@ const numberOfColumns = Math.round(width/215
 )
 
 function Listings() {
-  const [searchResults, setSearchResults] = useState([]);
-
+  const [searchResults, setSearchResults] = useState<Object[]>([]);
+  const [hasSearched, sethasSearched] = useState(false);
   const handleSearch = (query: any) => {
-    // Perform search logic here
-    // For demonstration purposes, just setting the search results to an array with the query
-    setSearchResults([Empty]);
+    if (!hasSearched) {
+      sethasSearched(!hasSearched);
+    }
+    const filteredItems = DATA.filter(Item =>
+      Item.title.toLowerCase().includes(query.toLowerCase())
+    );
+    setSearchResults(filteredItems);
   };
 
   console.log(width)
@@ -187,16 +191,10 @@ function Listings() {
                 </Text>
                 <View style={styles.search}>
                   <SearchBar onSearch={handleSearch}/>
-                    <View style={styles.resultsContainer}>
-                      {searchResults.map((result, index) => (
-                        <Text key={index}>{result}</Text>
-                      ))}
+                    <View >
                     </View>
                   
                 </View>
-                //profile
-                //chat
-                //Post
                 <StatusBar style="auto" />
             </View>
             <View style={styles.page}>
@@ -206,14 +204,24 @@ function Listings() {
                 {listing("Refrigerator", fridge)}
 
                 {listing("Microwave", microwave)} */}
-                <FlatList
+                <View style={styles.resultsContainer}>
+                    {hasSearched && (<FlatList
+                    data={searchResults}
+                    keyExtractor={(item) => item.id}
+                    renderItem={renderItem}
+                    ItemSeparatorComponent={() => <View style={{height: 30}}/>}
+                    ListEmptyComponent={Empty}
+                    numColumns={Math.round(width/moderateScale(215))}
+                    />)}
+                </View>
+                {!hasSearched && (<FlatList      
                   data={DATA}
                   renderItem={renderItem}
                   keyExtractor={(item) => item.id}
                   ItemSeparatorComponent={() => <View style={{height: 30}}/>}
                   ListEmptyComponent={Empty}
                   numColumns={Math.round(width/moderateScale(215))}
-                  />
+                  />)}
               {/* </ScrollView> */}
             </View>
         </View>
@@ -224,7 +232,8 @@ function Listings() {
 const styles = StyleSheet.create({
   safeContainer: {
     flex: 1,
-    backgroundColor: "white"
+    backgroundColor: "white",
+    overflow: "scroll"
   },
   container: {
     flex: 1,
@@ -291,7 +300,7 @@ const styles = StyleSheet.create({
   productsText: {
     //height: 50,
     width: (width/2),
-    fontWeight: "bold",
+    //fontWeight: "bold",
     padding: 0,
     backgroundColor: "#e5e7eb",
     color: "black",
@@ -316,8 +325,14 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     //flexDirection: "row",
     //justifyContent: "space-around",
-    textAlign: "center"
-  }
+    textAlign: "center",
+    fontFamily: 'Roboto',
+  },
+
+  resultsContainer: {
+    marginTop: 20,
+    paddingHorizontal: 10,
+  },
 });
 
 export default Listings

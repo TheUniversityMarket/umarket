@@ -100,6 +100,7 @@ const styles = StyleSheet.create({
       //flex: 1,
       alignItems: 'center',
       justifyContent: 'center',
+      fontFamily: 'Roboto',
     },
     backgroundImage: {
         borderRadius: 3,
