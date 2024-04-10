@@ -136,7 +136,8 @@ function button(text: String) { // A function to make buttons. Will allow to add
 const styles = StyleSheet.create({
     safeContainer: {
         flex: 1,
-        backgroundColor: "white"
+        backgroundColor: "white",
+        overflow: "scroll"
     },
 
     container: {
