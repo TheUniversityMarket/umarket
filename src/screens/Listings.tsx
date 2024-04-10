@@ -4,6 +4,7 @@ import { StyleSheet, Text, View, SafeAreaView, ScrollView, Image, FlatList, Dime
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { TextInput } from 'react-native-gesture-handler';
+import SearchBar from "/Users/nmoor/UMarket/umarket/src/components/SearchBar";
 
 // import { scale, verticalScale, moderateScale, moderateVerticalScale } from "/Users/jevontwitty/Documents/GitHub/UMarket/src/components/Scaling"
 // import { FlatList } from 'react-native-gesture-handler';
@@ -28,7 +29,7 @@ function moderateVerticalScale(size: number, factor = 0.5) {
     return size + (verticalScale(size) - size) * factor;
 }
 
-function returnTags(tagList) {
+function returnTags(tagList: string | any[]) {
   let stringReturn = ""
   for (let i=0; i<tagList.length; i++) {
       stringReturn += "#" + tagList[i]
@@ -36,14 +37,25 @@ function returnTags(tagList) {
   return stringReturn
 }
 
-function Item(props) {
+function Item(props: { id: any; title: any; image: any; description: any; price: any; tags: any; }) {
   const { id, title, image, description, price, tags} = props
   return (
     <View style={styles.item}>
       <View style={{flexDirection: "row", justifyContent: "space-between"}}>
       </View>
       <Image style={{ width: moderateScale(155), height: moderateVerticalScale(170), borderRadius: 0, marginTop: 10, borderWidth: 0, borderColor: "rgb(34 197 94)"}} source={{uri: image}} />
-      <View style={{width: moderateScale(155), backgroundColor:"#e5e7eb", padding: 10 }}>
+      <View style={{backgroundColor: "rgb(34 197 94)", position: "absolute", left:6, bottom:13, padding: 7, borderRadius: 24}}>
+        <Text style={{fontFamily: 'Roboto', fontWeight: "bold", fontSize: moderateScale(10), color:"white"}}>{title}</Text>
+      </View>
+      <View>
+        <Text style={{marginBottom: 10, fontSize: moderateScale(10), position:"absolute"}}>{returnTags(tags)}</Text>
+      </View>
+      <View style={{backgroundColor: "rgb(34 197 94)", position: "absolute", right:8, bottom:16, padding: 7, borderRadius: 24}}>
+        <Text style={{fontSize: moderateScale(10), color:"white"}}> 
+         {price}
+        </Text>
+      </View>
+      {/* <View style={{width: moderateScale(155), backgroundColor:"#e5e7eb", padding: 10 }}>
         <View>
             <View>
                 <View style={{}}>
@@ -61,7 +73,7 @@ function Item(props) {
                 </Text>
             </View>
         </View>
-    </View>
+    </View> */}
     </View>
   )
 }
@@ -129,6 +141,18 @@ const numberOfColumns = Math.round(width/215
 )
 
 function Listings() {
+  const [searchResults, setSearchResults] = useState<Object[]>([]);
+  const [hasSearched, sethasSearched] = useState(false);
+  const handleSearch = (query: any) => {
+    if (!hasSearched) {
+      sethasSearched(!hasSearched);
+    }
+    const filteredItems = DATA.filter(Item =>
+      Item.title.toLowerCase().includes(query.toLowerCase())
+    );
+    setSearchResults(filteredItems);
+  };
+
   console.log(width)
   const navigation = useNavigation()
   function renderItem({item}) {
@@ -166,9 +190,10 @@ function Listings() {
                     {companyName}
                 </Text>
                 <View style={styles.search}>
-                  <AntDesign name="search1" size={24} color="rgb(34 197 94)" />
-                  <TextInput placeholder="Search for product, service, tag, etc..." placeholderTextColor={'#A9A9A9'} style={{fontSize: 20, marginLeft: 10, width: "90%"}}>
-                  </TextInput>
+                  <SearchBar onSearch={handleSearch}/>
+                    <View >
+                    </View>
+                  
                 </View>
                 <StatusBar style="auto" />
             </View>
@@ -179,14 +204,24 @@ function Listings() {
                 {listing("Refrigerator", fridge)}
 
                 {listing("Microwave", microwave)} */}
-                <FlatList
+                <View style={styles.resultsContainer}>
+                    {hasSearched && (<FlatList
+                    data={searchResults}
+                    keyExtractor={(item) => item.id}
+                    renderItem={renderItem}
+                    ItemSeparatorComponent={() => <View style={{height: 30}}/>}
+                    ListEmptyComponent={Empty}
+                    numColumns={Math.round(width/moderateScale(215))}
+                    />)}
+                </View>
+                {!hasSearched && (<FlatList      
                   data={DATA}
                   renderItem={renderItem}
                   keyExtractor={(item) => item.id}
                   ItemSeparatorComponent={() => <View style={{height: 30}}/>}
                   ListEmptyComponent={Empty}
                   numColumns={Math.round(width/moderateScale(215))}
-                  />
+                  />)}
               {/* </ScrollView> */}
             </View>
         </View>
@@ -197,7 +232,8 @@ function Listings() {
 const styles = StyleSheet.create({
   safeContainer: {
     flex: 1,
-    backgroundColor: "white"
+    backgroundColor: "white",
+    overflow: "scroll"
   },
   container: {
     flex: 1,
@@ -224,7 +260,7 @@ const styles = StyleSheet.create({
     marginTop: 17,
   },
   compName: {
-    fontSize: scale(17),
+    fontSize: scale(17) < 20 ? 20 : scale(17),
     color: "rgb(34 197 94)",
     fontWeight: "bold",
     width: "20%",
@@ -264,7 +300,7 @@ const styles = StyleSheet.create({
   productsText: {
     //height: 50,
     width: (width/2),
-    fontWeight: "bold",
+    //fontWeight: "bold",
     padding: 0,
     backgroundColor: "#e5e7eb",
     color: "black",
@@ -286,10 +322,17 @@ const styles = StyleSheet.create({
     padding: 0,
     marginVertical: 8,
     marginHorizontal: 10,
+    borderRadius: 25,
     //flexDirection: "row",
     //justifyContent: "space-around",
-    //alignItems: "center"
-  }
+    textAlign: "center",
+    fontFamily: 'Roboto',
+  },
+
+  resultsContainer: {
+    marginTop: 20,
+    paddingHorizontal: 10,
+  },
 });
 
 export default Listings
