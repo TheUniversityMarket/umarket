@@ -25,7 +25,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 //     return size + (verticalScale(size) - size) * factor;
 // }
 
-
+//check
 function Post({ navigation }) {
     const companyName = "UMarket";
     const [name, setName] = useState('');
