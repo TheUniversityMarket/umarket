@@ -1,7 +1,8 @@
 import { View, Text, StyleSheet, Dimensions } from 'react-native'
 import UserLogin from "./src/screens/UserLogin"
 import Listings from './src/screens/Listings'
-import UserRegistrationEmail from './src/screens/UserRegistrationEmail'
+import UserRegistrationAccount from './src/screens/UserRegistrationAccount'
+import UserRegistrationEmail from './UserRegistrationEmail'
 import Post from './src/screens/Post'
 import Settings from './src/screens/Settings'
 import ListingItem from './src/screens/ListingItem'
@@ -50,9 +51,15 @@ function Home() {
           return <FontAwesome5 name="shopping-cart" size={focused ? 27 : 23} color={focused ? "#22cc5e" : "black"} />;
       },
     })}
-    tabBarOptions={{
-      activeTintColor: '#22cc5e',
-      inactiveTintColor: 'gray',
+    screenOptions={{
+      "tabBarActiveTintColor": "#22cc5e",
+      "tabBarInactiveTintColor": "gray",
+      "tabBarStyle": [
+        {
+          "display": "flex"
+        },
+        null
+      ]
     }}>
       <Tab.Screen name={'Listings'} component={Listings} options={{headerShown: false, tabBarIcon: ({focused}) => {return <FontAwesome5 name="shopping-cart" size={focused ? (moderateScale(23) > 30 ? 30 : moderateScale(23)) : (moderateScale(20) > 27 ? 27 : moderateScale(20))} color={focused ? "#22cc5e" : "black"} />} }} />
       <Tab.Screen name={'Post'} component={Post} options={{headerShown: false, tabBarIcon: ({focused}) => {return <AntDesign name="pluscircleo" size={focused ? (moderateScale(23) > 30 ? 30 : moderateScale(23)) : (moderateScale(20) > 27 ? 27 : moderateScale(20))} color={focused ? "#22cc5e" : "black"} />} }} />
@@ -68,7 +75,7 @@ function App() {
       <Stack.Navigator>
         <Stack.Screen name={'Login/SignUp'} component={UserLogin} options={{headerShown: false}} />
         <Stack.Screen name={'UserRegistrationEmail'} component={UserRegistrationEmail} options={{headerShown: false}} />
-        <Stack.Screen name={'Registration'} component={UserRegistrationEmail} options={{headerShown: false}} />
+        <Stack.Screen name={'UserRegistrationAccount'} component={UserRegistrationAccount} options={{headerShown: false}} />
         <Stack.Screen name={'Home'} component={Home} options={{headerShown: false}}/>
         <Stack.Screen name={'ListingItem'} component={ListingItem} options={{headerShown: false}}/>
         {/*<Stack.Screen name={'Listings'} component={Listings} options={{headerShown: false}} />*/}

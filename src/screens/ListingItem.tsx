@@ -1,6 +1,7 @@
-import { StyleSheet, Text, View, SafeAreaView, ScrollView, Image, FlatList, Dimensions, useWindowDimensions, Pressable, ImageBackground } from 'react-native'
+import { StyleSheet, Text, View, SafeAreaView, ScrollView, Image, FlatList, Dimensions, useWindowDimensions, Pressable, ImageBackground, TextInput, StatusBar } from 'react-native'
 import { useRoute } from '@react-navigation/native'
 import { Ionicons } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 
 const { width, height } = Dimensions.get('window');
 const [shortDimension, longDimension] = width < height ? [width, height] : [height, width];
@@ -33,9 +34,26 @@ function returnTags(tagList) {
 function ListingItem( {navigation} ) {
     const route = useRoute()
     const { item } = route.params
+    const companyName = "UMarket";
     return (
         <SafeAreaView style={styles.safeContainer}>
+
+            <View style={styles.header}>
+                <Image style={styles.logo} source={require('./assets/logo.jpg')}></Image>
+                <Text style={styles.compName}>
+                    {companyName}
+                </Text>
+                <View style={styles.search}>
+                    <AntDesign name="search1" size={24} color="rgb(34 197 94)" />
+                    <TextInput placeholder="Search for product, service, tag, etc..." placeholderTextColor={'#A9A9A9'} style={{fontSize: 20, marginLeft: 10, width: "90%"}}>
+                    </TextInput>
+                </View>
+                <StatusBar style="auto" />
+            </View>
+
+            <ScrollView>
                 <View style={styles.container}>
+
                     <View style={{width: "100%"}}>
                         <View style={{alignItems: "flex-start", width: "100%", marginLeft: scale(7), marginTop: scale(7) }}>
                             <Pressable style={ ({ pressed }) => [
@@ -51,7 +69,8 @@ function ListingItem( {navigation} ) {
                             <Image source={{uri: item.image}} style={styles.backgroundImage} resizeMode="contain" />
                         </View>
                     </View>
-                    
+
+
                     <View style={styles.productInformation}>
                         <View>
                             <View>
@@ -68,11 +87,9 @@ function ListingItem( {navigation} ) {
                             <Text style={{fontWeight: "bold", fontSize: moderateScale(13)}}>
                                 Description:
                             </Text> 
-                            <ScrollView>
-                                <Text style={{fontSize: moderateScale(13)}}>
-                                    {item.description}
-                                </Text>
-                            </ScrollView>
+                            <Text style={{fontSize: moderateScale(13)}}>
+                                {item.description}
+                            </Text>
                         </View>
                         <View style={{marginTop: 10}}>
                             <View>
@@ -85,7 +102,9 @@ function ListingItem( {navigation} ) {
                             </Pressable>
                         </View>
                     </View>
+
                 </View>
+            </ScrollView>
 
         </SafeAreaView>
     )
@@ -97,7 +116,7 @@ const styles = StyleSheet.create({
       backgroundColor: "white",
     },
     container: {
-      //flex: 1,
+      flex: 1,
       alignItems: 'center',
       justifyContent: 'center',
     },
@@ -125,7 +144,48 @@ const styles = StyleSheet.create({
         borderColor: "rgb(34 197 94)", 
         marginTop: 0, 
         borderRadius: 3 
-    }
+    },
+    header: {
+        //justifyContent: "center",
+        //paddingTop: 30,
+        alignItems: "center",
+        paddingBottom: 20, 
+        backgroundColor: "white",
+        flexDirection: "row",
+        justifyContent: "flex-start",
+        borderBottomWidth: 1,
+        borderBottomColor: "#d3d3d3",
+        //bottom: 15,
+    },
+    compName: {
+        fontSize: scale(17) < 20 ? 20 : scale(17),
+        color: "rgb(34 197 94)",
+        fontWeight: "bold",
+        width: "20%",
+        marginTop: 15,
+        paddingTop: 0,
+    },
+    logo: {
+        width: 40,
+        height: 60,
+        marginLeft: 40,
+        marginTop: 17,
+    },
+    search: {
+        width: "55%",
+        borderWidth: 1,
+        borderColor: "#A9A9A9",
+        backgroundColor: "#fbfbfb",
+        borderRadius: 5,
+        flexDirection: "row",
+        padding: 10,
+        marginTop: 15,
+        height: 50,
+        alignItems: "center",
+        justifyContent: "flex-start",
+        marginRight: 600,
+        marginLeft: 40,
+    },
 })
 
 export default ListingItem
