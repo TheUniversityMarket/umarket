@@ -4,6 +4,7 @@ import { StyleSheet, Text, View, SafeAreaView, ScrollView, Image, FlatList, Dime
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { TextInput } from 'react-native-gesture-handler';
+import { SearchBar } from "/Users/nmoor/UMarket/umarket/src/components/SearchBar";
 
 // import { scale, verticalScale, moderateScale, moderateVerticalScale } from "/Users/jevontwitty/Documents/GitHub/UMarket/src/components/Scaling"
 // import { FlatList } from 'react-native-gesture-handler';
@@ -28,7 +29,7 @@ function moderateVerticalScale(size: number, factor = 0.5) {
     return size + (verticalScale(size) - size) * factor;
 }
 
-function returnTags(tagList) {
+function returnTags(tagList: string | any[]) {
   let stringReturn = ""
   for (let i=0; i<tagList.length; i++) {
       stringReturn += "#" + tagList[i]
@@ -36,14 +37,25 @@ function returnTags(tagList) {
   return stringReturn
 }
 
-function Item(props) {
+function Item(props: { id: any; title: any; image: any; description: any; price: any; tags: any; }) {
   const { id, title, image, description, price, tags} = props
   return (
     <View style={styles.item}>
       <View style={{flexDirection: "row", justifyContent: "space-between"}}>
       </View>
       <Image style={{ width: moderateScale(155), height: moderateVerticalScale(170), borderRadius: 0, marginTop: 10, borderWidth: 0, borderColor: "rgb(34 197 94)"}} source={{uri: image}} />
-      <View style={{width: moderateScale(155), backgroundColor:"#e5e7eb", padding: 10 }}>
+      <View style={{backgroundColor: "rgb(34 197 94)", position: "absolute", left:6, bottom:13, padding: 3, borderRadius: 24}}>
+        <Text style={{fontWeight: "bold", fontSize: moderateScale(13), color:"white"}}>{title}</Text>
+      </View>
+      <View>
+        <Text style={{marginBottom: 10, fontSize: moderateScale(10), position:"absolute"}}>{returnTags(tags)}</Text>
+      </View>
+      <View style={{backgroundColor: "rgb(34 197 94)", position: "absolute", right:8, bottom:16, padding: 3, borderRadius: 24}}>
+        <Text style={{fontSize: moderateScale(11), color:"white"}}> 
+         {price}
+        </Text>
+      </View>
+      {/* <View style={{width: moderateScale(155), backgroundColor:"#e5e7eb", padding: 10 }}>
         <View>
             <View>
                 <View style={{}}>
@@ -61,7 +73,7 @@ function Item(props) {
                 </Text>
             </View>
         </View>
-    </View>
+    </View> */}
     </View>
   )
 }
@@ -129,6 +141,14 @@ const numberOfColumns = Math.round(width/215
 )
 
 function Listings() {
+  const [searchResults, setSearchResults] = useState([]);
+
+  const handleSearch = (query: any) => {
+    // Perform search logic here
+    // For demonstration purposes, just setting the search results to an array with the query
+    setSearchResults([Empty]);
+  };
+
   console.log(width)
   const navigation = useNavigation()
   function renderItem({item}) {
@@ -166,10 +186,17 @@ function Listings() {
                     {companyName}
                 </Text>
                 <View style={styles.search}>
-                  <AntDesign name="search1" size={24} color="rgb(34 197 94)" />
-                  <TextInput placeholder="Search for product, service, tag, etc..." placeholderTextColor={'#A9A9A9'} style={{fontSize: 20, marginLeft: 10, width: "90%"}}>
-                  </TextInput>
+                  <SearchBar onSearch={handleSearch}/>
+                    <View style={styles.resultsContainer}>
+                      {searchResults.map((result, index) => (
+                        <Text key={index}>{result}</Text>
+                      ))}
+                    </View>
+                  
                 </View>
+                //profile
+                //chat
+                //Post
                 <StatusBar style="auto" />
             </View>
             <View style={styles.page}>
@@ -286,9 +313,10 @@ const styles = StyleSheet.create({
     padding: 0,
     marginVertical: 8,
     marginHorizontal: 10,
+    borderRadius: 25,
     //flexDirection: "row",
     //justifyContent: "space-around",
-    //alignItems: "center"
+    textAlign: "center"
   }
 });
 
