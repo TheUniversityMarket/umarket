@@ -40,8 +40,36 @@ function changeColor() {
 function UserRegistrationEmail() {
     const companyName = "UMarket";
 
-    return (
-        <SafeAreaView style={styles.safeContainer}>
+    if (width < 700) {    
+        return (
+            <SafeAreaView style={styles.safeContainer}>
+                <View style={styles.container}>
+                    {/* <ImageBackground source={{uri: school}} style={styles.schoolBackGround}>
+                        <Text style={styles.signUp}>UMarket</Text>
+                    </ImageBackground> */}
+                    <View style={styles.header}>
+                        <Text style={styles.signUp}>UMarket</Text>
+                    </View>
+                    <View style={styles.registrationContainer}>
+                        <Text style={{fontWeight: "bold", fontSize: 25, marginBottom: 17, color:"rgb(17 24 39)"}}>Account Type</Text>
+                        <TextInput style={styles.emailInput} placeholder="Enter School Email" keyboardType="email-address" />
+                        <Pressable style={ ({ pressed }) => [
+                            styles.button,
+                            pressed && {backgroundColor: "green"}
+                            ]}>
+                            <Text style={styles.buttonText}>Continue</Text>
+                        </Pressable>
+                    </View>
+                </View>
+            </SafeAreaView>
+        )
+    }
+    else {
+        return (
+            <SafeAreaView style={styles.safeContainer}>
+            <View style={{flex: 1, backgroundColor: "rgb(34 197 94)", width: "100%", height: "100%"}}>
+                
+            </View>
             <View style={styles.container}>
                 {/* <ImageBackground source={{uri: school}} style={styles.schoolBackGround}>
                     <Text style={styles.signUp}>UMarket</Text>
@@ -85,11 +113,13 @@ function UserRegistrationEmail() {
                 </View>
             </View>
         </SafeAreaView>
-    )
+        )
+    }
 }
 
 const styles = StyleSheet.create({
     safeContainer: {
+        flexDirection: "row",
         flex: 1,
         backgroundColor: "white"
     },

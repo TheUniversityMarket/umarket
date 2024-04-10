@@ -260,7 +260,7 @@ const styles = StyleSheet.create({
     marginTop: 17,
   },
   compName: {
-    fontSize: scale(17),
+    fontSize: scale(17) < 20 ? 20 : scale(17),
     color: "rgb(34 197 94)",
     fontWeight: "bold",
     width: "20%",
