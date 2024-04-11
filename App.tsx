@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, Dimensions } from 'react-native'
 import UserLogin from "./src/screens/UserLogin"
 import Listings from './src/screens/Listings'
 import UserVerification from './src/screens/UserVerification'
-import UserRegistrationEmail from './UserRegistrationEmail'
+import UserRegistrationEmail from './src/screens/UserRegistrationEmail'
 import Post from './src/screens/Post'
 import Settings from './src/screens/Settings'
 import ListingItem from './src/screens/ListingItem'

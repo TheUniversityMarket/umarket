@@ -178,7 +178,7 @@ function Listings() {
       if (!tags.includes(item.tags[i])) {
         tags.push(item.tags[i])
         return (
-          <View style={{justifyContent: "center", marginLeft: 30}}>
+          <View style={{justifyContent: "center", marginLeft: 40}}>
             <Text style={{fontWeight: "bold", color: "gray"}}>
               {item.tags[i]}
             </Text>
