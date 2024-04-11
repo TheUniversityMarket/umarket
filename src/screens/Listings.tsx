@@ -109,6 +109,10 @@ const DATA = [
   { id: '8', title: "Microwave", image: microwave, description: 'A microwave is a kitchen appliance that uses electromagnetic waves to heat and cook food quickly.', price:"$630", tags: ['kitchen', 'electrical','cooking'] },
 ]
 
+const TAGS = [
+  {tag: "kitchen"},
+]
+
 const SectionedDATA = [
   {
     title: "Kitchenware",
@@ -167,6 +171,23 @@ function Listings() {
     )
   }
 
+  let tags = [];
+
+  function renderTags({item}) {
+    for (let i = 0; i < item.tags.length; i++) {
+      if (!tags.includes(item.tags[i])) {
+        tags.push(item.tags[i])
+        return (
+          <View style={{justifyContent: "center", marginLeft: 30}}>
+            <Text style={{fontWeight: "bold", color: "gray"}}>
+              {item.tags[i]}
+            </Text>
+          </View>
+        )
+      }
+    }
+  }
+
   // function listing(text: string, image: string) {
   //   return (
   //   //<ScrollView horizontal>
@@ -180,53 +201,130 @@ function Listings() {
   //   )
   // }
 
-
-  return (
-    <SafeAreaView style={styles.safeContainer}>
-        <View style={styles.container}>
-            <View style={styles.header}>
-                <Image style={styles.logo} source={require('./assets/logo.jpg')}></Image>
-                <Text style={styles.compName}>
-                    {companyName}
-                </Text>
-                <View style={styles.search}>
-                  <SearchBar onSearch={handleSearch}/>
-                    <View >
-                    </View>
-                  
-                </View>
-                <StatusBar style="auto" />
-            </View>
-            <View style={styles.page}>
-              {/* <ScrollView> */}
-                {/* {listing("Mac", laptop)}
-
-                {listing("Refrigerator", fridge)}
-
-                {listing("Microwave", microwave)} */}
-                <View style={styles.resultsContainer}>
-                    {hasSearched && (<FlatList
-                    data={searchResults}
+  if (width > 700) {
+    return (
+      <SafeAreaView style={styles.safeContainer}>
+          <View style={styles.container}>
+              <View style={styles.header}>
+                  <Image style={styles.logo} source={require('./assets/logo.jpg')}></Image>
+                  <Text style={styles.compName}>
+                      {companyName}
+                  </Text>
+                  <View style={styles.search}>
+                    <AntDesign name="search1" size={24} color="rgb(34 197 94)" />
+                    <SearchBar onSearch={handleSearch}/>
+                  </View>
+                  <View style={{alignItems: "flex-end", flex: 1, marginRight: 30}}>
+                    <Pressable onPress={() => navigation.navigate('Login/SignUp')} >
+                      <View style={{borderWidth: 3, borderColor: "rgb(34 197 94)", marginTop: 17}}>
+                        <Text style={{color: "rgb(34 197 94)", fontWeight: "bold", padding: 15}}>
+                          Log in / Sign up
+                        </Text>
+                      </View>
+                    </Pressable>
+                  </View>
+                  <StatusBar style="auto" />
+              </View>
+              <View style={{height: 40}}>
+                <View style={{flex: 1, flexDirection: "row", borderBottomWidth: 1, borderBottomColor: "#d3d3d3"}}>
+                  <FlatList
+                    horizontal={true}
+                    data={DATA}
                     keyExtractor={(item) => item.id}
+                    renderItem={renderTags}
+                    ItemSeparatorComponent={() => <View style={{width: 0}}/>}
+                    ListEmptyComponent={Empty}
+                  />
+                </View>
+              </View>
+              <View style={styles.page}>
+                {/* <ScrollView> */}
+                  {/* {listing("Mac", laptop)}
+
+                  {listing("Refrigerator", fridge)}
+
+                  {listing("Microwave", microwave)} */}
+                  <View style={styles.resultsContainer}>
+                      {hasSearched && (<FlatList
+                      data={searchResults}
+                      keyExtractor={(item) => item.id}
+                      renderItem={renderItem}
+                      ItemSeparatorComponent={() => <View style={{height: 30}}/>}
+                      ListEmptyComponent={Empty}
+                      numColumns={Math.round(width/moderateScale(215))}
+                      />)}
+                  </View>
+                  {!hasSearched && (<FlatList      
+                    data={DATA}
                     renderItem={renderItem}
+                    keyExtractor={(item) => item.id}
                     ItemSeparatorComponent={() => <View style={{height: 30}}/>}
                     ListEmptyComponent={Empty}
                     numColumns={Math.round(width/moderateScale(215))}
                     />)}
+                {/* </ScrollView> */}
+              </View>
+          </View>
+      </SafeAreaView>
+    );
+  } else {
+    return (
+      <SafeAreaView style={styles.safeContainer}>
+          <View style={styles.container}>
+              <View style={styles.header}>
+                  <Image style={styles.logo} source={require('./assets/logo.jpg')}></Image>
+                  <Text style={styles.compName}>
+                      {companyName}
+                  </Text>
+                  <View style={styles.search}>
+                    <AntDesign name="search1" size={24} color="rgb(34 197 94)" />
+                    <SearchBar onSearch={handleSearch}/>
+                  </View>
+                  <StatusBar style="auto" />
+              </View>
+              <View style={{height: 40}}>
+                <View style={{flex: 1, flexDirection: "row", borderBottomWidth: 1, borderBottomColor: "#d3d3d3"}}>
+                  <FlatList
+                    horizontal={true}
+                    data={DATA}
+                    keyExtractor={(item) => item.id}
+                    renderItem={renderTags}
+                    ItemSeparatorComponent={() => <View style={{width: 0}}/>}
+                    ListEmptyComponent={Empty}
+                  />
                 </View>
-                {!hasSearched && (<FlatList      
-                  data={DATA}
-                  renderItem={renderItem}
-                  keyExtractor={(item) => item.id}
-                  ItemSeparatorComponent={() => <View style={{height: 30}}/>}
-                  ListEmptyComponent={Empty}
-                  numColumns={Math.round(width/moderateScale(215))}
-                  />)}
-              {/* </ScrollView> */}
-            </View>
-        </View>
-    </SafeAreaView>
-  );
+              </View>
+              <View style={styles.page}>
+                {/* <ScrollView> */}
+                  {/* {listing("Mac", laptop)}
+
+                  {listing("Refrigerator", fridge)}
+
+                  {listing("Microwave", microwave)} */}
+                  <View style={styles.resultsContainer}>
+                      {hasSearched && (<FlatList
+                      data={searchResults}
+                      keyExtractor={(item) => item.id}
+                      renderItem={renderItem}
+                      ItemSeparatorComponent={() => <View style={{height: 30}}/>}
+                      ListEmptyComponent={Empty}
+                      numColumns={Math.round(width/moderateScale(215))}
+                      />)}
+                  </View>
+                  {!hasSearched && (<FlatList      
+                    data={DATA}
+                    renderItem={renderItem}
+                    keyExtractor={(item) => item.id}
+                    ItemSeparatorComponent={() => <View style={{height: 30}}/>}
+                    ListEmptyComponent={Empty}
+                    numColumns={Math.round(width/moderateScale(215))}
+                    />)}
+                {/* </ScrollView> */}
+              </View>
+          </View>
+      </SafeAreaView>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
@@ -268,7 +366,8 @@ const styles = StyleSheet.create({
     paddingTop: 0,
   },
   search: {
-    width: "55%",
+    //width: scale(130),
+    // borderWidth: 10,
     borderWidth: 1,
     borderColor: "#A9A9A9",
     backgroundColor: "#fbfbfb",
@@ -279,8 +378,8 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: "center",
     justifyContent: "flex-start",
-    marginRight: 600,
-    marginLeft: 40,
+    marginRight: 20,
+    marginLeft: 20,
   },
   shoppingCart: {
     //backgroundColor: "black",

@@ -123,7 +123,7 @@ function UserLogin({ navigation }) {
               },
               pressed && {backgroundColor: "green"}
             ]} onPress={() => navigation.navigate('Home')}>
-              <Text style={styles.buttonText}>Login</Text>
+              <Text style={styles.buttonText}>Log in</Text>
             </Pressable>
             {/* login button */}
 
@@ -244,7 +244,7 @@ function UserLogin({ navigation }) {
               },
               pressed && {backgroundColor: "green"}
             ]} onPress={() => navigation.navigate('Home')}>
-              <Text style={styles.buttonText}>Login</Text>
+              <Text style={styles.buttonText}>Log in</Text>
             </Pressable>
             {/* login button */}
 

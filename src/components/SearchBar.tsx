@@ -1,5 +1,26 @@
 import React, { useState } from 'react';
 import { TextInput, View, StyleSheet } from 'react-native';
+import { Dimensions } from 'react-native';
+
+const { width, height } = Dimensions.get('window');
+const [shortDimension, longDimension] = width < height ? [width, height] : [height, width];
+
+//Default guideline sizes are based on standard ~5" screen mobile device
+const guidelineBaseWidth = 350;
+const guidelineBaseHeight = 680;
+
+function scale(size: number) {
+    return shortDimension / guidelineBaseWidth * size;
+}
+function verticalScale(size: number) {
+    return longDimension / guidelineBaseHeight * size;
+}
+function moderateScale(size: number, factor = 0.5) {
+    return size + (scale(size) - size) * factor;
+}
+function moderateVerticalScale(size: number, factor = 0.5) {
+    return size + (verticalScale(size) - size) * factor;
+}
 
 const SearchBar = ({ onSearch }) => {
   const [searchText, setSearchText] = useState('');
@@ -13,6 +34,7 @@ const SearchBar = ({ onSearch }) => {
       <TextInput
         style={styles.input}
         placeholder="Search..."
+        placeholderTextColor={"rgb(34 197 94)"}
         onChangeText={setSearchText}
         value={searchText}
         onSubmitEditing={handleSearch}
@@ -26,11 +48,13 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   input: {
+    width: scale(130),
     height: 40,
     borderColor: 'gray',
-    borderWidth: 1,
+    //borderWidth: 1,
     borderRadius: 5,
     paddingHorizontal: 10,
+    outlineColor: "transparent",
   },
 });
 
