@@ -37,7 +37,7 @@ function changeColor() {
     buttonProperties.color2 = x
 }
 
-function UserVerification({ navigation }) {
+function AccountInformation({ navigation }) {
     const companyName = "UMarket";
 
     if (width < 700) {    
@@ -51,15 +51,38 @@ function UserVerification({ navigation }) {
                         <Text style={styles.signUp}>UMarket</Text>
                     </View>
                     <View style={styles.registrationContainer}>
-                        <Text style={{fontWeight: "bold", fontSize: moderateScale(25), marginBottom: 17, color:"rgb(17 24 39)"}}>Verification Code</Text>
+ 
                         <View style={{ gap: 3, marginBottom: verticalScale(17)}}>
-                            <TextInput style={styles.verificationCode} placeholder="Enter School Email" keyboardType="email-address" />
+
+
+
+                            <View style={{alignItems: "flex-start", width: "100%"}}>
+                                <Text style={{fontWeight: "bold", fontSize: moderateScale(17), marginBottom: 17, color:"rgb(17 24 39)"}}>First Name</Text>
+                            </View>
+                            <TextInput style={styles.verificationCode} placeholder="First Name" keyboardType="email-address" placeholderTextColor={"#B3B3B3"} />
+
+
+
+                            <View style={{alignItems: "flex-start", width: "100%", marginTop: 10}}>
+                                <Text style={{fontWeight: "bold", fontSize: moderateScale(17), marginBottom: 17, color:"rgb(17 24 39)"}}>Last Name</Text>
+                            </View>
+                            <TextInput style={styles.verificationCode} placeholder="Last Name" keyboardType="email-address" placeholderTextColor={"#B3B3B3"} />
+
+
+
+                            <View style={{alignItems: "flex-start", width: "100%", marginTop: 10}}>
+                                <Text style={{fontWeight: "bold", fontSize: moderateScale(17), marginBottom: 17, color:"rgb(17 24 39)"}}>Password</Text>
+                            </View>
+                            <TextInput style={styles.verificationCode} placeholder="Password" placeholderTextColor={"#B3B3B3"} secureTextEntry/>
+
+
+                            
                             <Pressable style={ ({ pressed }) => [
                             styles.button,
                             pressed && {backgroundColor: "green"}
                             ]}
-                            onPress={() => navigation.navigate('UserRegistrationAccount')}>
-                            <Text style={styles.buttonText}>Continue</Text>
+                            onPress={() => navigation.navigate('Home')}>
+                            <Text style={styles.buttonText}>Create Account</Text>
                         </Pressable>
                         </View>
                     </View>
@@ -81,15 +104,38 @@ function UserVerification({ navigation }) {
                         <Text style={styles.signUp}>UMarket</Text>
                     </View>
                     <View style={styles.registrationContainer}>
-                        <Text style={{fontWeight: "bold", fontSize: moderateScale(25), marginBottom: 17, color:"rgb(17 24 39)"}}>Verification Code</Text>
+ 
                         <View style={{ gap: 3, marginBottom: verticalScale(17)}}>
-                            <TextInput style={styles.verificationCode} placeholder="Enter School Email" keyboardType="email-address" />
+
+
+
+                            <View style={{alignItems: "flex-start", width: "100%"}}>
+                                <Text style={{fontWeight: "bold", fontSize: moderateScale(13), marginBottom: 17, color:"rgb(17 24 39)"}}>First Name</Text>
+                            </View>
+                            <TextInput style={styles.verificationCode} placeholder="First Name" keyboardType="email-address" placeholderTextColor={"#B3B3B3"}/>
+
+
+
+                            <View style={{alignItems: "flex-start", width: "100%", marginTop: 10}}>
+                                <Text style={{fontWeight: "bold", fontSize: moderateScale(13), marginBottom: 17, color:"rgb(17 24 39)"}}>Last Name</Text>
+                            </View>
+                            <TextInput style={styles.verificationCode} placeholder="Last Name" keyboardType="email-address" placeholderTextColor={"#B3B3B3"}/>
+
+
+
+                            <View style={{alignItems: "flex-start", width: "100%", marginTop: 10}}>
+                                <Text style={{fontWeight: "bold", fontSize: moderateScale(13), marginBottom: 17, color:"rgb(17 24 39)"}}>Password</Text>
+                            </View>
+                            <TextInput style={styles.verificationCode} placeholder="Password" secureTextEntry placeholderTextColor={"#B3B3B3"}/>
+
+
+                            
                             <Pressable style={ ({ pressed }) => [
                             styles.button,
                             pressed && {backgroundColor: "green"}
                             ]}
-                            onPress={() => navigation.navigate('UserRegistrationAccount')}>
-                            <Text style={styles.buttonText}>Continue</Text>
+                            onPress={() => navigation.navigate('Home')}>
+                            <Text style={styles.buttonText}>Create Account</Text>
                         </Pressable>
                         </View>
                     </View>
@@ -123,7 +169,7 @@ const styles = StyleSheet.create({
     //     alignItems: "center",
     // },
     signUp: {
-        fontSize: scale(73),
+        fontSize: moderateScale(65),
         color: "rgb(34 197 94)",
         fontWeight: "bold",
     },
@@ -137,20 +183,11 @@ const styles = StyleSheet.create({
         alignItems: "center",
         //justifyContent: "center",
     },
-    emailInput: {
-        height: 40,
-        borderWidth: 1,
-        borderColor: "#e5e7eb",
-        width: 275,
-        paddingTop: 4,
-        fontSize: 15,
-        paddingLeft: 5
-    },
     verificationCode: {
         height: 40,
         borderWidth: 1,
         borderColor: "#e5e7eb",
-        width: 275,
+        width: moderateScale(250),
         paddingTop: 4,
         fontSize: 15,
         paddingLeft: 5,
@@ -158,7 +195,7 @@ const styles = StyleSheet.create({
     button: {
         borderRadius: 3,
         alignItems: "center",
-        width: 275,
+        width: moderateScale(250),
         backgroundColor: "#22c55e",
         padding: 7,
         marginBottom: moderateVerticalScale(600),
@@ -171,4 +208,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default UserVerification
+export default AccountInformation

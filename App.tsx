@@ -1,11 +1,12 @@
 import { View, Text, StyleSheet, Dimensions } from 'react-native'
 import UserLogin from "./src/screens/UserLogin"
 import Listings from './src/screens/Listings'
-import UserRegistrationAccount from './src/screens/UserRegistrationAccount'
+import UserVerification from './src/screens/UserVerification'
 import UserRegistrationEmail from './UserRegistrationEmail'
 import Post from './src/screens/Post'
 import Settings from './src/screens/Settings'
 import ListingItem from './src/screens/ListingItem'
+import AccountInformation from './src/screens/AccountInformation'
 
 import { AntDesign } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
@@ -75,9 +76,10 @@ function App() {
       <Stack.Navigator>
         <Stack.Screen name={'Login/SignUp'} component={UserLogin} options={{headerShown: false}} />
         <Stack.Screen name={'UserRegistrationEmail'} component={UserRegistrationEmail} options={{headerShown: false}} />
-        <Stack.Screen name={'UserRegistrationAccount'} component={UserRegistrationAccount} options={{headerShown: false}} />
+        <Stack.Screen name={'UserVerification'} component={UserVerification} options={{headerShown: false}} />
         <Stack.Screen name={'Home'} component={Home} options={{headerShown: false}}/>
         <Stack.Screen name={'ListingItem'} component={ListingItem} options={{headerShown: false}}/>
+        <Stack.Screen name={'AccountInformation'} component={AccountInformation} options={{headerShown: false}}/>
         {/*<Stack.Screen name={'Listings'} component={Listings} options={{headerShown: false}} />*/}
       </Stack.Navigator>
     </NavigationContainer>
