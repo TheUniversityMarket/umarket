@@ -53,12 +53,12 @@ function UserVerification({ navigation }) {
                     <View style={styles.registrationContainer}>
                         <Text style={{fontWeight: "bold", fontSize: moderateScale(25), marginBottom: 17, color:"rgb(17 24 39)"}}>Verification Code</Text>
                         <View style={{ gap: 3, marginBottom: verticalScale(17)}}>
-                            <TextInput style={styles.verificationCode} placeholder="Enter School Email" keyboardType="email-address" />
+                            <TextInput style={styles.verificationCode} placeholder="Enter School Email" keyboardType="email-address" placeholderTextColor={"#B3B3B3"}/>
                             <Pressable style={ ({ pressed }) => [
                             styles.button,
                             pressed && {backgroundColor: "green"}
                             ]}
-                            onPress={() => navigation.navigate('UserRegistrationAccount')}>
+                            onPress={() => navigation.navigate('AccountInformation')}>
                             <Text style={styles.buttonText}>Continue</Text>
                         </Pressable>
                         </View>
@@ -83,12 +83,12 @@ function UserVerification({ navigation }) {
                     <View style={styles.registrationContainer}>
                         <Text style={{fontWeight: "bold", fontSize: moderateScale(25), marginBottom: 17, color:"rgb(17 24 39)"}}>Verification Code</Text>
                         <View style={{ gap: 3, marginBottom: verticalScale(17)}}>
-                            <TextInput style={styles.verificationCode} placeholder="Enter School Email" keyboardType="email-address" />
+                            <TextInput style={styles.verificationCode} placeholder="Enter School Email" keyboardType="email-address" placeholderTextColor={"#B3B3B3"}/>
                             <Pressable style={ ({ pressed }) => [
                             styles.button,
                             pressed && {backgroundColor: "green"}
                             ]}
-                            onPress={() => navigation.navigate('UserRegistrationAccount')}>
+                            onPress={() => navigation.navigate('AccountInformation')}>
                             <Text style={styles.buttonText}>Continue</Text>
                         </Pressable>
                         </View>
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
     //     alignItems: "center",
     // },
     signUp: {
-        fontSize: scale(73),
+        fontSize: moderateScale(65),
         color: "rgb(34 197 94)",
         fontWeight: "bold",
     },
@@ -137,20 +137,11 @@ const styles = StyleSheet.create({
         alignItems: "center",
         //justifyContent: "center",
     },
-    emailInput: {
-        height: 40,
-        borderWidth: 1,
-        borderColor: "#e5e7eb",
-        width: 275,
-        paddingTop: 4,
-        fontSize: 15,
-        paddingLeft: 5
-    },
     verificationCode: {
         height: 40,
         borderWidth: 1,
         borderColor: "#e5e7eb",
-        width: 275,
+        width: moderateScale(250),
         paddingTop: 4,
         fontSize: 15,
         paddingLeft: 5,
@@ -158,7 +149,7 @@ const styles = StyleSheet.create({
     button: {
         borderRadius: 3,
         alignItems: "center",
-        width: 275,
+        width: moderateScale(250),
         backgroundColor: "#22c55e",
         padding: 7,
         marginBottom: moderateVerticalScale(600),
