@@ -40,7 +40,60 @@ function changeColor() {
 function AccountInformation({ navigation }) {
     const companyName = "UMarket";
 
-    if (width < 700) {    
+    if (width > 700) {
+        return (
+            <SafeAreaView style={styles.safeContainer}>
+            <View style={{flex: 1, backgroundColor: "rgb(34 197 94)", width: "100%", height: "100%"}}>
+
+            </View>
+            <View style={styles.container}>
+                    {/* <ImageBackground source={{uri: school}} style={styles.schoolBackGround}>
+                        <Text style={styles.signUp}>UMarket</Text>
+                    </ImageBackground> */}
+                    <View style={styles.header}>
+                        <Text style={styles.signUp}>UMarket</Text>
+                    </View>
+                    <View style={styles.registrationContainer}>
+
+                        <View style={{ gap: 3, marginBottom: verticalScale(17)}}>
+
+
+
+                            <View style={{alignItems: "flex-start", width: "100%"}}>
+                                <Text style={{fontWeight: "bold", fontSize: moderateScale(13), marginBottom: 17, color:"rgb(17 24 39)"}}>First Name</Text>
+                            </View>
+                            <TextInput style={styles.verificationCode} placeholder="First Name" keyboardType="email-address" placeholderTextColor={"#B3B3B3"}/>
+
+
+
+                            <View style={{alignItems: "flex-start", width: "100%", marginTop: 10}}>
+                                <Text style={{fontWeight: "bold", fontSize: moderateScale(13), marginBottom: 17, color:"rgb(17 24 39)"}}>Last Name</Text>
+                            </View>
+                            <TextInput style={styles.verificationCode} placeholder="Last Name" keyboardType="email-address" placeholderTextColor={"#B3B3B3"}/>
+
+
+
+                            <View style={{alignItems: "flex-start", width: "100%", marginTop: 10}}>
+                                <Text style={{fontWeight: "bold", fontSize: moderateScale(13), marginBottom: 17, color:"rgb(17 24 39)"}}>Password</Text>
+                            </View>
+                            <TextInput style={styles.verificationCode} placeholder="Password" secureTextEntry placeholderTextColor={"#B3B3B3"}/>
+
+
+                            
+                            <Pressable style={ ({ pressed }) => [
+                            styles.button,
+                            pressed && {backgroundColor: "green"}
+                            ]}
+                            onPress={() => navigation.navigate('Listings')}>
+                            <Text style={styles.buttonText}>Create Account</Text>
+                        </Pressable>
+                        </View>
+                    </View>
+                </View>
+        </SafeAreaView>
+        )
+    }
+    else {    
         return (
             <SafeAreaView style={styles.safeContainer}>
                 <View style={styles.container}>
@@ -88,59 +141,6 @@ function AccountInformation({ navigation }) {
                     </View>
                 </View>
             </SafeAreaView>
-        )
-    }
-    else {
-        return (
-            <SafeAreaView style={styles.safeContainer}>
-            <View style={{flex: 1, backgroundColor: "rgb(34 197 94)", width: "100%", height: "100%"}}>
-
-            </View>
-            <View style={styles.container}>
-                    {/* <ImageBackground source={{uri: school}} style={styles.schoolBackGround}>
-                        <Text style={styles.signUp}>UMarket</Text>
-                    </ImageBackground> */}
-                    <View style={styles.header}>
-                        <Text style={styles.signUp}>UMarket</Text>
-                    </View>
-                    <View style={styles.registrationContainer}>
- 
-                        <View style={{ gap: 3, marginBottom: verticalScale(17)}}>
-
-
-
-                            <View style={{alignItems: "flex-start", width: "100%"}}>
-                                <Text style={{fontWeight: "bold", fontSize: moderateScale(13), marginBottom: 17, color:"rgb(17 24 39)"}}>First Name</Text>
-                            </View>
-                            <TextInput style={styles.verificationCode} placeholder="First Name" keyboardType="email-address" placeholderTextColor={"#B3B3B3"}/>
-
-
-
-                            <View style={{alignItems: "flex-start", width: "100%", marginTop: 10}}>
-                                <Text style={{fontWeight: "bold", fontSize: moderateScale(13), marginBottom: 17, color:"rgb(17 24 39)"}}>Last Name</Text>
-                            </View>
-                            <TextInput style={styles.verificationCode} placeholder="Last Name" keyboardType="email-address" placeholderTextColor={"#B3B3B3"}/>
-
-
-
-                            <View style={{alignItems: "flex-start", width: "100%", marginTop: 10}}>
-                                <Text style={{fontWeight: "bold", fontSize: moderateScale(13), marginBottom: 17, color:"rgb(17 24 39)"}}>Password</Text>
-                            </View>
-                            <TextInput style={styles.verificationCode} placeholder="Password" secureTextEntry placeholderTextColor={"#B3B3B3"}/>
-
-
-                            
-                            <Pressable style={ ({ pressed }) => [
-                            styles.button,
-                            pressed && {backgroundColor: "green"}
-                            ]}
-                            onPress={() => navigation.navigate('Home')}>
-                            <Text style={styles.buttonText}>Create Account</Text>
-                        </Pressable>
-                        </View>
-                    </View>
-                </View>
-        </SafeAreaView>
         )
     }
 }
