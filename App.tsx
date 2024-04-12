@@ -8,6 +8,7 @@ import Settings from './src/screens/Settings'
 import ListingItem from './src/screens/ListingItem'
 import AccountInformation from './src/screens/AccountInformation'
 import ListingsLoggedOut from './src/screens/ListingsLoggedOut'
+import Chat from './src/screens/Chat'
 
 import { AntDesign } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
@@ -77,6 +78,7 @@ function App() {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen name={'ListingsLoggedOut'} component={ListingsLoggedOut} options={{headerShown: false}}/>
+          <Stack.Screen name={'Chat'} component={Chat} options={{headerShown: false}}/>
           <Stack.Screen name={'Listings'} component={Listings} options={{headerShown: false}}/>
           <Stack.Screen name={'Post'} component={Post} options={{headerShown: false}}/>
           <Stack.Screen name={'Settings'} component={Settings} options={{headerShown: false}}/>

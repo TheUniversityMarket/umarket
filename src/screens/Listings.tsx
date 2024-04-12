@@ -234,9 +234,11 @@ function Listings() {
                         </View>
                       </Pressable>
 
-                      <View style={{alignItems: "flex-end", marginRight: 30, marginTop: 17}}>
-                        <Entypo name="chat" size={43} color="rgb(34 197 94)" />
-                      </View>
+                      <Pressable onPress={() => navigation.navigate('Chat')} >
+                        <View style={{alignItems: "flex-end", marginRight: 30, marginTop: 17}}>
+                          <Entypo name="chat" size={43} color="rgb(34 197 94)" />
+                        </View>
+                      </Pressable>
 
                       <Pressable onPress={() => navigation.navigate('Post')} >
                         <View style={{borderWidth: 3, borderColor: "rgb(34 197 94)", marginTop: 17, flexDirection: "row", alignItems: "center"}}>
