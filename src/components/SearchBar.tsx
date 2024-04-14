@@ -45,10 +45,12 @@ const SearchBar = ({ onSearch }) => {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     padding: 10,
   },
   input: {
-    width: scale(130),
+    //width: scale(130),
+    flex: 1,
     height: 40,
     borderColor: 'gray',
     //borderWidth: 1,

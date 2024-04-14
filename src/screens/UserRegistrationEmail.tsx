@@ -285,8 +285,8 @@ function UserRegistrationEmail( {navigation} ) {
                     <Text style={styles.signUp}>UMarket</Text>
                 </View>
                 <View style={styles.registrationContainer}>
-                    <Text style={{fontWeight: "bold", fontSize: 25, marginBottom: 17, color:"rgb(17 24 39)"}}>Account Type</Text>
-                    <View style={{flexDirection: "row", gap: 30, marginBottom: verticalScale(3)}}>
+                    <Text style={{fontWeight: "bold", fontSize: 25, marginBottom: 17, color:"rgb(17 24 39)"}}>School Email</Text>
+                    {/* <View style={{flexDirection: "row", gap: 30, marginBottom: verticalScale(3)}}>
                         <Pressable style={ ({ pressed }) => [
                         {backgroundColor: buttonSingleProperties.color1, padding: 13,borderRadius: 100, alignItems: "center"},
                         pressed && {backgroundColor: "rgb(17 24 39)"}
@@ -309,7 +309,7 @@ function UserRegistrationEmail( {navigation} ) {
                                 <Text style={{fontWeight: "bold", color: "white"}}>Group</Text>
                             </View>
                         </Pressable>
-                    </View>
+                    </View> */}
                     <TextInput style={styles.emailInput} placeholder="Enter School Email" keyboardType="email-address" placeholderTextColor={"#B3B3B3"}/>
                     <Pressable style={ ({ pressed }) => [
                         styles.button,
