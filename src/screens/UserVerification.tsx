@@ -37,7 +37,7 @@ function changeColor() {
     buttonProperties.color2 = x
 }
 
-function UserRegistrationEmail() {
+function UserVerification({ navigation }) {
     const companyName = "UMarket";
 
     if (width < 700) {    
@@ -51,14 +51,17 @@ function UserRegistrationEmail() {
                         <Text style={styles.signUp}>UMarket</Text>
                     </View>
                     <View style={styles.registrationContainer}>
-                        <Text style={{fontWeight: "bold", fontSize: 25, marginBottom: 17, color:"rgb(17 24 39)"}}>Account Type</Text>
-                        <TextInput style={styles.emailInput} placeholder="Enter School Email" keyboardType="email-address" />
-                        <Pressable style={ ({ pressed }) => [
+                        <Text style={{fontWeight: "bold", fontSize: moderateScale(25), marginBottom: 17, color:"rgb(17 24 39)"}}>Verification Code</Text>
+                        <View style={{ gap: 3, marginBottom: verticalScale(17)}}>
+                            <TextInput style={styles.verificationCode} placeholder="Enter School Email" keyboardType="email-address" placeholderTextColor={"#B3B3B3"}/>
+                            <Pressable style={ ({ pressed }) => [
                             styles.button,
                             pressed && {backgroundColor: "green"}
-                            ]}>
+                            ]}
+                            onPress={() => navigation.navigate('AccountInformation')}>
                             <Text style={styles.buttonText}>Continue</Text>
                         </Pressable>
+                        </View>
                     </View>
                 </View>
             </SafeAreaView>
@@ -68,50 +71,29 @@ function UserRegistrationEmail() {
         return (
             <SafeAreaView style={styles.safeContainer}>
             <View style={{flex: 1, backgroundColor: "rgb(34 197 94)", width: "100%", height: "100%"}}>
-                
+
             </View>
             <View style={styles.container}>
-                {/* <ImageBackground source={{uri: school}} style={styles.schoolBackGround}>
-                    <Text style={styles.signUp}>UMarket</Text>
-                </ImageBackground> */}
-                <View style={styles.header}>
-                    <Text style={styles.signUp}>UMarket</Text>
-                </View>
-                <View style={styles.registrationContainer}>
-                    <Text style={{fontWeight: "bold", fontSize: 25, marginBottom: 17, color:"rgb(17 24 39)"}}>Account Type</Text>
-                    <View style={{flexDirection: "row", gap: 30, marginBottom: verticalScale(17)}}>
-                        <Pressable style={ ({ pressed }) => [
-                        {backgroundColor: "rgb(34 197 94)", padding: 13,borderRadius: 100, alignItems: "center"},
-                        pressed && changeColor()
-                        ]}>
-                            <View>
-                                <FontAwesome5 name="user-alt" size={24} color={buttonProperties.color1} />
-                            </View>
-                            <View style={{alignItems: "center", marginTop: 3}}>
-                                <Text style={{fontWeight: "bold", color: "rgb(17 24 39)"}}>Single</Text>
-                            </View>
-                        </Pressable>
-                        <Pressable style={ ({ pressed }) => [
-                        {backgroundColor: "rgb(34 197 94)", padding: 13,borderRadius: 100, alignItems: "center"},
-                        pressed && {backgroundColor: "rgb(17 24 39)"}
-                        ]}>
-                            <View>
-                                <FontAwesome6 name="user-group" size={24} color="rgb(17 24 39)" />
-                            </View>
-                            <View style={{alignItems: "center", marginTop: 3}}>
-                                <Text style={{fontWeight: "bold", color: "rgb(17 24 39)"}}>Group</Text>
-                            </View>
-                        </Pressable>
+                    {/* <ImageBackground source={{uri: school}} style={styles.schoolBackGround}>
+                        <Text style={styles.signUp}>UMarket</Text>
+                    </ImageBackground> */}
+                    <View style={styles.header}>
+                        <Text style={styles.signUp}>UMarket</Text>
                     </View>
-                    <TextInput style={styles.emailInput} placeholder="Enter School Email" keyboardType="email-address" />
-                    <Pressable style={ ({ pressed }) => [
-                        styles.button,
-                        pressed && {backgroundColor: "green"}
-                        ]}>
-                        <Text style={styles.buttonText}>Continue</Text>
-                    </Pressable>
+                    <View style={styles.registrationContainer}>
+                        <Text style={{fontWeight: "bold", fontSize: moderateScale(25), marginBottom: 17, color:"rgb(17 24 39)"}}>Verification Code</Text>
+                        <View style={{ gap: 3, marginBottom: verticalScale(17)}}>
+                            <TextInput style={styles.verificationCode} placeholder="Enter School Email" keyboardType="email-address" placeholderTextColor={"#B3B3B3"}/>
+                            <Pressable style={ ({ pressed }) => [
+                            styles.button,
+                            pressed && {backgroundColor: "green"}
+                            ]}
+                            onPress={() => navigation.navigate('AccountInformation')}>
+                            <Text style={styles.buttonText}>Continue</Text>
+                        </Pressable>
+                        </View>
+                    </View>
                 </View>
-            </View>
         </SafeAreaView>
         )
     }
@@ -141,29 +123,33 @@ const styles = StyleSheet.create({
     //     alignItems: "center",
     // },
     signUp: {
-        fontSize: scale(73),
+        fontSize: moderateScale(65),
         color: "rgb(34 197 94)",
         fontWeight: "bold",
     },
     registrationContainer: {
+        flex: 1,
+        //borderWidth: 10,
+        //borderColor: "red",
         backgroundColor: "white",
         paddingHorizontal: moderateScale(74),
         paddingTop: moderateVerticalScale(44),
         alignItems: "center",
+        //justifyContent: "center",
     },
-    emailInput: {
+    verificationCode: {
         height: 40,
         borderWidth: 1,
         borderColor: "#e5e7eb",
-        width: 275,
+        width: moderateScale(250),
         paddingTop: 4,
         fontSize: 15,
-        paddingLeft: 5
+        paddingLeft: 5,
     },
     button: {
         borderRadius: 3,
         alignItems: "center",
-        width: 275,
+        width: moderateScale(250),
         backgroundColor: "#22c55e",
         padding: 7,
         marginBottom: moderateVerticalScale(600),
@@ -176,4 +162,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default UserRegistrationEmail
+export default UserVerification

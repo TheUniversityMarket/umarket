@@ -1,11 +1,14 @@
 import { View, Text, StyleSheet, Dimensions } from 'react-native'
 import UserLogin from "./src/screens/UserLogin"
 import Listings from './src/screens/Listings'
-import UserRegistrationAccount from './src/screens/UserRegistrationAccount'
-import UserRegistrationEmail from './UserRegistrationEmail'
+import UserVerification from './src/screens/UserVerification'
+import UserRegistrationEmail from './src/screens/UserRegistrationEmail'
 import Post from './src/screens/Post'
 import Settings from './src/screens/Settings'
 import ListingItem from './src/screens/ListingItem'
+import AccountInformation from './src/screens/AccountInformation'
+import ListingsLoggedOut from './src/screens/ListingsLoggedOut'
+import Chat from './src/screens/Chat'
 
 import { AntDesign } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
@@ -70,18 +73,42 @@ function Home() {
 }
 
 function App() {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name={'Login/SignUp'} component={UserLogin} options={{headerShown: false}} />
-        <Stack.Screen name={'UserRegistrationEmail'} component={UserRegistrationEmail} options={{headerShown: false}} />
-        <Stack.Screen name={'UserRegistrationAccount'} component={UserRegistrationAccount} options={{headerShown: false}} />
-        <Stack.Screen name={'Home'} component={Home} options={{headerShown: false}}/>
-        <Stack.Screen name={'ListingItem'} component={ListingItem} options={{headerShown: false}}/>
-        {/*<Stack.Screen name={'Listings'} component={Listings} options={{headerShown: false}} />*/}
-      </Stack.Navigator>
-    </NavigationContainer>
-  )
+  if (width > 700) {
+    return (
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen name={'ListingsLoggedOut'} component={ListingsLoggedOut} options={{headerShown: false}}/>
+          <Stack.Screen name={'Chat'} component={Chat} options={{headerShown: false}}/>
+          <Stack.Screen name={'Listings'} component={Listings} options={{headerShown: false}}/>
+          <Stack.Screen name={'Post'} component={Post} options={{headerShown: false}}/>
+          <Stack.Screen name={'Settings'} component={Settings} options={{headerShown: false}}/>
+          <Stack.Screen name={'Login/SignUp'} component={UserLogin} options={{headerShown: false}} />
+          <Stack.Screen name={'UserRegistrationEmail'} component={UserRegistrationEmail} options={{headerShown: false}} />
+          <Stack.Screen name={'UserVerification'} component={UserVerification} options={{headerShown: false}} />
+          <Stack.Screen name={'ListingItem'} component={ListingItem} options={{headerShown: false}}/>
+          <Stack.Screen name={'AccountInformation'} component={AccountInformation} options={{headerShown: false}}/>
+          {/*<Stack.Screen name={'Listings'} component={Listings} options={{headerShown: false}} />*/}
+        </Stack.Navigator>
+      </NavigationContainer>
+    )
+  }
+  else {
+    return (
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen name={'ListingsLoggedOut'} component={ListingsLoggedOut} options={{headerShown: false}}/>
+          <Stack.Screen name={'Home'} component={Home} options={{headerShown: false}}/>
+          <Stack.Screen name={'Login/SignUp'} component={UserLogin} options={{headerShown: false}} />
+          <Stack.Screen name={'UserRegistrationEmail'} component={UserRegistrationEmail} options={{headerShown: false}} />
+          <Stack.Screen name={'UserVerification'} component={UserVerification} options={{headerShown: false}} />
+          <Stack.Screen name={'ListingItem'} component={ListingItem} options={{headerShown: false}}/>
+          <Stack.Screen name={'AccountInformation'} component={AccountInformation} options={{headerShown: false}}/>
+          {/*<Stack.Screen name={'Listings'} component={Listings} options={{headerShown: false}} />*/}
+        </Stack.Navigator>
+      </NavigationContainer>
+    )
+  } 
+
 }
 
 const styles = StyleSheet.create({
