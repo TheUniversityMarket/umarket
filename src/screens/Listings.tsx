@@ -224,7 +224,7 @@ function Listings() {
                     <SearchBar onSearch={handleSearch}/>
                   </View>
 
-                  <View style={{alignItems: "flex-end", flex: 1, marginRight: 30}}>
+                  <View style={{alignItems: "flex-end", marginRight: 30, marginLeft: 20}}>
 
                     <View style={{flexDirection: "row", alignItems: "center"}}>
 
@@ -249,7 +249,7 @@ function Listings() {
                         </View>
                       </Pressable>
 
-                      </View>
+                    </View>
 
                   </View>
                   <StatusBar style="auto" />
@@ -339,7 +339,7 @@ function Listings() {
                       renderItem={renderItem}
                       ItemSeparatorComponent={() => <View style={{height: 30}}/>}
                       ListEmptyComponent={Empty}
-                      numColumns={Math.round(width/moderateScale(215))}
+                      numColumns={Math.round(width/moderateScale(210))}
                       />)}
                   </View>
                   {!hasSearched && (<FlatList      
@@ -361,6 +361,7 @@ function Listings() {
 const styles = StyleSheet.create({
   safeContainer: {
     flex: 1,
+    flexGrow: 1,
     backgroundColor: "white",
     overflow: "scroll"
   },
@@ -392,13 +393,13 @@ const styles = StyleSheet.create({
     fontSize: scale(17) < 20 ? 20 : scale(17),
     color: "rgb(34 197 94)",
     fontWeight: "bold",
-    width: "20%",
+    //width: "20%",
     marginTop: 15,
     paddingTop: 0,
   },
   search: {
     //width: scale(130),
-    // borderWidth: 10,
+    //borderWidth: 10,
     borderWidth: 1,
     borderColor: "#A9A9A9",
     backgroundColor: "#fbfbfb",
@@ -410,7 +411,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-start",
     marginRight: 20,
-    marginLeft: 20,
+    marginLeft: 50,
+    flex: 4,
   },
   shoppingCart: {
     //backgroundColor: "black",
@@ -446,6 +448,7 @@ const styles = StyleSheet.create({
     // borderColor: "red",
     //flexDirection: "row",
     flexWrap: "wrap",
+    overflow: "scroll",
   },
   item: {
     //borderWidth: 1,
