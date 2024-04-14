@@ -160,7 +160,7 @@ function Listings() {
       sethasSearched(!hasSearched);
     }
     const filteredItems = DATA.filter(Item =>
-      Item.title.toLowerCase().includes(query.toLowerCase())
+      (Item.title.toLowerCase().includes(query.toLowerCase()) || Item.tags.includes(query.toLowerCase()))
     );
     setSearchResults(filteredItems);
   };
@@ -186,11 +186,13 @@ function Listings() {
       if (!tags.includes(item.tags[i])) {
         tags.push(item.tags[i])
         return (
+          <Pressable onPress = {() => handleSearch(item.tags[i])}>
           <View style={{justifyContent: "center", marginLeft: 40}}>
             <Text style={{fontWeight: "bold", color: "gray"}}>
               {item.tags[i]}
             </Text>
           </View>
+          </Pressable>
         )
       }
     }
@@ -342,6 +344,7 @@ function Listings() {
                       numColumns={Math.round(width/moderateScale(215))}
                       />)}
                   </View>
+                  <View style={styles.container}>
                   {!hasSearched && (<FlatList      
                     data={DATA}
                     renderItem={renderItem}
@@ -350,6 +353,7 @@ function Listings() {
                     ListEmptyComponent={Empty}
                     numColumns={Math.round(width/moderateScale(215))}
                     />)}
+                  </View>
                 {/* </ScrollView> */}
               </View>
           </View>
@@ -465,6 +469,7 @@ const styles = StyleSheet.create({
   resultsContainer: {
     marginTop: 20,
     paddingHorizontal: 10,
+    flex:1
   },
 });
 
