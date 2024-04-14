@@ -211,6 +211,7 @@ function ListingsLoggedOut() {
     return (
       <SafeAreaView style={styles.safeContainer}>
           <View style={styles.container}>
+
               <View style={styles.header}>
                   <Image style={styles.logo} source={require('./assets/logo.jpg')}></Image>
                   <Text style={styles.compName}>
@@ -220,7 +221,7 @@ function ListingsLoggedOut() {
                     <AntDesign name="search1" size={24} color="rgb(34 197 94)" />
                     <SearchBar onSearch={handleSearch}/>
                   </View>
-                  <View style={{alignItems: "flex-end", flex: 1, marginRight: 30}}>
+                  <View style={{alignItems: "flex-end", marginRight: 30, marginLeft: 50}}>
                     <Pressable onPress={() => navigation.navigate('Login/SignUp')} >
                       <View style={{borderWidth: 3, borderColor: "rgb(34 197 94)", marginTop: 17}}>
                         <Text style={{color: "rgb(34 197 94)", fontWeight: "bold", padding: 15}}>
@@ -231,6 +232,7 @@ function ListingsLoggedOut() {
                   </View>
                   <StatusBar style="auto" />
               </View>
+
               <View style={{height: 40}}>
                 <View style={{flex: 1, flexDirection: "row", borderBottomWidth: 1, borderBottomColor: "#d3d3d3"}}>
                   <FlatList
@@ -244,7 +246,6 @@ function ListingsLoggedOut() {
                 </View>
               </View>
               <View style={styles.page}>
-                {/* <ScrollView> */}
                   {/* {listing("Mac", laptop)}
 
                   {listing("Refrigerator", fridge)}
@@ -268,7 +269,6 @@ function ListingsLoggedOut() {
                     ListEmptyComponent={Empty}
                     numColumns={Math.round(width/moderateScale(215))}
                     />)}
-                {/* </ScrollView> */}
               </View>
           </View>
       </SafeAreaView>
@@ -368,8 +368,9 @@ const styles = StyleSheet.create({
     fontSize: scale(17) < 20 ? 20 : scale(17),
     color: "rgb(34 197 94)",
     fontWeight: "bold",
-    width: "20%",
+    //width: "20%",
     marginTop: 15,
+    marginRight: 50,
     paddingTop: 0,
   },
   search: {
@@ -385,12 +386,13 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: "center",
     justifyContent: "flex-start",
-    marginRight: 20,
-    marginLeft: 20,
+    //marginRight: 20,
+    //marginLeft: 20,
+    flex: 7,
   },
   shoppingCart: {
     //backgroundColor: "black",
-    padding: 10,
+    //padding: 10,
     //borderRadius: 13,
     //overflow: "hidden",
   },
