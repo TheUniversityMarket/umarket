@@ -182,7 +182,7 @@ const [messages, setMessages] = useState([]);
                         <View style={{borderWidth: 3, borderColor: "rgb(34 197 94)", marginTop: 17, flexDirection: "row", alignItems: "center"}}>
                         <AntDesign name="pluscircleo" size={24} color="rgb(34 197 94)" style={{paddingLeft: 15, paddingRight: 7}}/>
                             <Text style={{color: "rgb(34 197 94)", fontWeight: "bold", paddingVertical: 15, paddingRight: 15, fontSize: 17}}>
-                            Post
+                              Post
                             </Text>
                         </View>
                         </Pressable>
@@ -337,13 +337,15 @@ const styles = StyleSheet.create({
   messageContainer: {
     marginLeft: 10,
     padding: 10,
-    backgroundColor: '#e5e5e5',
+    backgroundColor: "rgb(34 197 94)",
+    //backgroundColor: '#e5e5e5',
     borderRadius: 10,
     marginVertical: 5,
     alignSelf: 'flex-start',
     maxWidth: '80%',
   },
   messageText: {
+    color: "white",
     fontSize: 16,
   },
   inputContainer: {
