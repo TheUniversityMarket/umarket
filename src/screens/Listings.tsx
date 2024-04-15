@@ -192,15 +192,20 @@ function Listings() {
 
   function renderItem({item}) {
     return (
-      <Pressable style={ ({ pressed }) => [
-        {borderRadius: 10},
-        pressed && {backgroundColor: "rgb(34 197 94)",}
+      <Pressable
+        style={({ pressed }) => [
+          {
+            borderRadius: 10,
+            backgroundColor: pressed ? 'transparent' : 'white', // Change or remove background color change on press
+          }
         ]}
-        onPress={() => navigation.navigate('ListingItem', { item })}>
+        onPress={() => navigation.navigate('ListingItem', { item })}
+      >
         <Item id={item.id} title={item.title} image={item.image} description={item.description} price={item.price} tags={item.tags}/>
       </Pressable>
     )
   }
+  
 
   let tags = [];
 
