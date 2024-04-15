@@ -19,6 +19,7 @@
     "bootstrap": "^4.6.2",
     "expo": "~50.0.14",
     "expo-status-bar": "~1.11.1",
+    "firebase": "^10.11.0",
     "package.json": "^2.0.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
