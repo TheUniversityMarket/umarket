@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from 'react';
 import { useState, useEffect, useRef } from 'react';
 import { StatusBar } from 'expo-status-bar'
 import { StyleSheet, Text, View, SafeAreaView, ScrollView, Image, FlatList, Dimensions, useWindowDimensions, Pressable, Animated } from 'react-native'
