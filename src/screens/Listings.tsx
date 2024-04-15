@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar'
 import { StyleSheet, Text, View, SafeAreaView, ScrollView, Image, FlatList, Dimensions, useWindowDimensions, Pressable } from 'react-native'
 import { AntDesign } from '@expo/vector-icons';
@@ -7,6 +7,8 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { TextInput } from 'react-native-gesture-handler';
 import SearchBar from "../components/SearchBar";
+import MainHeader from "../components/MainHeader";
+import { useRoute } from "@react-navigation/native";
 
 // import { scale, verticalScale, moderateScale, moderateVerticalScale } from "/Users/jevontwitty/Documents/GitHub/UMarket/src/components/Scaling"
 // import { FlatList } from 'react-native-gesture-handler';
@@ -155,18 +157,27 @@ const numberOfColumns = Math.round(width/215
 function Listings() {
   const [searchResults, setSearchResults] = useState<Object[]>([]);
   const [hasSearched, sethasSearched] = useState(false);
+  const navigation = useNavigation()
+  const route = useRoute()
+  
   const handleSearch = (query: any) => {
-    if (!hasSearched) {
-      sethasSearched(!hasSearched);
-    }
+    sethasSearched(true);
     const filteredItems = DATA.filter(Item =>
       (Item.title.toLowerCase().includes(query.toLowerCase()) || Item.tags.includes(query.toLowerCase()))
     );
     setSearchResults(filteredItems);
   };
 
-  console.log(width)
-  const navigation = useNavigation()
+  const q = route.params?.obj?.q;
+  let h = route.params?.obj?.h;
+
+  useEffect(() => {
+    if (h) {
+      h = false;
+      handleSearch(q);
+    }
+  }, [q, h]);
+
   function renderItem({item}) {
     return (
       <Pressable style={ ({ pressed }) => [
@@ -197,6 +208,7 @@ function Listings() {
       }
     }
   }
+  console.log()
 
   // function listing(text: string, image: string) {
   //   return (
