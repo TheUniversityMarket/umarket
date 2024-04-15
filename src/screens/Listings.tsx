@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import { StatusBar } from 'expo-status-bar'
 import { StyleSheet, Text, View, SafeAreaView, ScrollView, Image, FlatList, Dimensions, useWindowDimensions, Pressable, Animated } from 'react-native'
@@ -301,7 +301,7 @@ function Listings() {
               </View>
 
               <View style={{height: 40}}>
-                <View style={{flex: 1, flexDirection: "row", borderBottomWidth: 1, borderBottomColor: "#d3d3d3"}}>
+                <View style={{flex: 1, flexDirection: "row", borderBottomWidth: 1, borderBottomColor: "#d3d3d3", marginTop: 10}}>
                   <FlatList
                     horizontal={true}
                     data={DATA}
@@ -446,7 +446,7 @@ const styles = StyleSheet.create({
   },
   search: {
     //width: scale(130),
-    //borderWidth: 10,
+    // borderWidth: 10,
     borderWidth: 1,
     borderColor: "#A9A9A9",
     backgroundColor: "#fbfbfb",
@@ -529,6 +529,7 @@ const styles = StyleSheet.create({
   tagText: {
     color: 'black',             // Text color
     fontSize: 12,               // Font size
+    fontWeight: "bold"
   }
 });
 
