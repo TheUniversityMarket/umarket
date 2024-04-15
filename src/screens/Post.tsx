@@ -9,8 +9,9 @@ import { Entypo } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import SearchBar from "../components/SearchBar";
 import { StatusBar } from 'expo-status-bar'
+import MainHeader from "../components/MainHeader";
 import { ScrollView } from "react-native-gesture-handler";
-
+        
 // import { AntDesign } from '@expo/vector-icons';
 // import { useNavigation } from '@react-navigation/native';
 
@@ -32,6 +33,7 @@ import { ScrollView } from "react-native-gesture-handler";
 
 //check
 function Post({ navigation }) {
+    console.log("oasdasjdajdaoisjdoasjdoadjoajdoasjdajsdoiasdioajsdojasdoasj");
     const companyName = "Market";
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
@@ -40,50 +42,8 @@ function Post({ navigation }) {
 
     return (
          <SafeAreaView style={styles.safeContainer}>
-
-            <View style={styles.header}>
-                <Pressable onPress={() => navigation.navigate('Listings')}>
-                    <View>
-                        <Image style={styles.logo} source={require('./assets/logo.jpg')}></Image>
-                        <Text style={styles.compName}>
-                            {companyName}
-                        </Text>
-                    </View>
-                </Pressable>
-                
-                <View style={styles.search}>
-                <AntDesign name="search1" size={24} color="rgb(34 197 94)" />
-                {/* <SearchBar onSearch={handleSearch}/> */}
-                </View>
-
-                <View style={{alignItems: "flex-end", flex: 1, marginRight: 30}}>
-
-                <View style={{flexDirection: "row", alignItems: "center"}}>
-
-                    <Pressable onPress={() => navigation.navigate('Settings')} >
-                    <View style={{alignItems: "flex-end", marginRight: 30, marginTop: 17}}>
-                        <MaterialIcons name="account-circle" size={43} color="rgb(34 197 94)" />
-                    </View>
-                    </Pressable>
-
-                    <View style={{alignItems: "flex-end", marginRight: 30, marginTop: 17}}>
-                    <Entypo name="chat" size={43} color="rgb(34 197 94)" />
-                    </View>
-
-                    <Pressable onPress={() => navigation.navigate('Post')} >
-                    <View style={{borderWidth: 3, borderColor: "rgb(34 197 94)", marginTop: 17, flexDirection: "row", alignItems: "center"}}>
-                    <AntDesign name="pluscircleo" size={24} color="rgb(34 197 94)" style={{paddingLeft: 15, paddingRight: 7}}/>
-                        <Text style={{color: "rgb(34 197 94)", fontWeight: "bold", paddingVertical: 15, paddingRight: 15, fontSize: 17}}>
-                        Post
-                        </Text>
-                    </View>
-                    </Pressable>
-
-                    </View>
-
-                </View>
-                <StatusBar style="auto" />
-            </View>
+            <MainHeader></MainHeader>
+            
 
             <ScrollView contentContainerStyle={{flex: 1}}>
                 <View style={styles.container}>
