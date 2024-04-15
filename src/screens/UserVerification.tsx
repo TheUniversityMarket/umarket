@@ -83,7 +83,7 @@ function UserVerification({ navigation }) {
                     <View style={styles.registrationContainer}>
                         <Text style={{fontWeight: "bold", fontSize: moderateScale(25), marginBottom: 17, color:"rgb(17 24 39)"}}>Verification Code</Text>
                         <View style={{ gap: 3, marginBottom: verticalScale(17)}}>
-                            <TextInput style={styles.verificationCode} placeholder="Enter School Email" keyboardType="email-address" placeholderTextColor={"#B3B3B3"}/>
+                            <TextInput style={styles.verificationCode} placeholder="Enter Verification Code" keyboardType="email-address" placeholderTextColor={"#B3B3B3"}/>
                             <Pressable style={ ({ pressed }) => [
                             styles.button,
                             pressed && {backgroundColor: "green"}
