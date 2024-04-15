@@ -40,45 +40,44 @@ function returnTags(tagList: string | any[]) {
 }
 
 function Item(props: { id: any; title: any; image: any; description: any; price: any; tags: any; }) {
-  const { id, title, image, description, price, tags} = props
+  const { id, title, image, description, price, tags } = props;
   return (
     <View style={styles.item}>
-      <View style={{flexDirection: "row", justifyContent: "space-between"}}>
+      <Image style={{
+        width: moderateScale(155),
+        height: moderateVerticalScale(170),
+        marginTop: 10,
+        borderRadius: 5 // Small value for slight rounding
+      }} source={{ uri: image }} />
+      <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 10 }}>
+        <View style={{ backgroundColor: "rgb(34 197 94)", padding: 7, borderRadius: 5 }}>
+          <Text style={{
+            fontWeight: "bold",
+            fontSize: moderateScale(10),
+            color: "white"
+          }}>
+            {title}
+          </Text>
+        </View>
+        <View style={{ backgroundColor: "rgb(34 197 94)", padding: 7, borderRadius: 5 }}>
+          <Text style={{
+            fontSize: moderateScale(10),
+            color: "white"
+          }}>
+            {price}
+          </Text>
+        </View>
       </View>
-      <Image style={{ width: moderateScale(155), height: moderateVerticalScale(170), borderRadius: 0, marginTop: 10, borderWidth: 0, borderColor: "rgb(34 197 94)"}} source={{uri: image}} />
-      <View style={{backgroundColor: "rgb(34 197 94)", position: "absolute", left:6, bottom:13, padding: 7, borderRadius: 24}}>
-        <Text style={{fontFamily: 'Roboto', fontWeight: "bold", fontSize: moderateScale(10), color:"white"}}>{title}</Text>
-      </View>
-      <View>
-        <Text style={{marginBottom: 10, fontSize: moderateScale(10), position:"absolute"}}>{returnTags(tags)}</Text>
-      </View>
-      <View style={{backgroundColor: "rgb(34 197 94)", position: "absolute", right:8, bottom:16, padding: 7, borderRadius: 24}}>
-        <Text style={{fontSize: moderateScale(10), color:"white"}}> 
-         {price}
+      <View style={{marginTop: 10}}>
+        <Text style={{ fontSize: moderateScale(10) }}>
+          {returnTags(tags)}
         </Text>
       </View>
-      {/* <View style={{width: moderateScale(155), backgroundColor:"#e5e7eb", padding: 10 }}>
-        <View>
-            <View>
-                <View style={{}}>
-                    <Text style={{fontWeight: "bold", fontSize: moderateScale(17) }}>{title}</Text>
-                </View>
-                <Text style={{marginBottom: 10, fontSize: moderateScale(10)}}>
-                    {returnTags(tags)}
-                </Text>
-            </View>
-        </View>
-        <View style={{marginTop: 3}}>
-            <View>
-                <Text style={{fontSize: moderateScale(13)}}>
-                    Price: {price}
-                </Text>
-            </View>
-        </View>
-    </View> */}
     </View>
   )
 }
+
+
 
 function Empty() {
   return (
