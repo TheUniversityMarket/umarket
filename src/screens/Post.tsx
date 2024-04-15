@@ -30,7 +30,7 @@ import { ScrollView } from "react-native-gesture-handler";
 //     return size + (verticalScale(size) - size) * factor;
 // }
 
-
+//check
 function Post({ navigation }) {
     const companyName = "Market";
     const [name, setName] = useState('');
