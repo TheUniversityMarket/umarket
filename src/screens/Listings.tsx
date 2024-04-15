@@ -180,24 +180,20 @@ function Listings() {
   const navigation = useNavigation()
   function renderItem({item}) {
     return (
-      <Pressable 
-        onPress={() => navigation.navigate('ListingItem', { item })}
+      <Pressable
         style={({ pressed }) => [
-            styles.item,
-            // If you want to have any specific style changes when the item is pressed,
-            // you can apply them here. For example, you might want to decrease the opacity
-            // or scale the item slightly. Since you want to remove the green background, do not
-            // set any background color here.
-            {
-                opacity: pressed ? 0.8 : 1, // Optional: changes opacity instead of showing a green background
-            }
+          {
+            borderRadius: 10,
+            backgroundColor: pressed ? 'transparent' : 'white', // Change or remove background color change on press
+          }
         ]}
+        onPress={() => navigation.navigate('ListingItem', { item })}
       >
         <Item id={item.id} title={item.title} image={item.image} description={item.description} price={item.price} tags={item.tags}/>
       </Pressable>
     )
-}
-
+  }
+  
 
   let tags = [];
 
