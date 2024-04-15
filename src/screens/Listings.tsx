@@ -31,12 +31,13 @@ function moderateVerticalScale(size: number, factor = 0.5) {
     return size + (verticalScale(size) - size) * factor;
 }
 
-function returnTags(tagList: string | any[]) {
-  let stringReturn = ""
-  for (let i=0; i<tagList.length; i++) {
-      stringReturn += "#" + tagList[i]
-  }
-  return stringReturn
+function returnTags(tagList) {
+  // Map each tag to a Text component wrapped in a View component styled to look like a small grey pill-shaped box
+  return tagList.map((tag, index) => (
+    <View key={index} style={styles.tag}>
+      <Text style={styles.tagText}>{tag}</Text>
+    </View>
+  ));
 }
 
 function Item(props) {
@@ -493,6 +494,19 @@ const styles = StyleSheet.create({
     marginTop: 20,
     paddingHorizontal: 10,
   },
+
+  tag: {
+    backgroundColor: '#d3d3d3', // Grey background
+    borderRadius: 15,           // Rounded corners for pill shape
+    paddingVertical: 5,         // Vertical padding
+    paddingHorizontal: 10,      // Horizontal padding
+    marginRight: 5,             // Space between tags
+    marginTop: 5,               // Margin top for space above
+  },
+  tagText: {
+    color: 'black',             // Text color
+    fontSize: 12,               // Font size
+  }
 });
 
 export default Listings
