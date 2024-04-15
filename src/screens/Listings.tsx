@@ -31,12 +31,13 @@ function moderateVerticalScale(size: number, factor = 0.5) {
     return size + (verticalScale(size) - size) * factor;
 }
 
-function returnTags(tagList: string | any[]) {
-  let stringReturn = ""
-  for (let i=0; i<tagList.length; i++) {
-      stringReturn += "#" + tagList[i]
-  }
-  return stringReturn
+function returnTags(tagList) {
+  // Map each tag to a Text component wrapped in a View component styled to look like a small grey pill-shaped box
+  return tagList.map((tag, index) => (
+    <View key={index} style={styles.tag}>
+      <Text style={styles.tagText}>{tag}</Text>
+    </View>
+  ));
 }
 
 function Item(props) {
@@ -251,13 +252,27 @@ function Listings() {
                       </Pressable>
 
                       <Pressable onPress={() => navigation.navigate('Post')} >
-                        <View style={{borderWidth: 3, borderColor: "rgb(34 197 94)", marginTop: 17, flexDirection: "row", alignItems: "center", borderRadius: 15}}>
-                        <AntDesign name="pluscircleo" size={24} color="rgb(34 197 94)" style={{paddingLeft: 15, paddingRight: 7}}/>
-                          <Text style={{color: "rgb(34 197 94)", fontWeight: "bold", paddingVertical: 15, paddingRight: 15, fontSize: 17}}>
+                        <View style={{
+                          borderWidth: 3,
+                          borderColor: "rgb(34 197 94)",
+                          marginTop: 17,
+                          flexDirection: "row",
+                          alignItems: "center",
+                          borderRadius: 40, // Adjust this value to achieve the desired pill shape
+                          paddingVertical: 10, // Ensure vertical padding is sufficient for a good appearance
+                          paddingHorizontal: 15, // Adjust horizontal padding as needed
+                        }}>
+                          <AntDesign name="pluscircleo" size={24} color="rgb(34 197 94)" style={{ marginRight: 7 }}/>
+                          <Text style={{
+                            color: "rgb(34 197 94)",
+                            fontWeight: "bold",
+                            fontSize: 17
+                          }}>
                             Post
                           </Text>
                         </View>
                       </Pressable>
+
 
                     </View>
 
@@ -413,7 +428,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#A9A9A9",
     backgroundColor: "#fbfbfb",
-    borderRadius: 5,
+    borderRadius: 30,
     flexDirection: "row",
     padding: 10,
     marginTop: 15,
@@ -479,6 +494,19 @@ const styles = StyleSheet.create({
     marginTop: 20,
     paddingHorizontal: 10,
   },
+
+  tag: {
+    backgroundColor: '#d3d3d3', // Grey background
+    borderRadius: 15,           // Rounded corners for pill shape
+    paddingVertical: 5,         // Vertical padding
+    paddingHorizontal: 10,      // Horizontal padding
+    marginRight: 5,             // Space between tags
+    marginTop: 5,               // Margin top for space above
+  },
+  tagText: {
+    color: 'black',             // Text color
+    fontSize: 12,               // Font size
+  }
 });
 
 export default Listings
