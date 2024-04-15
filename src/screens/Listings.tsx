@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { StatusBar } from 'expo-status-bar'
-import { StyleSheet, Text, View, SafeAreaView, ScrollView, Image, FlatList, Dimensions, useWindowDimensions, Pressable } from 'react-native'
+import { StyleSheet, Text, View, SafeAreaView, ScrollView, Image, FlatList, Dimensions, useWindowDimensions, Pressable, Animated } from 'react-native'
 import { AntDesign } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -39,45 +39,56 @@ function returnTags(tagList: string | any[]) {
   return stringReturn
 }
 
-function Item(props: { id: any; title: any; image: any; description: any; price: any; tags: any; }) {
+function Item(props) {
   const { id, title, image, description, price, tags } = props;
+  const scaleValue = useRef(new Animated.Value(1)).current; // Initial scale
+
+  const handleMouseEnter = () => {
+    Animated.spring(scaleValue, {
+      toValue: 1.05,
+      useNativeDriver: true
+    }).start();
+  };
+
+  const handleMouseLeave = () => {
+    Animated.spring(scaleValue, {
+      toValue: 1,
+      useNativeDriver: true
+    }).start();
+  };
+
   return (
-    <View style={styles.item}>
-      <Image style={{
-        width: moderateScale(155),
-        height: moderateVerticalScale(170),
-        marginTop: 10,
-        borderRadius: 5 // Small value for slight rounding
-      }} source={{ uri: image }} />
-      <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 10 }}>
-        <View style={{ backgroundColor: "rgb(34 197 94)", padding: 7, borderRadius: 5 }}>
-          <Text style={{
-            fontWeight: "bold",
-            fontSize: moderateScale(10),
-            color: "white"
-          }}>
-            {title}
-          </Text>
-        </View>
-        <View style={{ backgroundColor: "rgb(34 197 94)", padding: 7, borderRadius: 5 }}>
-          <Text style={{
-            fontSize: moderateScale(10),
-            color: "white"
-          }}>
-            {price}
-          </Text>
-        </View>
-      </View>
-      <View style={{marginTop: 10}}>
-        <Text style={{ fontSize: moderateScale(10) }}>
+    <Animated.View 
+      style={[
+        styles.item, 
+        { transform: [{ scale: scaleValue }] }
+      ]}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
+      <Image
+        style={{
+          width: moderateScale(155),
+          height: moderateVerticalScale(170),
+          marginTop: 10,
+          borderRadius: 5
+        }}
+        source={{ uri: image }}
+      />
+      <View style={{ marginTop: 10 }}>
+        <Text style={{ fontWeight: "bold", fontSize: moderateScale(10), color: "black" }}>
+          {title}
+        </Text>
+        <Text style={{ fontSize: moderateScale(10), color: "black" }}>
+          {price}
+        </Text>
+        <Text style={{ fontSize: moderateScale(10), color: "black" }}>
           {returnTags(tags)}
         </Text>
       </View>
-    </View>
-  )
+    </Animated.View>
+  );
 }
-
-
 
 function Empty() {
   return (
@@ -240,7 +251,7 @@ function Listings() {
                       </Pressable>
 
                       <Pressable onPress={() => navigation.navigate('Post')} >
-                        <View style={{borderWidth: 3, borderColor: "rgb(34 197 94)", marginTop: 17, flexDirection: "row", alignItems: "center"}}>
+                        <View style={{borderWidth: 3, borderColor: "rgb(34 197 94)", marginTop: 17, flexDirection: "row", alignItems: "center", borderRadius: 15}}>
                         <AntDesign name="pluscircleo" size={24} color="rgb(34 197 94)" style={{paddingLeft: 15, paddingRight: 7}}/>
                           <Text style={{color: "rgb(34 197 94)", fontWeight: "bold", paddingVertical: 15, paddingRight: 15, fontSize: 17}}>
                             Post
