@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     height: 40,
     borderColor: 'gray',
     //borderWidth: 1,
-    borderRadius: 5,
+    borderRadius: 20,
     paddingHorizontal: 10,
     outlineColor: "transparent",
   },

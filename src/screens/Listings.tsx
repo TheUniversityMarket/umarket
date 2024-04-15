@@ -7,6 +7,8 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { TextInput } from 'react-native-gesture-handler';
 import SearchBar from "../components/SearchBar";
+import MainHeader from "../components/MainHeader";
+import { useRoute } from "@react-navigation/native";
 
 // import { scale, verticalScale, moderateScale, moderateVerticalScale } from "/Users/jevontwitty/Documents/GitHub/UMarket/src/components/Scaling"
 // import { FlatList } from 'react-native-gesture-handler';
@@ -31,12 +33,13 @@ function moderateVerticalScale(size: number, factor = 0.5) {
     return size + (verticalScale(size) - size) * factor;
 }
 
-function returnTags(tagList: string | any[]) {
-  let stringReturn = ""
-  for (let i=0; i<tagList.length; i++) {
-      stringReturn += "#" + tagList[i]
-  }
-  return stringReturn
+function returnTags(tagList) {
+  // Map each tag to a Text component wrapped in a View component styled to look like a small grey pill-shaped box
+  return tagList.map((tag, index) => (
+    <View key={index} style={styles.tag}>
+      <Text style={styles.tagText}>{tag}</Text>
+    </View>
+  ));
 }
 
 function Item(props) {
@@ -165,29 +168,43 @@ const numberOfColumns = Math.round(width/215
 function Listings() {
   const [searchResults, setSearchResults] = useState<Object[]>([]);
   const [hasSearched, sethasSearched] = useState(false);
+  const navigation = useNavigation()
+  const route = useRoute()
+  
   const handleSearch = (query: any) => {
-    if (!hasSearched) {
-      sethasSearched(!hasSearched);
-    }
+    sethasSearched(true);
     const filteredItems = DATA.filter(Item =>
-      Item.title.toLowerCase().includes(query.toLowerCase())
+      (Item.title.toLowerCase().includes(query.toLowerCase()) || Item.tags.includes(query.toLowerCase()))
     );
     setSearchResults(filteredItems);
   };
 
-  console.log(width)
-  const navigation = useNavigation()
+  const q = route.params?.obj?.q;
+  let h = route.params?.obj?.h;
+
+  useEffect(() => {
+    if (h) {
+      h = false;
+      handleSearch(q);
+    }
+  }, [q, h]);
+
   function renderItem({item}) {
     return (
-      <Pressable style={ ({ pressed }) => [
-        {borderRadius: 10},
-        pressed && {backgroundColor: "rgb(34 197 94)",}
+      <Pressable
+        style={({ pressed }) => [
+          {
+            borderRadius: 10,
+            backgroundColor: pressed ? 'transparent' : 'white', // Change or remove background color change on press
+          }
         ]}
-        onPress={() => navigation.navigate('ListingItem', { item })}>
+        onPress={() => navigation.navigate('ListingItem', { item })}
+      >
         <Item id={item.id} title={item.title} image={item.image} description={item.description} price={item.price} tags={item.tags}/>
       </Pressable>
     )
   }
+  
 
   let tags = [];
 
@@ -196,15 +213,18 @@ function Listings() {
       if (!tags.includes(item.tags[i])) {
         tags.push(item.tags[i])
         return (
+          <Pressable onPress = {() => handleSearch(item.tags[i])}>
           <View style={{justifyContent: "center", marginLeft: 40}}>
             <Text style={{fontWeight: "bold", color: "gray"}}>
               {item.tags[i]}
             </Text>
           </View>
+          </Pressable>
         )
       }
     }
   }
+  console.log()
 
   // function listing(text: string, image: string) {
   //   return (
@@ -251,13 +271,27 @@ function Listings() {
                       </Pressable>
 
                       <Pressable onPress={() => navigation.navigate('Post')} >
-                        <View style={{borderWidth: 3, borderColor: "rgb(34 197 94)", marginTop: 17, flexDirection: "row", alignItems: "center", borderRadius: 15}}>
-                        <AntDesign name="pluscircleo" size={24} color="rgb(34 197 94)" style={{paddingLeft: 15, paddingRight: 7}}/>
-                          <Text style={{color: "rgb(34 197 94)", fontWeight: "bold", paddingVertical: 15, paddingRight: 15, fontSize: 17}}>
+                        <View style={{
+                          borderWidth: 3,
+                          borderColor: "rgb(34 197 94)",
+                          marginTop: 17,
+                          flexDirection: "row",
+                          alignItems: "center",
+                          borderRadius: 40, // Adjust this value to achieve the desired pill shape
+                          paddingVertical: 10, // Ensure vertical padding is sufficient for a good appearance
+                          paddingHorizontal: 15, // Adjust horizontal padding as needed
+                        }}>
+                          <AntDesign name="pluscircleo" size={24} color="rgb(34 197 94)" style={{ marginRight: 7 }}/>
+                          <Text style={{
+                            color: "rgb(34 197 94)",
+                            fontWeight: "bold",
+                            fontSize: 17
+                          }}>
                             Post
                           </Text>
                         </View>
                       </Pressable>
+
 
                     </View>
 
@@ -352,6 +386,7 @@ function Listings() {
                       numColumns={Math.round(width/moderateScale(210))}
                       />)}
                   </View>
+                  <View style={styles.container}>
                   {!hasSearched && (<FlatList      
                     data={DATA}
                     renderItem={renderItem}
@@ -360,6 +395,7 @@ function Listings() {
                     ListEmptyComponent={Empty}
                     numColumns={Math.round(width/moderateScale(215))}
                     />)}
+                  </View>
                 {/* </ScrollView> */}
               </View>
           </View>
@@ -413,7 +449,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#A9A9A9",
     backgroundColor: "#fbfbfb",
-    borderRadius: 5,
+    borderRadius: 30,
     flexDirection: "row",
     padding: 10,
     marginTop: 15,
@@ -478,7 +514,21 @@ const styles = StyleSheet.create({
   resultsContainer: {
     marginTop: 20,
     paddingHorizontal: 10,
+    flex:1
   },
+
+  tag: {
+    backgroundColor: '#d3d3d3', // Grey background
+    borderRadius: 15,           // Rounded corners for pill shape
+    paddingVertical: 5,         // Vertical padding
+    paddingHorizontal: 10,      // Horizontal padding
+    marginRight: 5,             // Space between tags
+    marginTop: 5,               // Margin top for space above
+  },
+  tagText: {
+    color: 'black',             // Text color
+    fontSize: 12,               // Font size
+  }
 });
 
 export default Listings
