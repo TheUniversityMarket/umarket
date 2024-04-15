@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { StatusBar } from 'expo-status-bar'
-import { StyleSheet, Text, View, SafeAreaView, ScrollView, Image, FlatList, Dimensions, useWindowDimensions, Pressable } from 'react-native'
+import { StyleSheet, Text, View, SafeAreaView, ScrollView, Image, FlatList, Dimensions, useWindowDimensions, Pressable, Animated } from 'react-native'
 import { AntDesign } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -31,53 +31,64 @@ function moderateVerticalScale(size: number, factor = 0.5) {
     return size + (verticalScale(size) - size) * factor;
 }
 
-function returnTags(tagList: string | any[]) {
-  let stringReturn = ""
-  for (let i=0; i<tagList.length; i++) {
-      stringReturn += "#" + tagList[i]
-  }
-  return stringReturn
+function returnTags(tagList) {
+  // Map each tag to a Text component wrapped in a View component styled to look like a small grey pill-shaped box
+  return tagList.map((tag, index) => (
+    <View key={index} style={styles.tag}>
+      <Text style={styles.tagText}>{tag}</Text>
+    </View>
+  ));
 }
 
-function Item(props: { id: any; title: any; image: any; description: any; price: any; tags: any; }) {
-  const { id, title, image, description, price, tags} = props
+function Item(props) {
+  const { id, title, image, description, price, tags } = props;
+  const scaleValue = useRef(new Animated.Value(1)).current; // Initial scale
+
+  const handleMouseEnter = () => {
+    Animated.spring(scaleValue, {
+      toValue: 1.05,
+      useNativeDriver: true
+    }).start();
+  };
+
+  const handleMouseLeave = () => {
+    Animated.spring(scaleValue, {
+      toValue: 1,
+      useNativeDriver: true
+    }).start();
+  };
+
   return (
-    <View style={styles.item}>
-      <View style={{flexDirection: "row", justifyContent: "space-between"}}>
-      </View>
-      <Image style={{ width: moderateScale(155), height: moderateVerticalScale(170), borderRadius: 0, marginTop: 10, borderWidth: 0, borderColor: "rgb(34 197 94)"}} source={{uri: image}} />
-      <View style={{backgroundColor: "rgb(34 197 94)", position: "absolute", left:6, bottom:13, padding: 7, borderRadius: 24}}>
-        <Text style={{fontFamily: 'Roboto', fontWeight: "bold", fontSize: moderateScale(10), color:"white"}}>{title}</Text>
-      </View>
-      <View>
-        <Text style={{marginBottom: 10, fontSize: moderateScale(10), position:"absolute"}}>{returnTags(tags)}</Text>
-      </View>
-      <View style={{backgroundColor: "rgb(34 197 94)", position: "absolute", right:8, bottom:16, padding: 7, borderRadius: 24}}>
-        <Text style={{fontSize: moderateScale(10), color:"white"}}> 
-         {price}
+    <Animated.View 
+      style={[
+        styles.item, 
+        { transform: [{ scale: scaleValue }] }
+      ]}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
+      <Image
+        style={{
+          width: moderateScale(155),
+          height: moderateVerticalScale(170),
+          marginTop: 10,
+          borderRadius: 5
+        }}
+        source={{ uri: image }}
+      />
+      <View style={{ marginTop: 10 }}>
+        <Text style={{ fontWeight: "bold", fontSize: moderateScale(10), color: "black" }}>
+          {title}
+        </Text>
+        <Text style={{ fontSize: moderateScale(10), color: "black" }}>
+          {price}
+        </Text>
+        <Text style={{ fontSize: moderateScale(10), color: "black" }}>
+          {returnTags(tags)}
         </Text>
       </View>
-      {/* <View style={{width: moderateScale(155), backgroundColor:"#e5e7eb", padding: 10 }}>
-        <View>
-            <View>
-                <View style={{}}>
-                    <Text style={{fontWeight: "bold", fontSize: moderateScale(17) }}>{title}</Text>
-                </View>
-                <Text style={{marginBottom: 10, fontSize: moderateScale(10)}}>
-                    {returnTags(tags)}
-                </Text>
-            </View>
-        </View>
-        <View style={{marginTop: 3}}>
-            <View>
-                <Text style={{fontSize: moderateScale(13)}}>
-                    Price: {price}
-                </Text>
-            </View>
-        </View>
-    </View> */}
-    </View>
-  )
+    </Animated.View>
+  );
 }
 
 function Empty() {
@@ -224,7 +235,7 @@ function Listings() {
                     <SearchBar onSearch={handleSearch}/>
                   </View>
 
-                  <View style={{alignItems: "flex-end", flex: 1, marginRight: 30}}>
+                  <View style={{alignItems: "flex-end", marginRight: 30, marginLeft: 20}}>
 
                     <View style={{flexDirection: "row", alignItems: "center"}}>
 
@@ -241,15 +252,29 @@ function Listings() {
                       </Pressable>
 
                       <Pressable onPress={() => navigation.navigate('Post')} >
-                        <View style={{borderWidth: 3, borderColor: "rgb(34 197 94)", marginTop: 17, flexDirection: "row", alignItems: "center"}}>
-                        <AntDesign name="pluscircleo" size={24} color="rgb(34 197 94)" style={{paddingLeft: 15, paddingRight: 7}}/>
-                          <Text style={{color: "rgb(34 197 94)", fontWeight: "bold", paddingVertical: 15, paddingRight: 15, fontSize: 17}}>
+                        <View style={{
+                          borderWidth: 3,
+                          borderColor: "rgb(34 197 94)",
+                          marginTop: 17,
+                          flexDirection: "row",
+                          alignItems: "center",
+                          borderRadius: 40, // Adjust this value to achieve the desired pill shape
+                          paddingVertical: 10, // Ensure vertical padding is sufficient for a good appearance
+                          paddingHorizontal: 15, // Adjust horizontal padding as needed
+                        }}>
+                          <AntDesign name="pluscircleo" size={24} color="rgb(34 197 94)" style={{ marginRight: 7 }}/>
+                          <Text style={{
+                            color: "rgb(34 197 94)",
+                            fontWeight: "bold",
+                            fontSize: 17
+                          }}>
                             Post
                           </Text>
                         </View>
                       </Pressable>
 
-                      </View>
+
+                    </View>
 
                   </View>
                   <StatusBar style="auto" />
@@ -339,7 +364,7 @@ function Listings() {
                       renderItem={renderItem}
                       ItemSeparatorComponent={() => <View style={{height: 30}}/>}
                       ListEmptyComponent={Empty}
-                      numColumns={Math.round(width/moderateScale(215))}
+                      numColumns={Math.round(width/moderateScale(210))}
                       />)}
                   </View>
                   {!hasSearched && (<FlatList      
@@ -361,6 +386,7 @@ function Listings() {
 const styles = StyleSheet.create({
   safeContainer: {
     flex: 1,
+    flexGrow: 1,
     backgroundColor: "white",
     overflow: "scroll"
   },
@@ -392,17 +418,17 @@ const styles = StyleSheet.create({
     fontSize: scale(17) < 20 ? 20 : scale(17),
     color: "rgb(34 197 94)",
     fontWeight: "bold",
-    width: "20%",
+    //width: "20%",
     marginTop: 15,
     paddingTop: 0,
   },
   search: {
     //width: scale(130),
-    // borderWidth: 10,
+    //borderWidth: 10,
     borderWidth: 1,
     borderColor: "#A9A9A9",
     backgroundColor: "#fbfbfb",
-    borderRadius: 5,
+    borderRadius: 30,
     flexDirection: "row",
     padding: 10,
     marginTop: 15,
@@ -410,7 +436,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-start",
     marginRight: 20,
-    marginLeft: 20,
+    marginLeft: 50,
+    flex: 4,
   },
   shoppingCart: {
     //backgroundColor: "black",
@@ -446,6 +473,7 @@ const styles = StyleSheet.create({
     // borderColor: "red",
     //flexDirection: "row",
     flexWrap: "wrap",
+    overflow: "scroll",
   },
   item: {
     //borderWidth: 1,
@@ -466,6 +494,19 @@ const styles = StyleSheet.create({
     marginTop: 20,
     paddingHorizontal: 10,
   },
+
+  tag: {
+    backgroundColor: '#d3d3d3', // Grey background
+    borderRadius: 15,           // Rounded corners for pill shape
+    paddingVertical: 5,         // Vertical padding
+    paddingHorizontal: 10,      // Horizontal padding
+    marginRight: 5,             // Space between tags
+    marginTop: 5,               // Margin top for space above
+  },
+  tagText: {
+    color: 'black',             // Text color
+    fontSize: 12,               // Font size
+  }
 });
 
 export default Listings

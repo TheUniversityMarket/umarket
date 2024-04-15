@@ -152,46 +152,46 @@ const [messages, setMessages] = useState([]);
         <SafeAreaView style={styles.safeContainer}>
             <View style={styles.container}>
 
-                <View style={styles.header}>
-                    <Image style={styles.logo} source={require('./assets/logo.jpg')}></Image>
-                    <Text style={styles.compName}>
-                        {companyName}
-                    </Text>
-                    <View style={styles.search}>
+            <View style={styles.header}>
+                  <Image style={styles.logo} source={require('./assets/logo.jpg')}></Image>
+                  <Text style={styles.compName}>
+                      {companyName}
+                  </Text>
+                  <View style={styles.search}>
                     <AntDesign name="search1" size={24} color="rgb(34 197 94)" />
                     <SearchBar onSearch={handleSearch}/>
-                    </View>
+                  </View>
 
-                    <View style={{alignItems: "flex-end", flex: 1, marginRight: 30}}>
+                  <View style={{alignItems: "flex-end", marginRight: 30, marginLeft: 20}}>
 
                     <View style={{flexDirection: "row", alignItems: "center"}}>
 
-                        <Pressable onPress={() => navigation.navigate('Settings')} >
+                      <Pressable onPress={() => navigation.navigate('Settings')} >
                         <View style={{alignItems: "flex-end", marginRight: 30, marginTop: 17}}>
-                            <MaterialIcons name="account-circle" size={43} color="rgb(34 197 94)" />
+                          <MaterialIcons name="account-circle" size={43} color="rgb(34 197 94)" />
                         </View>
-                        </Pressable>
+                      </Pressable>
 
-                        <Pressable onPress={() => navigation.navigate('Chat')} >
+                      <Pressable onPress={() => navigation.navigate('Chat')} >
                         <View style={{alignItems: "flex-end", marginRight: 30, marginTop: 17}}>
-                            <Entypo name="chat" size={43} color="rgb(34 197 94)" />
+                          <Entypo name="chat" size={43} color="rgb(34 197 94)" />
                         </View>
-                        </Pressable>
+                      </Pressable>
 
-                        <Pressable onPress={() => navigation.navigate('Post')} >
+                      <Pressable onPress={() => navigation.navigate('Post')} >
                         <View style={{borderWidth: 3, borderColor: "rgb(34 197 94)", marginTop: 17, flexDirection: "row", alignItems: "center"}}>
                         <AntDesign name="pluscircleo" size={24} color="rgb(34 197 94)" style={{paddingLeft: 15, paddingRight: 7}}/>
-                            <Text style={{color: "rgb(34 197 94)", fontWeight: "bold", paddingVertical: 15, paddingRight: 15, fontSize: 17}}>
+                          <Text style={{color: "rgb(34 197 94)", fontWeight: "bold", paddingVertical: 15, paddingRight: 15, fontSize: 17}}>
                             Post
-                            </Text>
+                          </Text>
                         </View>
-                        </Pressable>
-
-                        </View>
+                      </Pressable>
 
                     </View>
-                    <StatusBar style="auto" />
-                </View>
+
+                  </View>
+                  <StatusBar style="auto" />
+              </View>
 
                 <View style={{flex: 1, flexDirection: "row"}}>
 
@@ -261,7 +261,7 @@ const styles = StyleSheet.create({
     fontSize: scale(17) < 20 ? 20 : scale(17),
     color: "rgb(34 197 94)",
     fontWeight: "bold",
-    width: "20%",
+    //width: "20%",
     marginTop: 15,
     paddingTop: 0,
   },
@@ -279,7 +279,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-start",
     marginRight: 20,
-    marginLeft: 20,
+    marginLeft: 50,
+    flex: 4,
   },
   shoppingCart: {
     //backgroundColor: "black",
@@ -337,13 +338,15 @@ const styles = StyleSheet.create({
   messageContainer: {
     marginLeft: 10,
     padding: 10,
-    backgroundColor: '#e5e5e5',
+    backgroundColor: "rgb(34 197 94)",
+    //backgroundColor: '#e5e5e5',
     borderRadius: 10,
     marginVertical: 5,
     alignSelf: 'flex-start',
     maxWidth: '80%',
   },
   messageText: {
+    color: "white",
     fontSize: 16,
   },
   inputContainer: {
