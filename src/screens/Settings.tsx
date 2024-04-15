@@ -101,34 +101,43 @@ function Settings() {
                 </View>
                 <View style={styles.headerContainer}>
                     <Text style={styles.header}>
-                        Personal Information:
+                        Change Profile:
                     </Text>
                 </View>
                 <View>
                     <View style={styles.bodyContainer}>
-                        <Text style={styles.bodyTxt}>Name:
+                        <Text style={styles.bodyTxt}>First Name:
+                        <Text style={styles.bodyTxt2}>Last Name:
+                        </Text>
+                        </Text>
+                    </View>
+                    <View style={styles.bodyContainer}>
                         <View style={styles.nameCont}>
                             <TextInput style={styles.itemIn}
-                            placeholder="Nash Moore">
+                            placeholder="Nash">
+                            </TextInput>
+                        <View style={styles.nameCont2}>
+                            <TextInput style={styles.itemIn}
+                            placeholder="Moore">
                             </TextInput>
                         </View>
-                        </Text>
+                        </View>
                     </View>
                     <View style={styles.bodyContainer}>
                         <Text style={styles.bodyTxt}>Email:
-                            <View style={styles.nameCont}>
-                                <Text style={styles.itemIn}>nmoore66@gatech.edu</Text>
-                            </View>
+                        <Text style={styles.bodyTxt3}>Phone Number:
+                        </Text>
                         </Text>
                     </View>
                     <View style={styles.bodyContainer}>
-                        <Text style={styles.bodyTxt}>Phone Number:
-                            <View style={styles.nameCont}>
-                                <TextInput style={styles.itemIn}
-                                placeholder="214-304-9926">
-                                </TextInput>
-                            </View>
-                        </Text>
+                        <View style={styles.nameCont3}>
+                            <Text style={styles.itemIn2}>nmoore66@gatech.edu</Text>
+                        <View style={styles.nameCont4}>
+                            <TextInput style={styles.itemIn}
+                            placeholder="214-304-9926">
+                            </TextInput>
+                        </View>
+                        </View>
                     </View>
                 </View>
                 <View style={styles.submitContainer}>
@@ -179,37 +188,92 @@ const styles = StyleSheet.create({
         textAlign: "center",
     },
     headerContainer: {
+        marginLeft: "20%",
+        width: "60%",
         marginTop: 20,
-        marginLeft: 15
     },
     headerContainerAlt: {
         marginTop: 15,
-        marginLeft: 15
+        marginLeft: "20%",
+        width: "60%",
     },
     header: {
         fontSize: 35,
         color: "#228B22"
     },
     bodyContainer: {
-        marginLeft: 20,
+        marginLeft: "30%",
+        width: "40%",
         marginTop: 15
     },
     bodyTxt: {
+        flexDirection: "row",
+        fontSize: 25,
+        color: "rgb(34 197 94)"
+    },
+    bodyTxt2: {
+        marginLeft: "30%",
+        fontSize: 25,
+        color: "rgb(34 197 94)"
+    },
+    bodyTxt3: {
+        marginLeft: "40%",
         fontSize: 25,
         color: "rgb(34 197 94)"
     },
     nameCont: {
-        marginLeft: 7,
-        padding: 7,
+        flexDirection: "row",
+        marginLeft: 0,
+        //padding: 7,
         borderRadius: 3,
-        backgroundColor: "#e5e7eb",
-        width: 225,
+        borderWidth: 1,
+        borderColor: "Black",
+        width: "50%",
         height: 40,
     },
+    nameCont2: {
+        flexDirection: "row",
+        marginLeft: "30%",
+        //padding: 7,
+        borderRadius: 3,
+        borderWidth: 1,
+        borderColor: "Black",
+        width: "100%",
+        height: 40,
+    },
+
+    nameCont3: {
+        flexDirection: "row",
+        marginLeft: 0,
+        //padding: 7,
+        borderRadius: 3,
+        borderWidth: 1,
+        borderColor: "Black",
+        width: "50%",
+        height: 40,
+    },
+
+    nameCont4: {
+        flexDirection: "row",
+        marginLeft: "33%",
+        //padding: 7,
+        borderRadius: 3,
+        borderWidth: 1,
+        borderColor: "Black",
+        width: "100%",
+        height: 40,
+    },
+
     itemIn: {
         fontSize: 17,
-        padding: 2,
+        padding: 9,
         color: "black"
+    },
+    itemIn2: {
+        fontSize: 17,
+        padding: 9,
+        color: "#B3B3B3",
+        width: "100%"
     },
     submitTxt: {
         fontSize: 20,
@@ -219,6 +283,7 @@ const styles = StyleSheet.create({
         marginRight: 10,
     },
     submitContainer: {
+        flexDirection: "row",
         marginTop: 40,
         marginLeft: 5,
         padding: 7,
