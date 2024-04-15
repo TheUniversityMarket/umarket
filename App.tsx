@@ -1,135 +1,15 @@
-import { View, Text, StyleSheet, Dimensions } from 'react-native'
-import UserLogin from "./src/screens/UserLogin"
-import Listings from './src/screens/Listings'
-import UserVerification from './src/screens/UserVerification'
-import UserRegistrationEmail from './src/screens/UserRegistrationEmail'
-import Post from './src/screens/Post'
-import Settings from './src/screens/Settings'
-import ListingItem from './src/screens/ListingItem'
-import AccountInformation from './src/screens/AccountInformation'
-import ListingsLoggedOut from './src/screens/ListingsLoggedOut'
-import Chat from './src/screens/Chat'
+import React from 'react';
+import { AuthProvider } from './src/context/AuthContext';
+import Navigator from './src/navigation/Navigator';
 
-import { initializeApp } from 'firebase/app';
-import { getAuth } from "firebase/auth";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyCV3XV_XBwFT87AsAznMBLlawyd3uae_2g",
-  authDomain: "umarket-70a6f.firebaseapp.com",
-  projectId: "umarket-70a6f",
-  storageBucket: "umarket-70a6f.appspot.com",
-  messagingSenderId: "207849403163",
-  appId: "1:207849403163:web:e8457aabe834cd3f8159be",
-  measurementId: "G-W5VT33522B"
-};
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-
-import { AntDesign } from '@expo/vector-icons';
-import { Ionicons } from '@expo/vector-icons';
-
-import { enableScreens } from 'react-native-screens'
-import { FontAwesome5 } from '@expo/vector-icons';
-
-enableScreens();
-
-import { NavigationContainer, TabRouter } from "@react-navigation/native"
-import { createStackNavigator } from '@react-navigation/stack'
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-
-const { width, height } = Dimensions.get('window');
-const [shortDimension, longDimension] = width < height ? [width, height] : [height, width];
-
-//Default guideline sizes are based on standard ~5" screen mobile device
-const guidelineBaseWidth = 350;
-const guidelineBaseHeight = 680;
-
-function scale(size: number) {
-    return shortDimension / guidelineBaseWidth * size;
-}
-function verticalScale(size: number) {
-    return longDimension / guidelineBaseHeight * size;
-}
-function moderateScale(size: number, factor = 0.5) {
-    return size + (scale(size) - size) * factor;
-}
-function moderateVerticalScale(size: number, factor = 0.5) {
-    return size + (verticalScale(size) - size) * factor;
-}
-
-const Stack = createStackNavigator()
-const Tab = createBottomTabNavigator()
-const TopTab = createMaterialTopTabNavigator();
-
-function Home() {
+const App: React.FC = () => {
   return (
-    <Tab.Navigator initialRouteName={'Listings'} screenOptions={({ route }) => ({
-      tabBarIcon: ({ focused, color, size }) => {
-          return <FontAwesome5 name="shopping-cart" size={focused ? 27 : 23} color={focused ? "#22cc5e" : "black"} />;
-      },
-    })}
-    screenOptions={{
-      "tabBarActiveTintColor": "#22cc5e",
-      "tabBarInactiveTintColor": "gray",
-      "tabBarStyle": [
-        {
-          "display": "flex"
-        },
-        null
-      ]
-    }}>
-      <Tab.Screen name={'Listings'} component={Listings} options={{headerShown: false, tabBarIcon: ({focused}) => {return <FontAwesome5 name="shopping-cart" size={focused ? (moderateScale(23) > 30 ? 30 : moderateScale(23)) : (moderateScale(20) > 27 ? 27 : moderateScale(20))} color={focused ? "#22cc5e" : "black"} />} }} />
-      <Tab.Screen name={'Post'} component={Post} options={{headerShown: false, tabBarIcon: ({focused}) => {return <AntDesign name="pluscircleo" size={focused ? (moderateScale(23) > 30 ? 30 : moderateScale(23)) : (moderateScale(20) > 27 ? 27 : moderateScale(20))} color={focused ? "#22cc5e" : "black"} />} }} />
-      <Tab.Screen name={'Settings'} component={Settings} options={{headerShown: false, tabBarIcon: ({focused}) => {return <Ionicons name="settings-sharp" size={focused ? (moderateScale(23) > 30 ? 30 : moderateScale(23)) : (moderateScale(20) > 27 ? 27 : moderateScale(20))} color={focused ? "#22cc5e" : "black"} />}}}/>
-      {/* <Tab.Screen name={'Page'} component={Page} options={{headerShown: false}}/> */}
-    </Tab.Navigator>
-  )
-}
+    <AuthProvider>
+      <Navigator />
+    </AuthProvider>
+  );
+};
 
-function App() {
-  if (width > 700) {
-    return (
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen name={'ListingsLoggedOut'} component={ListingsLoggedOut} options={{headerShown: false}}/>
-          <Stack.Screen name={'Chat'} component={Chat} options={{headerShown: false}}/>
-          <Stack.Screen name={'Listings'} component={Listings} options={{headerShown: false}}/>
-          <Stack.Screen name={'Post'} component={Post} options={{headerShown: false}}/>
-          <Stack.Screen name={'Settings'} component={Settings} options={{headerShown: false}}/>
-          <Stack.Screen name={'Login/SignUp'} component={UserLogin} options={{headerShown: false}} />
-          <Stack.Screen name={'UserRegistrationEmail'} component={UserRegistrationEmail} options={{headerShown: false}} />
-          <Stack.Screen name={'UserVerification'} component={UserVerification} options={{headerShown: false}} />
-          <Stack.Screen name={'ListingItem'} component={ListingItem} options={{headerShown: false}}/>
-          <Stack.Screen name={'AccountInformation'} component={AccountInformation} options={{headerShown: false}}/>
-          {/*<Stack.Screen name={'Listings'} component={Listings} options={{headerShown: false}} />*/}
-        </Stack.Navigator>
-      </NavigationContainer>
-    )
-  }
-  else {
-    return (
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen name={'ListingsLoggedOut'} component={ListingsLoggedOut} options={{headerShown: false}}/>
-          <Stack.Screen name={'Home'} component={Home} options={{headerShown: false}}/>
-          <Stack.Screen name={'Login/SignUp'} component={UserLogin} options={{headerShown: false}} />
-          <Stack.Screen name={'UserRegistrationEmail'} component={UserRegistrationEmail} options={{headerShown: false}} />
-          <Stack.Screen name={'UserVerification'} component={UserVerification} options={{headerShown: false}} />
-          <Stack.Screen name={'ListingItem'} component={ListingItem} options={{headerShown: false}}/>
-          <Stack.Screen name={'AccountInformation'} component={AccountInformation} options={{headerShown: false}}/>
-          {/*<Stack.Screen name={'Listings'} component={Listings} options={{headerShown: false}} />*/}
-        </Stack.Navigator>
-      </NavigationContainer>
-    )
-  } 
+export default App;
 
-}
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  }
-})
-
-export default App

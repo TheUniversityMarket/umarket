@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from 'react';
 import { useState, useEffect, useRef } from 'react';
 import { StatusBar } from 'expo-status-bar'
 import { StyleSheet, Text, View, SafeAreaView, ScrollView, Image, FlatList, Dimensions, useWindowDimensions, Pressable, Animated } from 'react-native'
@@ -7,6 +8,8 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { TextInput } from 'react-native-gesture-handler';
 import SearchBar from "../components/SearchBar";
+import MainHeader from "../components/MainHeader";
+import { useRoute } from "@react-navigation/native";
 
 // import { scale, verticalScale, moderateScale, moderateVerticalScale } from "/Users/jevontwitty/Documents/GitHub/UMarket/src/components/Scaling"
 // import { FlatList } from 'react-native-gesture-handler';
@@ -166,29 +169,43 @@ const numberOfColumns = Math.round(width/215
 function Listings() {
   const [searchResults, setSearchResults] = useState<Object[]>([]);
   const [hasSearched, sethasSearched] = useState(false);
+  const navigation = useNavigation()
+  const route = useRoute()
+  
   const handleSearch = (query: any) => {
-    if (!hasSearched) {
-      sethasSearched(!hasSearched);
-    }
+    sethasSearched(true);
     const filteredItems = DATA.filter(Item =>
-      Item.title.toLowerCase().includes(query.toLowerCase())
+      (Item.title.toLowerCase().includes(query.toLowerCase()) || Item.tags.includes(query.toLowerCase()))
     );
     setSearchResults(filteredItems);
   };
 
-  console.log(width)
-  const navigation = useNavigation()
+  const q = route.params?.obj?.q;
+  let h = route.params?.obj?.h;
+
+  useEffect(() => {
+    if (h) {
+      h = false;
+      handleSearch(q);
+    }
+  }, [q, h]);
+
   function renderItem({item}) {
     return (
-      <Pressable style={ ({ pressed }) => [
-        {borderRadius: 10},
-        pressed && {backgroundColor: "rgb(34 197 94)",}
+      <Pressable
+        style={({ pressed }) => [
+          {
+            borderRadius: 10,
+            backgroundColor: pressed ? 'transparent' : 'white', // Change or remove background color change on press
+          }
         ]}
-        onPress={() => navigation.navigate('ListingItem', { item })}>
+        onPress={() => navigation.navigate('ListingItem', { item })}
+      >
         <Item id={item.id} title={item.title} image={item.image} description={item.description} price={item.price} tags={item.tags}/>
       </Pressable>
     )
   }
+  
 
   let tags = [];
 
@@ -197,15 +214,18 @@ function Listings() {
       if (!tags.includes(item.tags[i])) {
         tags.push(item.tags[i])
         return (
+          <Pressable onPress = {() => handleSearch(item.tags[i])}>
           <View style={{justifyContent: "center", marginLeft: 40}}>
             <Text style={{fontWeight: "bold", color: "gray"}}>
               {item.tags[i]}
             </Text>
           </View>
+          </Pressable>
         )
       }
     }
   }
+  console.log()
 
   // function listing(text: string, image: string) {
   //   return (
@@ -367,6 +387,7 @@ function Listings() {
                       numColumns={Math.round(width/moderateScale(210))}
                       />)}
                   </View>
+                  <View style={styles.container}>
                   {!hasSearched && (<FlatList      
                     data={DATA}
                     renderItem={renderItem}
@@ -375,6 +396,7 @@ function Listings() {
                     ListEmptyComponent={Empty}
                     numColumns={Math.round(width/moderateScale(215))}
                     />)}
+                  </View>
                 {/* </ScrollView> */}
               </View>
           </View>
@@ -493,6 +515,7 @@ const styles = StyleSheet.create({
   resultsContainer: {
     marginTop: 20,
     paddingHorizontal: 10,
+    flex:1
   },
 
   tag: {
