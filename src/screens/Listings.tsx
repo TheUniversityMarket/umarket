@@ -251,13 +251,27 @@ function Listings() {
                       </Pressable>
 
                       <Pressable onPress={() => navigation.navigate('Post')} >
-                        <View style={{borderWidth: 3, borderColor: "rgb(34 197 94)", marginTop: 17, flexDirection: "row", alignItems: "center", borderRadius: 15}}>
-                        <AntDesign name="pluscircleo" size={24} color="rgb(34 197 94)" style={{paddingLeft: 15, paddingRight: 7}}/>
-                          <Text style={{color: "rgb(34 197 94)", fontWeight: "bold", paddingVertical: 15, paddingRight: 15, fontSize: 17}}>
+                        <View style={{
+                          borderWidth: 3,
+                          borderColor: "rgb(34 197 94)",
+                          marginTop: 17,
+                          flexDirection: "row",
+                          alignItems: "center",
+                          borderRadius: 40, // Adjust this value to achieve the desired pill shape
+                          paddingVertical: 10, // Ensure vertical padding is sufficient for a good appearance
+                          paddingHorizontal: 15, // Adjust horizontal padding as needed
+                        }}>
+                          <AntDesign name="pluscircleo" size={24} color="rgb(34 197 94)" style={{ marginRight: 7 }}/>
+                          <Text style={{
+                            color: "rgb(34 197 94)",
+                            fontWeight: "bold",
+                            fontSize: 17
+                          }}>
                             Post
                           </Text>
                         </View>
                       </Pressable>
+
 
                     </View>
 
@@ -413,7 +427,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#A9A9A9",
     backgroundColor: "#fbfbfb",
-    borderRadius: 5,
+    borderRadius: 30,
     flexDirection: "row",
     padding: 10,
     marginTop: 15,
