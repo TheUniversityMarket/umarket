@@ -10,6 +10,21 @@ import AccountInformation from './src/screens/AccountInformation'
 import ListingsLoggedOut from './src/screens/ListingsLoggedOut'
 import Chat from './src/screens/Chat'
 
+import { initializeApp } from 'firebase/app';
+import { getAuth } from "firebase/auth";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCV3XV_XBwFT87AsAznMBLlawyd3uae_2g",
+  authDomain: "umarket-70a6f.firebaseapp.com",
+  projectId: "umarket-70a6f",
+  storageBucket: "umarket-70a6f.appspot.com",
+  messagingSenderId: "207849403163",
+  appId: "1:207849403163:web:e8457aabe834cd3f8159be",
+  measurementId: "G-W5VT33522B"
+};
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
 import { AntDesign } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 
