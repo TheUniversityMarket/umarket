@@ -27,7 +27,9 @@ const SearchBar = ({ onSearch, isListings }) => {
 
   useEffect(() => {
     // This effect will run every time searchText changes
-    handleSearch();
+    if (isListings) {
+      handleSearch();
+    }
   }, [searchText]);
 
   const handleSearch = () => {
