@@ -48,14 +48,14 @@ const Navigator: React.FC = () => {
                     <Stack.Screen name={'Home'} component={Home} options={{headerShown: false}}/>
                 )}
                 <Stack.Screen name={'ListingsLoggedOut'} component={ListingsLoggedOut} options={{headerShown: false}}/>
-                <Stack.Screen name={'Listing'} component={ListingItem} options={{headerShown: false}}/>
+                <Stack.Screen name={'ListingItem'} component={ListingItem} options={{headerShown: false}}/>
             </>
         ) : (
             <>
-                <Stack.Screen name={'Sign-In'} component={UserLogin} options={{headerShown: false}} />
-                <Stack.Screen name={'Join UMarket Email'} component={UserRegistrationEmail} options={{headerShown: false}} />
-                <Stack.Screen name={'Join UMarket Verify Emailt'} component={UserVerification} options={{headerShown: false}} />
-                <Stack.Screen name={'Join UMarket Account'} component={AccountInformation} options={{headerShown: false}}/>
+                <Stack.Screen name={'Login/SignUp'} component={UserLogin} options={{headerShown: false}} />
+                <Stack.Screen name={'UserRegistrationEmail'} component={UserRegistrationEmail} options={{headerShown: false}} />
+                <Stack.Screen name={'UserVerification'} component={UserVerification} options={{headerShown: false}} />
+                <Stack.Screen name={'AccountInformation'} component={AccountInformation} options={{headerShown: false}}/>
             </>    
         )}
       </Stack.Navigator>
