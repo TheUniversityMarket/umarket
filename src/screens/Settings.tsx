@@ -104,26 +104,45 @@ function Settings() {
                         Change Profile:
                     </Text>
                 </View>
-                <View>
-                    <View style={styles.bodyContainer}>
-                        <Text style={styles.bodyTxt}>First Name:
-                        <Text style={styles.bodyTxt2}>Last Name:
-                        </Text>
-                        </Text>
-                    </View>
-                    <View style={styles.bodyContainer}>
-                        <View style={styles.nameCont}>
-                            <TextInput style={styles.itemIn}
-                            placeholder="Nash">
-                            </TextInput>
-                        <View style={styles.nameCont2}>
-                            <TextInput style={styles.itemIn}
-                            placeholder="Moore">
-                            </TextInput>
+                <View style={{flex: 1, alignItems: "center"}}>
+                    {/* <View style={styles.bodyContainer}>
+                        <Text style={styles.bodyTxt}>First Name:</Text>
+                        <Text style={styles.bodyTxt2}>Last Name:</Text>
+                    </View> */}
+                    {/* <View style={styles.bodyContainer}> */}
+                    <View style={{width: "100%", flexDirection: "row", gap: 10}}>
+                        {/* <View style={styles.nameCont}> */}
+                        <View style={{flex: 1}}></View>
+                        <View style={{flex: 1, padding: 10, minWidth: 225}}>
+                            <Text>First Name:</Text>
+                            {/* <TextInput style={styles.itemIn} */}
+                            <TextInput placeholder="Nash" style={{borderWidth: 1, padding: 10, borderRadius: 3, marginTop: 3}} />
+                        {/* <View style={styles.nameCont2}> */}
                         </View>
+                        <View style={{flex: 1, padding: 10, minWidth: 225}}>
+                            <Text>Last Name:</Text>
+                            {/* <TextInput style={styles.itemIn} */}
+                            <TextInput placeholder="Moore" style={{borderWidth: 1, padding: 10, borderRadius: 3, marginTop: 3}} />
                         </View>
+                        <View style={{flex: 1}}></View>
                     </View>
-                    <View style={styles.bodyContainer}>
+                    <View style={{width: "100%", flexDirection: "row", gap: 10}}>
+                        {/* <View style={styles.nameCont}> */}
+                        <View style={{flex: 1}}></View>
+                        <View style={{flex: 1, padding: 10, minWidth: 225}}>
+                            <Text>Email:</Text>
+                            {/* <TextInput style={styles.itemIn} */}
+                            <Text style={{borderWidth: 1, padding: 10, borderRadius: 3, marginTop: 3, color: "#B3B3B3"}}>nmoore66@gatech.edu</Text>
+                        {/* <View style={styles.nameCont2}> */}
+                        </View>
+                        <View style={{flex: 1, padding: 10, minWidth: 225}}>
+                            <Text>Phone Number:</Text>
+                            {/* <TextInput style={styles.itemIn} */}
+                            <TextInput placeholder="214-304-9926" style={{borderWidth: 1, padding: 10, borderRadius: 3, marginTop: 3}} />
+                        </View>
+                        <View style={{flex: 1}}></View>
+                    </View>
+                    {/* <View style={styles.bodyContainer}>
                         <Text style={styles.bodyTxt}>Email:
                         <Text style={styles.bodyTxt3}>Phone Number:
                         </Text>
@@ -138,7 +157,7 @@ function Settings() {
                             </TextInput>
                         </View>
                         </View>
-                    </View>
+                    </View> */}
                 </View>
                 <View style={styles.submitContainer}>
                     <Pressable>
@@ -202,16 +221,22 @@ const styles = StyleSheet.create({
         color: "#228B22"
     },
     bodyContainer: {
-        marginLeft: "30%",
-        width: "40%",
+        backgroundColor: "yellow",
+        borderWidth: 1,
+        flexDirection: "row",
+        gap: 0,
+        //marginLeft: "30%",
+        //width: "40%",
         marginTop: 15
     },
     bodyTxt: {
+        borderWidth: 1,
         flexDirection: "row",
         fontSize: 25,
         color: "rgb(34 197 94)"
     },
     bodyTxt2: {
+        borderWidth: 1,
         marginLeft: "30%",
         fontSize: 25,
         color: "rgb(34 197 94)"
@@ -228,17 +253,18 @@ const styles = StyleSheet.create({
         borderRadius: 3,
         borderWidth: 1,
         borderColor: "Black",
-        width: "50%",
+        //width: "50%",
         height: 40,
     },
     nameCont2: {
+        flex: 1,
         flexDirection: "row",
-        marginLeft: "30%",
+        //marginLeft: "30%",
         //padding: 7,
         borderRadius: 3,
         borderWidth: 1,
         borderColor: "Black",
-        width: "100%",
+        //width: "100%",
         height: 40,
     },
 
@@ -265,6 +291,7 @@ const styles = StyleSheet.create({
     },
 
     itemIn: {
+        flex: 1,
         fontSize: 17,
         padding: 9,
         color: "black"
