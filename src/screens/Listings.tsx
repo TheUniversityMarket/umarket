@@ -162,8 +162,7 @@ const SectionedDATA = [
  ];
 
 //const width = Dimensions.get('window').width
-const numberOfColumns = Math.round(width/215
-)
+const numberOfColumns = Math.round(width/215)
 
 function Listings() {
   const { width, height } = useWindowDimensions();
@@ -183,7 +182,10 @@ function Listings() {
     return size + (verticalScale(size) - size) * factor;
   }
 
+
   const numColumns = Math.round(width/moderateScale(215))
+
+
   const [searchResults, setSearchResults] = useState<Object[]>([]);
   const [hasSearched, sethasSearched] = useState(false);
   const navigation = useNavigation()
@@ -286,7 +288,7 @@ function Listings() {
                   <View style={styles.resultsContainer}>
                       {hasSearched && (<FlatList
                       data={searchResults}
-                      key={`${width}`}
+                      key={`${numColumns}`}
                       keyExtractor={(item) => item.id}
                       renderItem={renderItem}
                       ItemSeparatorComponent={() => <View style={{height: 30}}/>}
