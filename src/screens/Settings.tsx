@@ -3,6 +3,7 @@ import { TextInput } from "react-native";
 import { useState } from "react"
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import { useNavigation } from '@react-navigation/native';
+import MainHeader from "../components/MainHeader";
 
 const { width, height } = Dimensions.get('window');
 const [shortDimension, longDimension] = width < height ? [width, height] : [height, width];
@@ -93,6 +94,7 @@ function Settings() {
 
     return (
         <SafeAreaView style={styles.safeContainer}>
+            <MainHeader></MainHeader>
             <View style={styles.container}>
                 <View>
                     <Text style={styles.compName}>

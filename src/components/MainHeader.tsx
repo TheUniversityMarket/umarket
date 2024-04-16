@@ -8,7 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useState } from "react"
 import { useRoute } from "@react-navigation/native";
 
-
+//on text change property
 function scale(size: number) {
     return shortDimension / guidelineBaseWidth * size;
 }
@@ -32,7 +32,9 @@ const MainHeader = ({}) => {
     
     return (
         <View style={styles.header}>
+            <Pressable onPress={() => navigation.navigate('Listings')}>
             <Image style={styles.logo} source={require('../screens/assets/logo.jpg')}></Image>
+            </Pressable>
                   <Text style={styles.compName}>
                       {companyName}
                   </Text>

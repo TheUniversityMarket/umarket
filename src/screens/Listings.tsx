@@ -244,62 +244,7 @@ function Listings() {
     return (
       <SafeAreaView style={styles.safeContainer}>
           <View style={styles.container}>
-
-              <View style={styles.header}>
-                  <Image style={styles.logo} source={require('./assets/logo.jpg')}></Image>
-                  <Text style={styles.compName}>
-                      {companyName}
-                  </Text>
-                  <View style={styles.search}>
-                    <AntDesign name="search1" size={24} color="rgb(34 197 94)" />
-                    <SearchBar onSearch={handleSearch}/>
-                  </View>
-
-                  <View style={{alignItems: "flex-end", marginRight: 30, marginLeft: 20}}>
-
-                    <View style={{flexDirection: "row", alignItems: "center"}}>
-
-                      <Pressable onPress={() => navigation.navigate('Settings')} >
-                        <View style={{alignItems: "flex-end", marginRight: 30, marginTop: 17}}>
-                          <MaterialIcons name="account-circle" size={43} color="rgb(34 197 94)" />
-                        </View>
-                      </Pressable>
-
-                      <Pressable onPress={() => navigation.navigate('Chat')} >
-                        <View style={{alignItems: "flex-end", marginRight: 30, marginTop: 17}}>
-                          <Entypo name="chat" size={43} color="rgb(34 197 94)" />
-                        </View>
-                      </Pressable>
-
-                      <Pressable onPress={() => navigation.navigate('Post')} >
-                        <View style={{
-                          borderWidth: 3,
-                          borderColor: "rgb(34 197 94)",
-                          marginTop: 17,
-                          flexDirection: "row",
-                          alignItems: "center",
-                          borderRadius: 40, // Adjust this value to achieve the desired pill shape
-                          paddingVertical: 10, // Ensure vertical padding is sufficient for a good appearance
-                          paddingHorizontal: 15, // Adjust horizontal padding as needed
-                        }}>
-                          <AntDesign name="pluscircleo" size={24} color="rgb(34 197 94)" style={{ marginRight: 7 }}/>
-                          <Text style={{
-                            color: "rgb(34 197 94)",
-                            fontWeight: "bold",
-                            fontSize: 17
-                          }}>
-                            Post
-                          </Text>
-                        </View>
-                      </Pressable>
-
-
-                    </View>
-
-                  </View>
-                  <StatusBar style="auto" />
-              </View>
-
+            <MainHeader></MainHeader>
               <View style={{height: 40}}>
                 <View style={{flex: 1, flexDirection: "row", borderBottomWidth: 1, borderBottomColor: "#d3d3d3", marginTop: 10}}>
                   <FlatList
