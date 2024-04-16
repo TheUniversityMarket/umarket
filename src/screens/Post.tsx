@@ -41,7 +41,7 @@ function Post({ navigation }) {
 
     return (
          <SafeAreaView style={styles.safeContainer}>
-            <MainHeader></MainHeader>
+            <MainHeader isListing={false} onInput={true}></MainHeader>
             
 
             <ScrollView contentContainerStyle={{flex: 1}}>
