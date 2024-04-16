@@ -1,5 +1,7 @@
+import React, { useState } from 'react';
 import { Text, View, StyleSheet, SafeAreaView, Pressable, ImageBackground, Dimensions } from "react-native"
 import { TextInput } from "react-native";
+import { useNavigation } from '@react-navigation/native';
 
 //const school = "https://images.genius.com/018e964bd737e5d4600162dbcac48ce5.1000x1000x1.png" // School image will vary with different schools if we decide to expand later on.
 const school = "https://www.htmlcsscolor.com/preview/gallery/111827.png"
@@ -26,6 +28,14 @@ function moderateVerticalScale(size: number, factor = 0.5) {
 
 function UserRegistrationEmail() {
     const companyName = "UMarket";
+
+    const navigation = useNavigation();
+    const [email, setEmail] = useState('');
+
+    const handleContinue = () => {
+        navigation.navigate('UserVerfication', { email });
+      };
+
     return (
         <SafeAreaView style={styles.safeContainer}>
             <View style={styles.container}>
@@ -33,11 +43,13 @@ function UserRegistrationEmail() {
                     <Text style={styles.signUp}>UMarket</Text>
                 </ImageBackground>
                 <View style={styles.registrationContainer}>
-                    <TextInput style={styles.emailInput} placeholder="Enter School Email" keyboardType="email-address" />
+                    <TextInput style={styles.emailInput} placeholder="Enter School Email" onChangeText={setEmail} value={email} keyboardType="email-address" />
                     <Pressable style={ ({ pressed }) => [
                         styles.button,
                         pressed && {backgroundColor: "green"}
-                        ]}>
+                        ]}
+                        onPress={handleContinue}
+                        >
                         <Text style={styles.buttonText}>Continue</Text>
                     </Pressable>
                 </View>
