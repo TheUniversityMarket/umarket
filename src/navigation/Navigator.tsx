@@ -35,12 +35,12 @@ const Navigator: React.FC = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        {currentUser ? (
+        {!currentUser ? (
             <>
                 {width > 700 ? (
                     <>
-                        <Stack.Screen name={'Chat'} component={Chat} options={{headerShown: false}}/>
                         <Stack.Screen name={'Listings'} component={Listings} options={{headerShown: false}}/>
+                        <Stack.Screen name={'Chat'} component={Chat} options={{headerShown: false}}/>
                         <Stack.Screen name={'Post'} component={Post} options={{headerShown: false}}/>
                         <Stack.Screen name={'Settings'} component={Settings} options={{headerShown: false}}/>
                     </>
