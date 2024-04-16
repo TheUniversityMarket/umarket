@@ -90,13 +90,14 @@ const numberOfColumns = Math.round(width/215
 
 function Chat() {
 
-const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState('');
 
   const sendMessage = () => {
     if (inputText.trim() !== '') {
-      setMessages([{ id: messages.length, text: inputText }]);
-      setInputText('');
+      const newMessage = { id: messages.length.toString(), text: inputText }
+      messages.push(newMessage)
+      setInputText('')
     }
   };
 
@@ -158,26 +159,25 @@ const [messages, setMessages] = useState([]);
                     <View style={{flex: 3, backgroundColor: "blue"}}>
 
                     </View>
-
+                    
                     <View style={{flex: 12, backgroundColor: "white"}}>
                     <FlatList
                         data={messages}
                         renderItem={renderMessage}
                         keyExtractor={(item) => item.id.toString()}
-                        inverted
                     />
-                    <View style={styles.inputContainer}>
-                        <TextInput
-                        placeholderTextColor={"#B3B3B3"}
-                        style={styles.input}
-                        placeholder="Type a message..."
-                        value={inputText}
-                        onChangeText={setInputText}
-                        />
-                        <TouchableOpacity style={styles.sendButton} onPress={sendMessage}>
-                        <Text style={styles.sendButtonText}>Send</Text>
-                        </TouchableOpacity>
-                    </View>
+                      <View style={styles.inputContainer}>
+                          <TextInput
+                          placeholderTextColor={"#B3B3B3"}
+                          style={styles.input}
+                          placeholder="Type a message..."
+                          value={inputText}
+                          onChangeText={setInputText}
+                          />
+                          <TouchableOpacity style={styles.sendButton} onPress={sendMessage}>
+                            <Text style={styles.sendButtonText}>Send</Text>
+                          </TouchableOpacity>
+                      </View>
                     </View>
 
                 </View>
