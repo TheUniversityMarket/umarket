@@ -166,6 +166,24 @@ const numberOfColumns = Math.round(width/215
 )
 
 function Listings() {
+  const { width, height } = useWindowDimensions();
+
+  const [shortDimension, longDimension] = width < height ? [width, height] : [height, width];
+
+  function scale(size: number) {
+    return shortDimension / guidelineBaseWidth * size;
+  }
+  function verticalScale(size: number) {
+    return longDimension / guidelineBaseHeight * size;
+  }
+  function moderateScale(size: number, factor = 0.5) {
+    return size + (scale(size) - size) * factor;
+  }
+  function moderateVerticalScale(size: number, factor = 0.5) {
+    return size + (verticalScale(size) - size) * factor;
+  }
+
+  const numColumns = Math.round(width/moderateScale(215))
   const [searchResults, setSearchResults] = useState<Object[]>([]);
   const [hasSearched, sethasSearched] = useState(false);
   const navigation = useNavigation()
@@ -240,14 +258,14 @@ function Listings() {
   //   //</ScrollView>
   //   )
   // }
-
-  if (width > 700) {
+  
+  if (true) {
     return (
       <SafeAreaView style={styles.safeContainer}>
           <View style={styles.container}>
             <MainHeader onInput={checkSearch} isListing={true}></MainHeader>
               <View style={{height: 40}}>
-                <View style={{flex: 1, flexDirection: "row", borderBottomWidth: 1, borderBottomColor: "#d3d3d3", marginTop: 10}}>
+                <View style={{flex: 1, flexDirection: "row", borderBottomWidth: 1, borderBottomColor: "#d3d3d3", alignItems: "center"}}>
                   <FlatList
                     horizontal={true}
                     data={DATA}
@@ -268,6 +286,7 @@ function Listings() {
                   <View style={styles.resultsContainer}>
                       {hasSearched && (<FlatList
                       data={searchResults}
+                      key={`${width}`}
                       keyExtractor={(item) => item.id}
                       renderItem={renderItem}
                       ItemSeparatorComponent={() => <View style={{height: 30}}/>}
@@ -277,77 +296,78 @@ function Listings() {
                   </View>
                   {!hasSearched && (<FlatList      
                     data={DATA}
+                    key={`${numColumns}`}
                     renderItem={renderItem}
                     keyExtractor={(item) => item.id}
                     ItemSeparatorComponent={() => <View style={{height: 30}}/>}
                     ListEmptyComponent={Empty}
-                    numColumns={Math.round(width/moderateScale(215))}
+                    numColumns={numColumns}
                     />)}
                 {/* </ScrollView> */}
               </View>
           </View>
       </SafeAreaView>
     );
-  } else {
-    return (
-      <SafeAreaView style={styles.safeContainer}>
-          <View style={styles.container}>
-              <View style={styles.header}>
-                  <Image style={styles.logo} source={require('./assets/logo.jpg')}></Image>
-                  <Text style={styles.compName}>
-                      {companyName}
-                  </Text>
-                  <View style={styles.search}>
-                    <AntDesign name="search1" size={24} color="rgb(34 197 94)" />
-                    <SearchBar onSearch={handleSearch}/>
-                  </View>
+  // } else {
+  //   return (
+  //     <SafeAreaView style={styles.safeContainer}>
+  //         <View style={styles.container}>
+  //             <View style={styles.header}>
+  //                 <Image style={styles.logo} source={require('./assets/logo.jpg')}></Image>
+  //                 <Text style={styles.compName}>
+  //                     {companyName}
+  //                 </Text>
+  //                 <View style={styles.search}>
+  //                   <AntDesign name="search1" size={24} color="rgb(34 197 94)" />
+  //                   <SearchBar onSearch={handleSearch}/>
+  //                 </View>
 
-                  <StatusBar style="auto" />
-              </View>
-              <View style={{height: 40}}>
-                <View style={{flex: 1, flexDirection: "row", borderBottomWidth: 1, borderBottomColor: "#d3d3d3"}}>
-                  <FlatList
-                    horizontal={true}
-                    data={DATA}
-                    keyExtractor={(item) => item.id}
-                    renderItem={renderTags}
-                    ItemSeparatorComponent={() => <View style={{width: 0}}/>}
-                    ListEmptyComponent={Empty}
-                  />
-                </View>
-              </View>
-              <View style={styles.page}>
-                {/* <ScrollView> */}
-                  {/* {listing("Mac", laptop)}
+  //                 <StatusBar style="auto" />
+  //             </View>
+  //             <View style={{height: 40}}>
+  //               <View style={{flex: 1, flexDirection: "row", borderBottomWidth: 1, borderBottomColor: "#d3d3d3"}}>
+  //                 <FlatList
+  //                   horizontal={true}
+  //                   data={DATA}
+  //                   keyExtractor={(item) => item.id}
+  //                   renderItem={renderTags}
+  //                   ItemSeparatorComponent={() => <View style={{width: 0}}/>}
+  //                   ListEmptyComponent={Empty}
+  //                 />
+  //               </View>
+  //             </View>
+  //             <View style={styles.page}>
+  //               {/* <ScrollView> */}
+  //                 {/* {listing("Mac", laptop)}
 
-                  {listing("Refrigerator", fridge)}
+  //                 {listing("Refrigerator", fridge)}
 
-                  {listing("Microwave", microwave)} */}
-                  <View style={styles.resultsContainer}>
-                      {hasSearched && (<FlatList
-                      data={searchResults}
-                      keyExtractor={(item) => item.id}
-                      renderItem={renderItem}
-                      ItemSeparatorComponent={() => <View style={{height: 30}}/>}
-                      ListEmptyComponent={Empty}
-                      numColumns={Math.round(width/moderateScale(210))}
-                      />)}
-                  </View>
-                  <View style={styles.container}>
-                  {!hasSearched && (<FlatList      
-                    data={DATA}
-                    renderItem={renderItem}
-                    keyExtractor={(item) => item.id}
-                    ItemSeparatorComponent={() => <View style={{height: 30}}/>}
-                    ListEmptyComponent={Empty}
-                    numColumns={Math.round(width/moderateScale(215))}
-                    />)}
-                  </View>
-                {/* </ScrollView> */}
-              </View>
-          </View>
-      </SafeAreaView>
-    );
+  //                 {listing("Microwave", microwave)} */}
+  //                 <View style={styles.resultsContainer}>
+  //                     {hasSearched && (<FlatList
+  //                     data={searchResults}
+  //                     keyExtractor={(item) => item.id}
+  //                     renderItem={renderItem}
+  //                     ItemSeparatorComponent={() => <View style={{height: 30}}/>}
+  //                     ListEmptyComponent={Empty}
+  //                     numColumns={Math.round(width/moderateScale(215))}
+  //                     />)}
+  //                 </View>
+  //                 <View style={styles.container}>
+  //                 {!hasSearched && (<FlatList      
+  //                   data={DATA}
+  //                   renderItem={renderItem}
+  //                   keyExtractor={(item) => item.id}
+  //                   ItemSeparatorComponent={() => <View style={{height: 30}}/>}
+  //                   ListEmptyComponent={Empty}
+  //                   numColumns={Math.round(width/moderateScale(215))}
+  //                   />)}
+  //                 </View>
+  //               {/* </ScrollView> */}
+  //             </View>
+  //         </View>
+  //     </SafeAreaView>
+  //   );
   }
 }
 

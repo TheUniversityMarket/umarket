@@ -33,7 +33,6 @@ import { ScrollView } from "react-native-gesture-handler";
 
 //check
 function Post({ navigation }) {
-    console.log("oasdasjdajdaoisjdoasjdoadjoajdoasjdajsdoiasdioajsdojasdoasj");
     const companyName = "Market";
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
@@ -96,17 +95,18 @@ function Post({ navigation }) {
                     <View style={styles.prodImgSuperContainer}>  
                         <Text style={styles.prodImgTxt}>
                             Add Picture:
-                            <View style={styles.prodImgContainer}>
-                                <Text style= {{color: "#B3B3B3"}}>
-                                    <Pressable style={ ({ pressed }) => [
-                                    styles.button,
-                                    pressed && {backgroundColor: "green"}
-                                    ]} onPress={() => { // 
-                                    
-                                    }}>Img
-                                    </Pressable>
-                                </Text>
-                            </View>
+                            <Pressable style={ ({ pressed }) => [
+                                        styles.button,
+                                        pressed && {backgroundColor: "green"}
+                                        ]} onPress={() => { // 
+                                        
+                                        }}>
+                                <View style={styles.prodImgContainer}>
+                                    <Text style= {{color: "#B3B3B3"}}>
+                                        Img
+                                    </Text>
+                                </View>
+                            </Pressable>
                         </Text> 
                     </View>
                     <View style={styles.prodPostSuperContainer}>  
