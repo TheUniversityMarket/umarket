@@ -44,7 +44,7 @@ function ListingItem({ navigation }) {
     const companyName = "UMarket";
     return (
         <SafeAreaView style={styles.safeContainer}>
-            <MainHeader onInput={true} isListing={false}></MainHeader>
+            <MainHeader isListing={false} onInput={false}></MainHeader>
             <View style={{ flex: 1, flexDirection: "row", justifyContent: "center" }}>
                 <View style={{ alignItems: "flex-start", marginLeft: scale(7), marginTop: scale(7), }}>
                     <Pressable style={({ pressed }) => [
