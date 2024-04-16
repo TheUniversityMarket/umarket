@@ -49,15 +49,15 @@ function ListingItem({ navigation }) {
                 <View style={{ alignItems: "flex-start", marginLeft: scale(7), marginTop: scale(7), }}>
                     <Pressable style={({ pressed }) => [
                         { borderRadius: 100 },
-                        pressed
+                        pressed && { backgroundColor: 'black' }
                     ]}
                         onPress={() => navigation.navigate('Listings', { item })}>
-                        <Ionicons name="arrow-back-circle-sharp" size={moderateScale(37)} color="black" />
+                        <Ionicons name="arrow-back-circle-sharp" size={moderateScale(37)} color="white" />
                     </Pressable>
                 </View>
-                <ScrollView>
+                <ScrollView contentContainerStyle={styles.scrollingContainer}>
                     <View style={styles.container}>
-                        <View style={{ width: "100%" }}>
+                        <View style={{ flex: 1 }}>
                             <View style={{ alignItems: "center", gap: 0 }}>
                                 <Text style={{ fontWeight: "bold", fontSize: scale(20) }}>{item.title}</Text>
                                 <Image source={{ uri: item.image }} style={styles.productImage} resizeMode="contain" />
@@ -95,15 +95,21 @@ function ListingItem({ navigation }) {
                         </View>
                     </View>
                 </ScrollView>
+                <View style={{width: moderateScale(37)}}></View>
             </View>
         </SafeAreaView>
     )
 }
 
 const styles = StyleSheet.create({
+    scrollingContainer: {
+        //backgroundColor: "red",
+        flex: 1,
+        alignItems: 'center',
+    },
     safeContainer: {
         flex: 1,
-        backgroundColor: "#e5e7eb", // Changed background color to light gray
+        backgroundColor: "rgb(34 197 94)", // Changed background color to light gray
     },
     container: {
         flex: 1,
@@ -117,6 +123,7 @@ const styles = StyleSheet.create({
         width: '50%', // Adjust width to fit within the screen nicely
     },
     productImage: {
+        //flex: 1,
         width: moderateScale(300),
         height: moderateScale(300),
         borderRadius: 30, // Optional, if you want rounded corners for the image
@@ -129,7 +136,7 @@ const styles = StyleSheet.create({
     header: {
         alignItems: "center",
         paddingBottom: 20,
-        backgroundColor: "#e5e7eb", // Match the main background
+        backgroundColor: "white", // Match the main background
         flexDirection: "row",
         justifyContent: "flex-start",
         borderBottomWidth: 1,
