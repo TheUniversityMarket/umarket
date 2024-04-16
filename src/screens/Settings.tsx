@@ -154,7 +154,7 @@ function Settings() {
     return (
         <SafeAreaView style={styles.safeContainer}>
             <MainHeader onInput={true} isListing={false}></MainHeader>
-            <Animated.View style={[styles.container, { opacity: animatedValue }]}>
+            {/* <Animated.View style={[styles.container, { opacity: animatedValue }]}> */}
                 <View style={styles.headerContainer}>
                     <Text style={styles.header}>
                         Change Profile:
@@ -285,7 +285,7 @@ function Settings() {
                             <Text style={{fontSize: 20, color:"white"}}>Sign Out</Text>
                         </View>
                     </Pressable>
-            </Animated.View>
+            {/* </Animated.View> */}
         </SafeAreaView>
     );
 }
