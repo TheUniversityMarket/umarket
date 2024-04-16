@@ -53,9 +53,9 @@ const Navigator: React.FC = () => {
         ) : (
             <>
                 <Stack.Screen name={'Sign-In'} component={UserLogin} options={{headerShown: false}} />
-                <Stack.Screen name={'Join UMarket'} component={UserRegistrationEmail} options={{headerShown: false}} />
-                <Stack.Screen name={'Join UMarket'} component={UserVerification} options={{headerShown: false}} />
-                <Stack.Screen name={'Join UMarket'} component={AccountInformation} options={{headerShown: false}}/>
+                <Stack.Screen name={'Join UMarket Email'} component={UserRegistrationEmail} options={{headerShown: false}} />
+                <Stack.Screen name={'Join UMarket Verify Emailt'} component={UserVerification} options={{headerShown: false}} />
+                <Stack.Screen name={'Join UMarket Account'} component={AccountInformation} options={{headerShown: false}}/>
             </>    
         )}
       </Stack.Navigator>
