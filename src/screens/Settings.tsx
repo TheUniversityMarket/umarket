@@ -59,6 +59,8 @@ function Empty() {
     )
   }
 
+  
+
 function Settings() {
     const companyName = "UMarket";
     const navigation = useNavigation();
@@ -97,9 +99,9 @@ function Settings() {
             <MainHeader onInput={true} isListing={false}></MainHeader>
             <View style={styles.container}>
                 <View>
-                    <Text style={styles.compName}>
+                    {/* <Text style={styles.compName}>
                         UMarket
-                    </Text>
+                    </Text> */}
                 </View>
                 <View style={styles.headerContainer}>
                     <Text style={styles.header}>
@@ -118,13 +120,13 @@ function Settings() {
                         <View style={{flex: 1, padding: 10, minWidth: 225}}>
                             <Text>First Name:</Text>
                             {/* <TextInput style={styles.itemIn} */}
-                            <TextInput placeholder="Nash" style={{borderWidth: 1, padding: 10, borderRadius: 3, marginTop: 3}} />
+                            <TextInput placeholder="Nash" style={styles.nameCont} />
                         {/* <View style={styles.nameCont2}> */}
                         </View>
                         <View style={{flex: 1, padding: 10, minWidth: 225}}>
                             <Text>Last Name:</Text>
                             {/* <TextInput style={styles.itemIn} */}
-                            <TextInput placeholder="Moore" style={{borderWidth: 1, padding: 10, borderRadius: 3, marginTop: 3}} />
+                            <TextInput placeholder="Moore" style={styles.nameCont} />
                         </View>
                         <View style={{flex: 1}}></View>
                     </View>
@@ -134,13 +136,13 @@ function Settings() {
                         <View style={{flex: 1, padding: 10, minWidth: 225}}>
                             <Text>Email:</Text>
                             {/* <TextInput style={styles.itemIn} */}
-                            <Text style={{borderWidth: 1, padding: 10, borderRadius: 3, marginTop: 3, color: "#B3B3B3"}}>nmoore66@gatech.edu</Text>
+                            <Text style={styles.nameCont}>nmoore66@gatech.edu</Text>
                         {/* <View style={styles.nameCont2}> */}
                         </View>
                         <View style={{flex: 1, padding: 10, minWidth: 225}}>
                             <Text>Phone Number:</Text>
                             {/* <TextInput style={styles.itemIn} */}
-                            <TextInput placeholder="214-304-9926" style={{borderWidth: 1, padding: 10, borderRadius: 3, marginTop: 3}} />
+                            <TextInput placeholder="214-304-9926" style={styles.nameCont} />
                         </View>
                         <View style={{flex: 1}}></View>
                     </View>
@@ -161,11 +163,14 @@ function Settings() {
                         </View>
                     </View> */}
                 </View>
-                <View style={styles.submitContainer}>
-                    <Pressable>
-                        <Text style={{fontSize: 20}}>Save Info</Text>
-                    </Pressable>
+                <Pressable style={ ({ pressed }) => [
+                    styles.submitContainer,
+                    pressed && {backgroundColor: "rgb(34 197 94)", }
+                    ]}>
+                <View >
+                        <Text style={{fontSize: 20, textAlign:"center", alignSelf:"center"}}>Save Info</Text>
                 </View>
+                </Pressable>
                     <View style={styles.headerContainerAlt}>
                         <Text style={styles.header}>Your Listings:</Text>
                         <View style={styles.page}>
@@ -179,15 +184,15 @@ function Settings() {
                             />
                         </View>
                     </View>
-                <View>
                     <Pressable style={ ({ pressed }) => [
-                            styles.submitContainer,
-                            pressed && {backgroundColor: "#e5e7eb"}
-                            ]} onPress={() => {navigation.navigate('Listings');
-                            }}>
-                       <Text style={{fontSize: 20}}>Sign Out</Text>
+                                styles.submitContainer,
+                                pressed && {backgroundColor: "#e5e7eb"}
+                                ]} onPress={() => {navigation.navigate('Login/SignUp');
+                                }}>
+                        <View>
+                            <Text style={{fontSize: 20}}>Sign Out</Text>
+                        </View>
                     </Pressable>
-                </View>
             </View>
         </SafeAreaView>
     );
@@ -220,7 +225,8 @@ const styles = StyleSheet.create({
     },
     header: {
         fontSize: 35,
-        color: "#228B22"
+        color: "black",
+        fontWeight: "300"
     },
     bodyContainer: {
         backgroundColor: "yellow",
@@ -249,21 +255,17 @@ const styles = StyleSheet.create({
         color: "rgb(34 197 94)"
     },
     nameCont: {
-        flexDirection: "row",
-        marginLeft: 0,
-        //padding: 7,
-        borderRadius: 3,
-        borderWidth: 1,
-        borderColor: "Black",
-        //width: "50%",
-        height: 40,
+        borderWidth: 1, 
+        padding: 10, 
+        borderRadius: 10, 
+        marginTop: 3
     },
     nameCont2: {
         flex: 1,
         flexDirection: "row",
         //marginLeft: "30%",
         //padding: 7,
-        borderRadius: 3,
+        borderRadius: 10,
         borderWidth: 1,
         borderColor: "Black",
         //width: "100%",
@@ -274,7 +276,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         marginLeft: 0,
         //padding: 7,
-        borderRadius: 3,
+        borderRadius: 10,
         borderWidth: 1,
         borderColor: "Black",
         width: "50%",
@@ -285,7 +287,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         marginLeft: "33%",
         //padding: 7,
-        borderRadius: 3,
+        borderRadius: 10,
         borderWidth: 1,
         borderColor: "Black",
         width: "100%",
@@ -316,12 +318,15 @@ const styles = StyleSheet.create({
         marginTop: 40,
         marginLeft: 5,
         padding: 7,
-        borderRadius: 3,
-        backgroundColor: "#e5e7eb",
+        borderRadius: 10,
+        backgroundColor: "#B3B3B3",
         width: 120,
         height: 40,
         alignSelf: "center",
-        alignItems: "center"
+        alignContent: "center",
+        borderColor: "black",
+        borderWidth: 1,
+        justifyContent: "center",
     },
     item: {
         padding: 0,
