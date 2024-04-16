@@ -2,6 +2,7 @@ import { StyleSheet, Text, View, SafeAreaView, ScrollView, Image, FlatList, Dime
 import { useRoute } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
+import MainHeader from '../components/MainHeader';
 
 const USERS = [
     { id: '1', name: "Jevon", image: "https://www.pngitem.com/pimgs/m/146-1462217_profile-icon-orange-png-transparent-png.png", description: 'I am a student at Georgia Tech.', tags: ['student', 'computer science'] },
@@ -43,18 +44,7 @@ function ListingItem({ navigation }) {
     const companyName = "UMarket";
     return (
         <SafeAreaView style={styles.safeContainer}>
-            <View style={styles.header}>
-                <Image style={styles.logo} source={require('./assets/logo.jpg')} />
-                <Text style={styles.compName}>
-                    {companyName}
-                </Text>
-                <View style={styles.search}>
-                    <AntDesign name="search1" size={24} color="rgb(34 197 94)" />
-                    <TextInput placeholder="Search for product, service, tag, etc..." placeholderTextColor={'#A9A9A9'} style={{ fontSize: 20, marginLeft: 10, width: "90%" }}>
-                    </TextInput>
-                </View>
-                <StatusBar style="auto" />
-            </View>
+            <MainHeader isListing={false} onInput={false}></MainHeader>
             <View style={{ flex: 1, flexDirection: "row", justifyContent: "center" }}>
                 <View style={{ alignItems: "flex-start", marginLeft: scale(7), marginTop: scale(7), }}>
                     <Pressable style={({ pressed }) => [
