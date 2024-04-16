@@ -94,7 +94,7 @@ function Settings() {
 
     return (
         <SafeAreaView style={styles.safeContainer}>
-            <MainHeader></MainHeader>
+            <MainHeader onInput={true} isListing={false}></MainHeader>
             <View style={styles.container}>
                 <View>
                     <Text style={styles.compName}>

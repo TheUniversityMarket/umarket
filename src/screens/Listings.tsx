@@ -175,11 +175,13 @@ function Listings() {
   const handleSearch = (query: any) => {
     sethasSearched(true);
     const filteredItems = DATA.filter(Item =>
-      (Item.title.toLowerCase().includes(query.toLowerCase()) || Item.tags.includes(query.toLowerCase()))
-    );
+      (Item.title.toLowerCase().includes(query.toLowerCase()) || Item.tags.some(tag => tag.includes(query))
+    ));
     setSearchResults(filteredItems);
   };
-
+  const checkSearch = (query) => {
+    handleSearch(query)
+  };
   const q = route.params?.obj?.q;
   let h = route.params?.obj?.h;
 
@@ -244,7 +246,7 @@ function Listings() {
     return (
       <SafeAreaView style={styles.safeContainer}>
           <View style={styles.container}>
-            <MainHeader></MainHeader>
+            <MainHeader onInput={checkSearch} isListing={true}></MainHeader>
               <View style={{height: 40}}>
                 <View style={{flex: 1, flexDirection: "row", borderBottomWidth: 1, borderBottomColor: "#d3d3d3", marginTop: 10}}>
                   <FlatList

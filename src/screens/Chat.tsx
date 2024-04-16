@@ -152,9 +152,9 @@ const [messages, setMessages] = useState([]);
     return (
         <SafeAreaView style={styles.safeContainer}>
             <View style={styles.container}>
-              <MainHeader></MainHeader>
+              <MainHeader onInput={true} isListing={false}></MainHeader>
                 <View style={{flex: 1, flexDirection: "row"}}>
-
+                    
                     <View style={{flex: 3, backgroundColor: "blue"}}>
 
                     </View>

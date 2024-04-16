@@ -18,15 +18,22 @@ const guidelineBaseWidth = 350;
 const guidelineBaseHeight = 680;
 const companyName = "Market";
 
-const MainHeader = ({}) => {
+const MainHeader = ({isListing, onInput}) => {
+    const [searchText, setSearchText] = useState('');
     const navigation = useNavigation()
     const handleSearch = (query: string) => {
         const obj = {
             q: query,
             h: true
         };
+        const obj2 = obj;
         console.log(query);
+        if (isListing) {
+            const info = searchText;
+            onInput(query);
+        } else {
         navigation.navigate('Listings', { obj: obj });
+        }
     };
     
     
@@ -40,7 +47,7 @@ const MainHeader = ({}) => {
                   </Text>
                   <View style={styles.search}>
                     <AntDesign name="search1" size={24} color="rgb(34 197 94)" />
-                    <SearchBar onSearch={handleSearch}/>
+                    <SearchBar isListings={isListing} onSearch={handleSearch}/>
                   </View>
 
                   <View style={{alignItems: "flex-end", marginRight: 30, marginLeft: 20}}>
