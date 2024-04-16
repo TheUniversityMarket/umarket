@@ -35,7 +35,7 @@ const Navigator: React.FC = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        {!currentUser ? (
+        {currentUser ? (
             <>
                 {width > 700 ? (
                     <>
