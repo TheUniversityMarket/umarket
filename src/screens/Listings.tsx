@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { StatusBar } from 'expo-status-bar'
 import { StyleSheet, Text, View, SafeAreaView, ScrollView, Image, FlatList, Dimensions, useWindowDimensions, Pressable, Animated } from 'react-native'
 import { AntDesign } from '@expo/vector-icons';
@@ -162,10 +162,30 @@ const SectionedDATA = [
  ];
 
 //const width = Dimensions.get('window').width
-const numberOfColumns = Math.round(width/215
-)
+const numberOfColumns = Math.round(width/215)
 
 function Listings() {
+  const { width, height } = useWindowDimensions();
+
+  const [shortDimension, longDimension] = width < height ? [width, height] : [height, width];
+
+  function scale(size: number) {
+    return shortDimension / guidelineBaseWidth * size;
+  }
+  function verticalScale(size: number) {
+    return longDimension / guidelineBaseHeight * size;
+  }
+  function moderateScale(size: number, factor = 0.5) {
+    return size + (scale(size) - size) * factor;
+  }
+  function moderateVerticalScale(size: number, factor = 0.5) {
+    return size + (verticalScale(size) - size) * factor;
+  }
+
+
+  const numColumns = Math.round(width/moderateScale(215))
+
+
   const [searchResults, setSearchResults] = useState<Object[]>([]);
   const [hasSearched, sethasSearched] = useState(false);
   const navigation = useNavigation()
@@ -174,11 +194,13 @@ function Listings() {
   const handleSearch = (query: any) => {
     sethasSearched(true);
     const filteredItems = DATA.filter(Item =>
-      (Item.title.toLowerCase().includes(query.toLowerCase()) || Item.tags.includes(query.toLowerCase()))
-    );
+      (Item.title.toLowerCase().includes(query.toLowerCase()) || Item.tags.some(tag => tag.includes(query))
+    ));
     setSearchResults(filteredItems);
   };
-
+  const checkSearch = (query) => {
+    handleSearch(query)
+  };
   const q = route.params?.obj?.q;
   let h = route.params?.obj?.h;
 
@@ -238,69 +260,14 @@ function Listings() {
   //   //</ScrollView>
   //   )
   // }
-
-  if (width > 700) {
+  
+  if (true) {
     return (
       <SafeAreaView style={styles.safeContainer}>
           <View style={styles.container}>
-
-              <View style={styles.header}>
-                  <Image style={styles.logo} source={require('./assets/logo.jpg')}></Image>
-                  <Text style={styles.compName}>
-                      {companyName}
-                  </Text>
-                  <View style={styles.search}>
-                    <AntDesign name="search1" size={24} color="rgb(34 197 94)" />
-                    <SearchBar onSearch={handleSearch}/>
-                  </View>
-
-                  <View style={{alignItems: "flex-end", marginRight: 30, marginLeft: 20}}>
-
-                    <View style={{flexDirection: "row", alignItems: "center"}}>
-
-                      <Pressable onPress={() => navigation.navigate('Settings')} >
-                        <View style={{alignItems: "flex-end", marginRight: 30, marginTop: 17}}>
-                          <MaterialIcons name="account-circle" size={43} color="rgb(34 197 94)" />
-                        </View>
-                      </Pressable>
-
-                      <Pressable onPress={() => navigation.navigate('Chat')} >
-                        <View style={{alignItems: "flex-end", marginRight: 30, marginTop: 17}}>
-                          <Entypo name="chat" size={43} color="rgb(34 197 94)" />
-                        </View>
-                      </Pressable>
-
-                      <Pressable onPress={() => navigation.navigate('Post')} >
-                        <View style={{
-                          borderWidth: 3,
-                          borderColor: "rgb(34 197 94)",
-                          marginTop: 17,
-                          flexDirection: "row",
-                          alignItems: "center",
-                          borderRadius: 40, // Adjust this value to achieve the desired pill shape
-                          paddingVertical: 10, // Ensure vertical padding is sufficient for a good appearance
-                          paddingHorizontal: 15, // Adjust horizontal padding as needed
-                        }}>
-                          <AntDesign name="pluscircleo" size={24} color="rgb(34 197 94)" style={{ marginRight: 7 }}/>
-                          <Text style={{
-                            color: "rgb(34 197 94)",
-                            fontWeight: "bold",
-                            fontSize: 17
-                          }}>
-                            Post
-                          </Text>
-                        </View>
-                      </Pressable>
-
-
-                    </View>
-
-                  </View>
-                  <StatusBar style="auto" />
-              </View>
-
+            <MainHeader onInput={checkSearch} isListing={true}></MainHeader>
               <View style={{height: 40}}>
-                <View style={{flex: 1, flexDirection: "row", borderBottomWidth: 1, borderBottomColor: "#d3d3d3"}}>
+                <View style={{flex: 1, flexDirection: "row", borderBottomWidth: 1, borderBottomColor: "#d3d3d3", alignItems: "center"}}>
                   <FlatList
                     horizontal={true}
                     data={DATA}
@@ -321,6 +288,7 @@ function Listings() {
                   <View style={styles.resultsContainer}>
                       {hasSearched && (<FlatList
                       data={searchResults}
+                      key={`${numColumns}`}
                       keyExtractor={(item) => item.id}
                       renderItem={renderItem}
                       ItemSeparatorComponent={() => <View style={{height: 30}}/>}
@@ -330,77 +298,78 @@ function Listings() {
                   </View>
                   {!hasSearched && (<FlatList      
                     data={DATA}
+                    key={`${numColumns}`}
                     renderItem={renderItem}
                     keyExtractor={(item) => item.id}
                     ItemSeparatorComponent={() => <View style={{height: 30}}/>}
                     ListEmptyComponent={Empty}
-                    numColumns={Math.round(width/moderateScale(215))}
+                    numColumns={numColumns}
                     />)}
                 {/* </ScrollView> */}
               </View>
           </View>
       </SafeAreaView>
     );
-  } else {
-    return (
-      <SafeAreaView style={styles.safeContainer}>
-          <View style={styles.container}>
-              <View style={styles.header}>
-                  <Image style={styles.logo} source={require('./assets/logo.jpg')}></Image>
-                  <Text style={styles.compName}>
-                      {companyName}
-                  </Text>
-                  <View style={styles.search}>
-                    <AntDesign name="search1" size={24} color="rgb(34 197 94)" />
-                    <SearchBar onSearch={handleSearch}/>
-                  </View>
+  // } else {
+  //   return (
+  //     <SafeAreaView style={styles.safeContainer}>
+  //         <View style={styles.container}>
+  //             <View style={styles.header}>
+  //                 <Image style={styles.logo} source={require('./assets/logo.jpg')}></Image>
+  //                 <Text style={styles.compName}>
+  //                     {companyName}
+  //                 </Text>
+  //                 <View style={styles.search}>
+  //                   <AntDesign name="search1" size={24} color="rgb(34 197 94)" />
+  //                   <SearchBar onSearch={handleSearch}/>
+  //                 </View>
 
-                  <StatusBar style="auto" />
-              </View>
-              <View style={{height: 40}}>
-                <View style={{flex: 1, flexDirection: "row", borderBottomWidth: 1, borderBottomColor: "#d3d3d3"}}>
-                  <FlatList
-                    horizontal={true}
-                    data={DATA}
-                    keyExtractor={(item) => item.id}
-                    renderItem={renderTags}
-                    ItemSeparatorComponent={() => <View style={{width: 0}}/>}
-                    ListEmptyComponent={Empty}
-                  />
-                </View>
-              </View>
-              <View style={styles.page}>
-                {/* <ScrollView> */}
-                  {/* {listing("Mac", laptop)}
+  //                 <StatusBar style="auto" />
+  //             </View>
+  //             <View style={{height: 40}}>
+  //               <View style={{flex: 1, flexDirection: "row", borderBottomWidth: 1, borderBottomColor: "#d3d3d3"}}>
+  //                 <FlatList
+  //                   horizontal={true}
+  //                   data={DATA}
+  //                   keyExtractor={(item) => item.id}
+  //                   renderItem={renderTags}
+  //                   ItemSeparatorComponent={() => <View style={{width: 0}}/>}
+  //                   ListEmptyComponent={Empty}
+  //                 />
+  //               </View>
+  //             </View>
+  //             <View style={styles.page}>
+  //               {/* <ScrollView> */}
+  //                 {/* {listing("Mac", laptop)}
 
-                  {listing("Refrigerator", fridge)}
+  //                 {listing("Refrigerator", fridge)}
 
-                  {listing("Microwave", microwave)} */}
-                  <View style={styles.resultsContainer}>
-                      {hasSearched && (<FlatList
-                      data={searchResults}
-                      keyExtractor={(item) => item.id}
-                      renderItem={renderItem}
-                      ItemSeparatorComponent={() => <View style={{height: 30}}/>}
-                      ListEmptyComponent={Empty}
-                      numColumns={Math.round(width/moderateScale(210))}
-                      />)}
-                  </View>
-                  <View style={styles.container}>
-                  {!hasSearched && (<FlatList      
-                    data={DATA}
-                    renderItem={renderItem}
-                    keyExtractor={(item) => item.id}
-                    ItemSeparatorComponent={() => <View style={{height: 30}}/>}
-                    ListEmptyComponent={Empty}
-                    numColumns={Math.round(width/moderateScale(215))}
-                    />)}
-                  </View>
-                {/* </ScrollView> */}
-              </View>
-          </View>
-      </SafeAreaView>
-    );
+  //                 {listing("Microwave", microwave)} */}
+  //                 <View style={styles.resultsContainer}>
+  //                     {hasSearched && (<FlatList
+  //                     data={searchResults}
+  //                     keyExtractor={(item) => item.id}
+  //                     renderItem={renderItem}
+  //                     ItemSeparatorComponent={() => <View style={{height: 30}}/>}
+  //                     ListEmptyComponent={Empty}
+  //                     numColumns={Math.round(width/moderateScale(215))}
+  //                     />)}
+  //                 </View>
+  //                 <View style={styles.container}>
+  //                 {!hasSearched && (<FlatList      
+  //                   data={DATA}
+  //                   renderItem={renderItem}
+  //                   keyExtractor={(item) => item.id}
+  //                   ItemSeparatorComponent={() => <View style={{height: 30}}/>}
+  //                   ListEmptyComponent={Empty}
+  //                   numColumns={Math.round(width/moderateScale(215))}
+  //                   />)}
+  //                 </View>
+  //               {/* </ScrollView> */}
+  //             </View>
+  //         </View>
+  //     </SafeAreaView>
+  //   );
   }
 }
 
@@ -445,7 +414,7 @@ const styles = StyleSheet.create({
   },
   search: {
     //width: scale(130),
-    //borderWidth: 10,
+    // borderWidth: 10,
     borderWidth: 1,
     borderColor: "#A9A9A9",
     backgroundColor: "#fbfbfb",
@@ -528,6 +497,7 @@ const styles = StyleSheet.create({
   tagText: {
     color: 'black',             // Text color
     fontSize: 12,               // Font size
+    fontWeight: "bold"
   }
 });
 

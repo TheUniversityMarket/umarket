@@ -3,6 +3,7 @@ import { TextInput } from "react-native";
 import { useState } from "react"
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import { useNavigation } from '@react-navigation/native';
+import MainHeader from "../components/MainHeader";
 
 const { width, height } = Dimensions.get('window');
 const [shortDimension, longDimension] = width < height ? [width, height] : [height, width];
@@ -58,6 +59,8 @@ function Empty() {
     )
   }
 
+  
+
 function Settings() {
     const companyName = "UMarket";
     const navigation = useNavigation();
@@ -93,37 +96,57 @@ function Settings() {
 
     return (
         <SafeAreaView style={styles.safeContainer}>
+            <MainHeader onInput={true} isListing={false}></MainHeader>
             <View style={styles.container}>
                 <View>
-                    <Text style={styles.compName}>
+                    {/* <Text style={styles.compName}>
                         UMarket
-                    </Text>
+                    </Text> */}
                 </View>
                 <View style={styles.headerContainer}>
                     <Text style={styles.header}>
                         Change Profile:
                     </Text>
                 </View>
-                <View>
-                    <View style={styles.bodyContainer}>
-                        <Text style={styles.bodyTxt}>First Name:
-                        <Text style={styles.bodyTxt2}>Last Name:
-                        </Text>
-                        </Text>
-                    </View>
-                    <View style={styles.bodyContainer}>
-                        <View style={styles.nameCont}>
-                            <TextInput style={styles.itemIn}
-                            placeholder="Nash">
-                            </TextInput>
-                        <View style={styles.nameCont2}>
-                            <TextInput style={styles.itemIn}
-                            placeholder="Moore">
-                            </TextInput>
+                <View style={{flex: 1, alignItems: "center"}}>
+                    {/* <View style={styles.bodyContainer}>
+                        <Text style={styles.bodyTxt}>First Name:</Text>
+                        <Text style={styles.bodyTxt2}>Last Name:</Text>
+                    </View> */}
+                    {/* <View style={styles.bodyContainer}> */}
+                    <View style={{width: "100%", flexDirection: "row", gap: 10}}>
+                        {/* <View style={styles.nameCont}> */}
+                        <View style={{flex: 1}}></View>
+                        <View style={{flex: 1, padding: 10, minWidth: 225}}>
+                            <Text>First Name:</Text>
+                            {/* <TextInput style={styles.itemIn} */}
+                            <TextInput placeholder="Nash" style={styles.nameCont} />
+                        {/* <View style={styles.nameCont2}> */}
                         </View>
+                        <View style={{flex: 1, padding: 10, minWidth: 225}}>
+                            <Text>Last Name:</Text>
+                            {/* <TextInput style={styles.itemIn} */}
+                            <TextInput placeholder="Moore" style={styles.nameCont} />
                         </View>
+                        <View style={{flex: 1}}></View>
                     </View>
-                    <View style={styles.bodyContainer}>
+                    <View style={{width: "100%", flexDirection: "row", gap: 10}}>
+                        {/* <View style={styles.nameCont}> */}
+                        <View style={{flex: 1}}></View>
+                        <View style={{flex: 1, padding: 10, minWidth: 225}}>
+                            <Text>Email:</Text>
+                            {/* <TextInput style={styles.itemIn} */}
+                            <Text style={styles.nameCont}>nmoore66@gatech.edu</Text>
+                        {/* <View style={styles.nameCont2}> */}
+                        </View>
+                        <View style={{flex: 1, padding: 10, minWidth: 225}}>
+                            <Text>Phone Number:</Text>
+                            {/* <TextInput style={styles.itemIn} */}
+                            <TextInput placeholder="214-304-9926" style={styles.nameCont} />
+                        </View>
+                        <View style={{flex: 1}}></View>
+                    </View>
+                    {/* <View style={styles.bodyContainer}>
                         <Text style={styles.bodyTxt}>Email:
                         <Text style={styles.bodyTxt3}>Phone Number:
                         </Text>
@@ -138,13 +161,16 @@ function Settings() {
                             </TextInput>
                         </View>
                         </View>
-                    </View>
+                    </View> */}
                 </View>
-                <View style={styles.submitContainer}>
-                    <Pressable>
-                        <Text style={{fontSize: 20}}>Save Info</Text>
-                    </Pressable>
+                <Pressable style={ ({ pressed }) => [
+                    styles.submitContainer,
+                    pressed && {backgroundColor: "rgb(34 197 94)", }
+                    ]}>
+                <View >
+                        <Text style={{fontSize: 20, textAlign:"center", alignSelf:"center"}}>Save Info</Text>
                 </View>
+                </Pressable>
                     <View style={styles.headerContainerAlt}>
                         <Text style={styles.header}>Your Listings:</Text>
                         <View style={styles.page}>
@@ -158,15 +184,15 @@ function Settings() {
                             />
                         </View>
                     </View>
-                <View>
                     <Pressable style={ ({ pressed }) => [
-                            styles.submitContainer,
-                            pressed && {backgroundColor: "#e5e7eb"}
-                            ]} onPress={() => {navigation.navigate('Listings');
-                            }}>
-                       <Text style={{fontSize: 20}}>Sign Out</Text>
+                                styles.submitContainer,
+                                pressed && {backgroundColor: "#e5e7eb"}
+                                ]} onPress={() => {navigation.navigate('Login/SignUp');
+                                }}>
+                        <View>
+                            <Text style={{fontSize: 20}}>Sign Out</Text>
+                        </View>
                     </Pressable>
-                </View>
             </View>
         </SafeAreaView>
     );
@@ -199,19 +225,26 @@ const styles = StyleSheet.create({
     },
     header: {
         fontSize: 35,
-        color: "#228B22"
+        color: "black",
+        fontWeight: "300"
     },
     bodyContainer: {
-        marginLeft: "30%",
-        width: "40%",
+        backgroundColor: "yellow",
+        borderWidth: 1,
+        flexDirection: "row",
+        gap: 0,
+        //marginLeft: "30%",
+        //width: "40%",
         marginTop: 15
     },
     bodyTxt: {
+        borderWidth: 1,
         flexDirection: "row",
         fontSize: 25,
         color: "rgb(34 197 94)"
     },
     bodyTxt2: {
+        borderWidth: 1,
         marginLeft: "30%",
         fontSize: 25,
         color: "rgb(34 197 94)"
@@ -222,23 +255,20 @@ const styles = StyleSheet.create({
         color: "rgb(34 197 94)"
     },
     nameCont: {
-        flexDirection: "row",
-        marginLeft: 0,
-        //padding: 7,
-        borderRadius: 3,
-        borderWidth: 1,
-        borderColor: "Black",
-        width: "50%",
-        height: 40,
+        borderWidth: 1, 
+        padding: 10, 
+        borderRadius: 10, 
+        marginTop: 3
     },
     nameCont2: {
+        flex: 1,
         flexDirection: "row",
-        marginLeft: "30%",
+        //marginLeft: "30%",
         //padding: 7,
-        borderRadius: 3,
+        borderRadius: 10,
         borderWidth: 1,
         borderColor: "Black",
-        width: "100%",
+        //width: "100%",
         height: 40,
     },
 
@@ -246,7 +276,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         marginLeft: 0,
         //padding: 7,
-        borderRadius: 3,
+        borderRadius: 10,
         borderWidth: 1,
         borderColor: "Black",
         width: "50%",
@@ -257,7 +287,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         marginLeft: "33%",
         //padding: 7,
-        borderRadius: 3,
+        borderRadius: 10,
         borderWidth: 1,
         borderColor: "Black",
         width: "100%",
@@ -265,6 +295,7 @@ const styles = StyleSheet.create({
     },
 
     itemIn: {
+        flex: 1,
         fontSize: 17,
         padding: 9,
         color: "black"
@@ -287,12 +318,15 @@ const styles = StyleSheet.create({
         marginTop: 40,
         marginLeft: 5,
         padding: 7,
-        borderRadius: 3,
-        backgroundColor: "#e5e7eb",
+        borderRadius: 10,
+        backgroundColor: "#B3B3B3",
         width: 120,
         height: 40,
         alignSelf: "center",
-        alignItems: "center"
+        alignContent: "center",
+        borderColor: "black",
+        borderWidth: 1,
+        justifyContent: "center",
     },
     item: {
         padding: 0,
