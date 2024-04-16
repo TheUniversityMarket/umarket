@@ -31,7 +31,7 @@ const MainHeader = ({isListing, onInput}) => {
         if (isListing) {
             const info = searchText;
             onInput(query);
-        } else if (query!="") {
+        } else {
         navigation.navigate('Listings', { obj: obj });
         }
     };
