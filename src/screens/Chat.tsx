@@ -153,7 +153,7 @@ function Chat() {
     return (
         <SafeAreaView style={styles.safeContainer}>
             <View style={styles.container}>
-              <MainHeader onInput={true} isListing={false}></MainHeader>
+              <MainHeader onInput={null} isListing={false}></MainHeader>
                 <View style={{flex: 1, flexDirection: "row"}}>
                     
                     <View style={{flex: 3, backgroundColor: "blue"}}>
