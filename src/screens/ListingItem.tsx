@@ -2,6 +2,7 @@ import { StyleSheet, Text, View, SafeAreaView, ScrollView, Image, FlatList, Dime
 import { useRoute } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
+import MainHeader from '../components/MainHeader';
 
 const USERS = [
     { id: '1', name: "Jevon", image: "https://www.pngitem.com/pimgs/m/146-1462217_profile-icon-orange-png-transparent-png.png", description: 'I am a student at Georgia Tech.', tags: ['student', 'computer science'] },
@@ -43,31 +44,20 @@ function ListingItem({ navigation }) {
     const companyName = "UMarket";
     return (
         <SafeAreaView style={styles.safeContainer}>
-            <View style={styles.header}>
-                <Image style={styles.logo} source={require('./assets/logo.jpg')} />
-                <Text style={styles.compName}>
-                    {companyName}
-                </Text>
-                <View style={styles.search}>
-                    <AntDesign name="search1" size={24} color="rgb(34 197 94)" />
-                    <TextInput placeholder="Search for product, service, tag, etc..." placeholderTextColor={'#A9A9A9'} style={{ fontSize: 20, marginLeft: 10, width: "90%" }}>
-                    </TextInput>
-                </View>
-                <StatusBar style="auto" />
-            </View>
+            <MainHeader isListing={false} onInput={false}></MainHeader>
             <View style={{ flex: 1, flexDirection: "row", justifyContent: "center" }}>
                 <View style={{ alignItems: "flex-start", marginLeft: scale(7), marginTop: scale(7), }}>
                     <Pressable style={({ pressed }) => [
                         { borderRadius: 100 },
-                        pressed
+                        pressed && { backgroundColor: 'black' }
                     ]}
                         onPress={() => navigation.navigate('Listings', { item })}>
-                        <Ionicons name="arrow-back-circle-sharp" size={moderateScale(37)} color="black" />
+                        <Ionicons name="arrow-back-circle-sharp" size={moderateScale(37)} color="rgb(34 197 94)" />
                     </Pressable>
                 </View>
-                <ScrollView>
+                <ScrollView contentContainerStyle={styles.scrollingContainer}>
                     <View style={styles.container}>
-                        <View style={{ width: "100%" }}>
+                        <View style={{ flex: 1 }}>
                             <View style={{ alignItems: "center", gap: 0 }}>
                                 <Text style={{ fontWeight: "bold", fontSize: scale(20) }}>{item.title}</Text>
                                 <Image source={{ uri: item.image }} style={styles.productImage} resizeMode="contain" />
@@ -105,15 +95,21 @@ function ListingItem({ navigation }) {
                         </View>
                     </View>
                 </ScrollView>
+                <View style={{width: moderateScale(37)}}></View>
             </View>
         </SafeAreaView>
     )
 }
 
 const styles = StyleSheet.create({
+    scrollingContainer: {
+        //backgroundColor: "red",
+        flex: 1,
+        alignItems: 'center',
+    },
     safeContainer: {
         flex: 1,
-        backgroundColor: "#e5e7eb", // Changed background color to light gray
+        backgroundColor: "rgb(59 130 246 / .5)", // Changed background color to light gray
     },
     container: {
         flex: 1,
@@ -127,6 +123,7 @@ const styles = StyleSheet.create({
         width: '50%', // Adjust width to fit within the screen nicely
     },
     productImage: {
+        //flex: 1,
         width: moderateScale(300),
         height: moderateScale(300),
         borderRadius: 30, // Optional, if you want rounded corners for the image
@@ -139,7 +136,7 @@ const styles = StyleSheet.create({
     header: {
         alignItems: "center",
         paddingBottom: 20,
-        backgroundColor: "#e5e7eb", // Match the main background
+        backgroundColor: "white", // Match the main background
         flexDirection: "row",
         justifyContent: "flex-start",
         borderBottomWidth: 1,
