@@ -407,7 +407,7 @@ function moderateVerticalScale(size: number, factor = 0.5) {
 
 function UserLogin( {navigation} ) {
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: "#fff0db"}}>
+    <SafeAreaView style={{flex: 1, backgroundColor: "rgb(34 197 94)"}}>
 
       <View style={{flex: 1, backgroundColor: "transparent"}}></View> {/*Top Spacer*/}
 
