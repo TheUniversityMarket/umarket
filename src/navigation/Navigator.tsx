@@ -35,7 +35,7 @@ const Navigator: React.FC = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        {!currentUser ? (
+        {currentUser ? (
             <>
                 {width > 700 ? (
                     <>
@@ -49,13 +49,13 @@ const Navigator: React.FC = () => {
                 )}
                 <Stack.Screen name={'ListingsLoggedOut'} component={ListingsLoggedOut} options={{headerShown: false}}/>
                 <Stack.Screen name={'ListingItem'} component={ListingItem} options={{headerShown: false}}/>
-                <Stack.Screen name={'AccountInformation'} component={AccountInformation} options={{headerShown: false}}/>
             </>
         ) : (
             <>
                 <Stack.Screen name={'Login/SignUp'} component={UserLogin} options={{headerShown: false}} />
                 <Stack.Screen name={'UserRegistrationEmail'} component={UserRegistrationEmail} options={{headerShown: false}} />
                 <Stack.Screen name={'UserVerification'} component={UserVerification} options={{headerShown: false}} />
+                <Stack.Screen name={'AccountInformation'} component={AccountInformation} options={{headerShown: false}}/>
             </>    
         )}
       </Stack.Navigator>
