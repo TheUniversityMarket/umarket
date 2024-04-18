@@ -42,57 +42,6 @@ function returnTags(tagList) {
   ));
 }
 
-function Item(props) {
-  const { id, title, image, description, price, tags } = props;
-  const scaleValue = useRef(new Animated.Value(1)).current; // Initial scale
-
-  const handleMouseEnter = () => {
-    Animated.spring(scaleValue, {
-      toValue: 1.05,
-      useNativeDriver: true
-    }).start();
-  };
-
-  const handleMouseLeave = () => {
-    Animated.spring(scaleValue, {
-      toValue: 1,
-      useNativeDriver: true
-    }).start();
-  };
-
-  return (
-    <Animated.View 
-      style={[
-        styles.item, 
-        { transform: [{ scale: scaleValue }] }
-      ]}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-    >
-      <Image
-        style={{
-          width: moderateScale(155),
-          height: moderateVerticalScale(170),
-          marginTop: 10,
-          borderRadius: 5
-        }}
-        source={{ uri: image }}
-      />
-      <View style={{ marginTop: 10 }}>
-        <Text style={{ fontWeight: "bold", fontSize: moderateScale(10), color: "black" }}>
-          {title}
-        </Text>
-        <Text style={{ fontSize: moderateScale(10), color: "black" }}>
-          {price}
-        </Text>
-        <Text style={{ fontSize: moderateScale(10), color: "black" }}>
-          {returnTags(tags)}
-        </Text>
-      </View>
-    </Animated.View>
-  );
-}
-
 function Empty() {
   return (
     <View>
@@ -165,23 +114,25 @@ const SectionedDATA = [
 const numberOfColumns = Math.round(width/215)
 
 function Listings() {
-  const { width, height } = useWindowDimensions();
-
+  const {height, width, scale, fontScale} = useWindowDimensions();
   const [shortDimension, longDimension] = width < height ? [width, height] : [height, width];
 
-  function scale(size: number) {
-    return shortDimension / guidelineBaseWidth * size;
+  //Default guideline sizes are based on standard ~5" screen mobile device
+  const guidelineBaseWidth = 350;
+  const guidelineBaseHeight = 680;
+
+  function scaleIt(size: number) {
+      return shortDimension / guidelineBaseWidth * size;
   }
   function verticalScale(size: number) {
-    return longDimension / guidelineBaseHeight * size;
+      return longDimension / guidelineBaseHeight * size;
   }
   function moderateScale(size: number, factor = 0.5) {
-    return size + (scale(size) - size) * factor;
+      return size + (scaleIt(size) - size) * factor;
   }
   function moderateVerticalScale(size: number, factor = 0.5) {
-    return size + (verticalScale(size) - size) * factor;
+      return size + (verticalScale(size) - size) * factor;
   }
-
 
   const numColumns = Math.round(width/moderateScale(215))
 
@@ -191,6 +142,57 @@ function Listings() {
   const navigation = useNavigation()
   const route = useRoute()
   
+  function Item(props) {
+    const { id, title, image, description, price, tags } = props;
+    const scaleValue = useRef(new Animated.Value(1)).current; // Initial scale
+  
+    const handleMouseEnter = () => {
+      Animated.spring(scaleValue, {
+        toValue: 1.05,
+        useNativeDriver: true
+      }).start();
+    };
+  
+    const handleMouseLeave = () => {
+      Animated.spring(scaleValue, {
+        toValue: 1,
+        useNativeDriver: true
+      }).start();
+    };
+  
+    return (
+      <Animated.View 
+        style={[
+          styles.item, 
+          { transform: [{ scale: scaleValue }] }
+        ]}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
+        <Image
+          style={{
+            width: moderateScale(155),
+            height: moderateVerticalScale(170),
+            marginTop: 10,
+            borderRadius: 5
+          }}
+          source={{ uri: image }}
+        />
+        <View style={{ marginTop: 10 }}>
+          <Text style={{ fontWeight: "bold", fontSize: moderateScale(10), color: "black" }}>
+            {title}
+          </Text>
+          <Text style={{ fontSize: moderateScale(10), color: "black" }}>
+            {price}
+          </Text>
+          <Text style={{ fontSize: moderateScale(10), color: "black" }}>
+            {returnTags(tags)}
+          </Text>
+        </View>
+      </Animated.View>
+    );
+  }
+
   const handleSearch = (query: any) => {
     sethasSearched(true);
     const filteredItems = DATA.filter(Item =>
