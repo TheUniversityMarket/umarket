@@ -1,3 +1,4 @@
+import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react"
 import { Text, View, StyleSheet, SafeAreaView, TextInput, Pressable, Dimensions, Image, useWindowDimensions } from "react-native"
 
@@ -46,7 +47,7 @@ function UserLogin( {navigation} ) {
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: "rgb(34 197 94)"}}>
-
+      <StatusBar translucent backgroundColor="transparent" />
       <View style={{flex: 1, backgroundColor: "transparent"}}></View> 
 
       <View style={{flex: 7, flexDirection: "row"}}>
@@ -54,7 +55,7 @@ function UserLogin( {navigation} ) {
 
             <View style={{flex: 1, backgroundColor: "transparent"}}></View> 
 
-            <View style={{flex: 7, alignItems: "center", justifyContent: "center", backgroundColor: "white", minWidth: 350, maxWidth: 600, minHeight: 575, borderRadius: 20, borderWidth: 3, borderColor: "rgb(34 197 94)"}}>
+            <View style={{flex: 7, alignItems: "center", justifyContent: "center", backgroundColor: "white", minWidth: 350, maxWidth: 800, minHeight: 575, borderRadius: 20, borderWidth: 3, borderColor: "rgb(34 197 94)"}}>
               <View style={{width: "90%", flex: 1, justifyContent: "center"}}>
 
                   <View style={{alignItems: "center", justifyContent: "center"}}>
@@ -69,7 +70,7 @@ function UserLogin( {navigation} ) {
 
                     <View style={{minWidth: 300}}>
 
-                    <Pressable style={ ({ pressed }) => [
+                    {/* <Pressable style={ ({ pressed }) => [
                         {
                           borderWidth: 1,
                           marginTop: 10,
@@ -85,7 +86,7 @@ function UserLogin( {navigation} ) {
                           <Image source={{uri: "Images/sellraze.png"}} style={{height: 23, width: 23, marginRight: 7}} />
                           <Text style={{fontSize: 20, color: "gray"}}>Continue with SellRaze</Text>
                         </View>
-                    </Pressable>
+                    </Pressable> */}
 
                       <View style={{flex: 1, marginTop: 30}}>
                           <Text style={{fontSize: 17, paddingBottom: 2}}>Email:</Text>
