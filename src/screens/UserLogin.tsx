@@ -54,7 +54,7 @@ function UserLogin( {navigation} ) {
 
             <View style={{flex: 1, backgroundColor: "transparent"}}></View> 
 
-            <View style={{flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: "white", minWidth: 350, minHeight: 600, borderRadius: 20, borderWidth: 3, borderColor: "rgb(34 197 94)"}}>
+            <View style={{flex: 7, alignItems: "center", justifyContent: "center", backgroundColor: "white", minWidth: 350, maxWidth: 600, minHeight: 575, borderRadius: 20, borderWidth: 3, borderColor: "rgb(34 197 94)"}}>
               <View style={{width: "90%", flex: 1, justifyContent: "center"}}>
 
                   <View style={{alignItems: "center", justifyContent: "center"}}>
