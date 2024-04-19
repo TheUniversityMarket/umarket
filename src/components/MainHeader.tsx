@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, Pressable, Dimensions, StyleSheet, TurboModuleRegistry } from 'react-native';
+import { View, Text, Image, Pressable, Dimensions, StyleSheet, TurboModuleRegistry, useWindowDimensions } from 'react-native';
 import { MaterialIcons, Entypo } from '@expo/vector-icons';
 import SearchBar from './SearchBar'; // Import the SearchBar component from its correct location
 import { AntDesign } from '@expo/vector-icons';
@@ -19,6 +19,7 @@ const guidelineBaseHeight = 680;
 const companyName = "Market";
 
 const MainHeader = ({isListing, onInput}) => {
+    const { width, height } = useWindowDimensions();
     const [searchText, setSearchText] = useState('');
     const navigation = useNavigation()
     const handleSearch = (query: string) => {
@@ -35,6 +36,14 @@ const MainHeader = ({isListing, onInput}) => {
         navigation.navigate('Listings', { obj: obj });
         }
     };
+
+
+    let isSmall = false;
+    if (width<700) {
+      isSmall = true;
+    } else {
+      isSmall = false;
+    }
     
     
     return (
@@ -42,9 +51,9 @@ const MainHeader = ({isListing, onInput}) => {
             <Pressable onPress={() => navigation.navigate('Listings')}>
             <Image style={styles.logo} source={require('../screens/assets/logo.jpg')}></Image>
             </Pressable>
-                  <Text style={styles.compName}>
+            {!isSmall && <Text style={styles.compName}>
                       {companyName}
-                  </Text>
+                  </Text>}
                   <View style={styles.search}>
                     <AntDesign name="search1" size={24} color="rgb(34 197 94)" />
                     <SearchBar isListings={isListing} onSearch={handleSearch}/>
@@ -54,11 +63,11 @@ const MainHeader = ({isListing, onInput}) => {
 
                     <View style={{flexDirection: "row", alignItems: "center"}}>
 
-                      <Pressable onPress={() => navigation.navigate('Settings')} >
+                      {!isSmall && <Pressable onPress={() => navigation.navigate('Settings')} >
                         <View style={{alignItems: "flex-end", marginRight: 30, marginTop: 17}}>
                           <MaterialIcons name="account-circle" size={43} color="rgb(34 197 94)" />
                         </View>
-                      </Pressable>
+                      </Pressable>}
 
                       <Pressable onPress={() => navigation.navigate('Chat')} >
                         <View style={{alignItems: "flex-end", marginRight: 30, marginTop: 17}}>
@@ -66,7 +75,7 @@ const MainHeader = ({isListing, onInput}) => {
                         </View>
                       </Pressable>
 
-                    <Pressable onPress={() => navigation.navigate('Post')} >
+                      {!isSmall && <Pressable onPress={() => navigation.navigate('Post')} >
                         <View style={{
                           borderWidth: 3,
                           borderColor: "rgb(34 197 94)",
@@ -86,7 +95,7 @@ const MainHeader = ({isListing, onInput}) => {
                             Post
                           </Text>
                         </View>
-                    </Pressable>
+                    </Pressable>}
 
                     </View>
 
