@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { StatusBar } from 'expo-status-bar'
-import { StyleSheet, Text, View, SafeAreaView, ScrollView, Image, FlatList, Dimensions, useWindowDimensions, Pressable, Animated } from 'react-native'
+import { StyleSheet, Text, View, SafeAreaView, Image, FlatList, ScrollView, Dimensions, useWindowDimensions, Pressable, Animated } from 'react-native'
 import { AntDesign } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -238,7 +238,8 @@ function Listings( {navigation} ) {
                     ItemSeparatorComponent={() => <View style={{height: 30}}/>}
                     ListEmptyComponent={Empty}
                     contentContainerStyle={{alignItems: "center", justifyContent: "center", flexGrow: 1}}
-                    numColumns={Math.round(width/moderateScale(215))}/>
+                    numColumns={Math.round(width/moderateScale(215))}
+                    />
                     )}
               </View>
           </View>
@@ -346,7 +347,6 @@ const styles = StyleSheet.create({
   resultsContainer: {
     marginTop: 20,
     paddingHorizontal: 10,
-    flex:1,
   },
 
   tag: {
