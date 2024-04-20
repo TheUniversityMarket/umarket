@@ -15,6 +15,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import { SimpleLineIcons } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
+import ImagePicker from "../components/ImagePicker";
         
 // import { AntDesign } from '@expo/vector-icons';
 // import { useNavigation } from '@react-navigation/native';
@@ -190,14 +191,13 @@ function Post({ navigation }) {
                     <View style={styles.prodImgSuperContainer}>  
                         <Text style={styles.prodImgTxt}>
                             Add Picture:
-                            <Pressable onPress={() => { // 
-                                        
-                                        }}>
-                                <View style={styles.prodImgContainer}>
+                            <Pressable onPress={() => {ImagePicker}}>
+                                {/* <View style={styles.prodImgContainer}>
                                     <Text style= {{color: "white"}}>
                                         Img
                                     </Text>
-                                </View>
+                                </View> */}
+                                <ImagePicker />
                             </Pressable>
                         </Text> 
                     </View>
