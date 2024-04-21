@@ -1,0 +1,52 @@
+import React, { useState } from 'react';
+import { View, Button, Platform, DatePickerAndroid, DatePickerIOS } from 'react-native';
+
+const DateSelector = () => {
+  const [date, setDate] = useState(new Date());
+  const [showDatePicker, setShowDatePicker] = useState(false);
+
+  const showDatePickerModal = () => {
+    setShowDatePicker(true);
+  };
+
+  const hideDatePickerModal = () => {
+    setShowDatePicker(false);
+  };
+
+  const handleDateChange = (newDate) => {
+    if (Platform.OS === 'ios') {
+      setDate(newDate);
+    }
+  };
+
+  const handleConfirmDate = () => {
+    // Handle the selected date for Android
+    hideDatePickerModal();
+    DatePickerAndroid.open({
+      date: date,
+    }).then(({ action, year, month, day }) => {
+      if (action !== DatePickerAndroid.dismissedAction) {
+        const selectedDate = new Date(year, month, day);
+        setDate(selectedDate);
+      }
+    });
+  };
+
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Button title="Select Date" onPress={showDatePickerModal} />
+      {showDatePicker && Platform.OS === 'ios' && (
+        <DatePickerIOS
+          date={date}
+          onDateChange={handleDateChange}
+          mode="date"
+        />
+      )}
+      {Platform.OS === 'android' && (
+        <Button title="Confirm" onPress={handleConfirmDate} />
+      )}
+    </View>
+  );
+};
+
+export default DateSelector;
