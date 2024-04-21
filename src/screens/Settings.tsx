@@ -5,12 +5,14 @@ import { Colors } from "react-native/Libraries/NewAppScreen";
 import { useNavigation } from '@react-navigation/native';
 import MainHeader from "../components/MainHeader";
 import React, { useEffect, useRef } from 'react';
+import { Alert } from 'react-native';
+
+import {auth, db} from '../firebase/firebaseConfig';
+import { signOut } from "firebase/auth";
 
 const { width, height } = Dimensions.get('window');
-const [shortDimension, longDimension] = width < height ? [width, height] : [height, width];
-//Default guideline sizes are based on standard ~5" screen mobile device
-const guidelineBaseWidth = 350;
-const guidelineBaseHeight = 680;
+
+import { scale, verticalScale, moderateScale, moderateVerticalScale } from '../components/Scaling';
 
 const microwave = "https://images.craigslist.org/00Q0Q_clz03CCkybF_0CI0t2_600x450.jpg"
 const fridge = "https://i.ebayimg.com/images/g/5JAAAOSwdB9hnRZ6/s-l1600.jpg"
@@ -63,18 +65,6 @@ const DATA = [
     );
   }
 
-function scale(size: number) {
-    return shortDimension / guidelineBaseWidth * size;
-}
-function verticalScale(size: number) {
-    return longDimension / guidelineBaseHeight * size;
-}
-function moderateScale(size: number, factor = 0.5) {
-    return size + (scale(size) - size) * factor;
-}
-function moderateVerticalScale(size: number, factor = 0.5) {
-    return size + (verticalScale(size) - size) * factor;
-}
 
 function Empty() {
     return (
@@ -88,9 +78,18 @@ function Empty() {
 
   
 
-function Settings() {
+function Settings({ navigation }) {
     const companyName = "UMarket";
-    const navigation = useNavigation();
+    
+    const handleSignOut = async () => {
+        try {
+            await signOut(auth);
+            navigation.navigate('UserLogin');
+        } catch (error) {
+            console.error("Sign out error:", error);
+            Alert.alert("Sign Out Failed", error.message);
+        }
+      };
 
     const [animatedValue] = useState(new Animated.Value(0));
 
@@ -277,13 +276,15 @@ function Settings() {
                             />
                         </View>
                     </View>
-                    <Pressable style={ ({ pressed }) => [
-                                styles.submitContainer,
-                                pressed && {backgroundColor: "#E5E4E2"}
-                                ]} onPress={() => {navigation.navigate('Login/SignUp');
-                                }}>
+                    <Pressable
+                        style={({ pressed }) => [
+                            styles.submitContainer,
+                            pressed && { backgroundColor: "#E5E4E2" }
+                        ]}
+                        onPress={() => signOut(auth)}
+                    >
                         <View>
-                            <Text style={{fontSize: 20, color:"white"}}>Sign Out</Text>
+                            <Text style={{ fontSize: 20, color: "white" }}>Sign Out</Text>
                         </View>
                     </Pressable>
                 </View>

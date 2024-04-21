@@ -11,6 +11,7 @@
     "strict": true,
     "target": "esnext"
   },
+  "include": ["types/**/*.d.ts"],
   "exclude": [
     "node_modules",
     "babel.config.js",
