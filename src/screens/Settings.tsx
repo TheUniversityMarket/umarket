@@ -154,6 +154,7 @@ function Settings({ navigation }) {
         <SafeAreaView style={styles.safeContainer}>
             <MainHeader onInput={true} isListing={false}></MainHeader>
             {/* <Animated.View style={[styles.container, { opacity: animatedValue }]}> */}
+            <View>
                 <View style={styles.headerContainer}>
                     <Text style={styles.header}>
                         Change Profile:
@@ -168,7 +169,7 @@ function Settings({ navigation }) {
                     <View style={{width: "100%", flexDirection: "row", gap: 10}}>
                         {/* <View style={styles.nameCont}> */}
                         <View style={{flex: 1}}></View>
-                        <View style={{flex: 1, padding: 10, minWidth: 225}}>
+                        <View style={{flex: 1, padding: 10, minWidth: 175}}>
                             <Text>First Name:</Text>
                             {/* <TextInput style={styles.itemIn} */}
                             <Animated.View 
@@ -183,7 +184,7 @@ function Settings({ navigation }) {
                             </Animated.View>
                         {/* <View style={styles.nameCont2}> */}
                         </View>
-                        <View style={{flex: 1, padding: 10, minWidth: 225}}>
+                        <View style={{flex: 1, padding: 10, minWidth: 175}}>
                             <Text>Last Name:</Text>
                             {/* <TextInput style={styles.itemIn} */}
                             <Animated.View 
@@ -202,7 +203,7 @@ function Settings({ navigation }) {
                     <View style={{width: "100%", flexDirection: "row", gap: 10}}>
                         {/* <View style={styles.nameCont}> */}
                         <View style={{flex: 1}}></View>
-                        <View style={{flex: 1, padding: 10, minWidth: 225}}>
+                        <View style={{flex: 1, padding: 10, minWidth: 175}}>
                             <Text>Email:</Text>
                             {/* <TextInput style={styles.itemIn} */}
                             <Animated.View 
@@ -217,7 +218,7 @@ function Settings({ navigation }) {
                             </Animated.View>
                         {/* <View style={styles.nameCont2}> */}
                         </View>
-                        <View style={{flex: 1, padding: 10, minWidth: 225}}>
+                        <View style={{flex: 1, padding: 10, minWidth: 175}}>
                             <Text>Phone Number:</Text>
                             {/* <TextInput style={styles.itemIn} */}
                             <Animated.View 
@@ -286,6 +287,7 @@ function Settings({ navigation }) {
                             <Text style={{ fontSize: 20, color: "white" }}>Sign Out</Text>
                         </View>
                     </Pressable>
+                </View>
             {/* </Animated.View> */}
         </SafeAreaView>
     );

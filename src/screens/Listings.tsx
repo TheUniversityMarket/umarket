@@ -9,6 +9,8 @@ import { TextInput } from 'react-native-gesture-handler';
 import SearchBar from "../components/SearchBar";
 import MainHeader from "../components/MainHeader";
 import { useRoute } from "@react-navigation/native";
+import Carousel from '../components/Carousel';
+import Footer from '../components/Footer';
 
 // import { scale, verticalScale, moderateScale, moderateVerticalScale } from "/Users/jevontwitty/Documents/GitHub/UMarket/src/components/Scaling"
 // import { FlatList } from 'react-native-gesture-handler';
@@ -141,7 +143,7 @@ function Listings( {navigation} ) {
           }}
           source={{ uri: image }}
         />
-        <View style={{ marginTop: 10 }}>
+        <View style={{ marginTop: 10, width: moderateScale(155) }}>
           <Text style={{ fontWeight: "bold", fontSize: moderateScale(10), color: "black" }}>
             {title}
           </Text>
@@ -175,6 +177,15 @@ function Listings( {navigation} ) {
       handleSearch(q);
     }
   }, [q, h]);
+
+  function returnTags(tagList) {
+    // Map each tag to a Text component wrapped in a View component styled to look like a small grey pill-shaped box
+    return tagList.map((tag, index) => (
+      <View key={index} style={styles.tag}>
+        <Text style={styles.tagText}>{tag}</Text>
+      </View>
+    ));
+  }
 
   function renderItem({item}) {
     return (
@@ -227,20 +238,25 @@ function Listings( {navigation} ) {
                     ItemSeparatorComponent={() => <View style={{width: 0}}/>}
                     contentContainerStyle={{alignItems: "center", justifyContent: "center", flexGrow: 1}}
                     ListEmptyComponent={Empty}
+                    showsVerticalScrollIndicator={false}
                   />
                 </View>
-                <View style={styles.resultsContainer}>
-                    {(<FlatList
-                    data={hasSearched ? searchResults : DATA}
-                    key={`${numColumns}`}
-                    keyExtractor={(item) => item.id}
-                    renderItem={renderItem}
-                    ItemSeparatorComponent={() => <View style={{height: 30}}/>}
-                    ListEmptyComponent={Empty}
-                    contentContainerStyle={{alignItems: "center", justifyContent: "center", flexGrow: 1}}
-                    numColumns={Math.round(width/moderateScale(215))}
-                    />
-                    )}
+              </View>
+              <View style={styles.page}>
+                  <View style={styles.resultsContainer}>
+                      <FlatList
+                        ListHeaderComponent={<Carousel />}
+                        ListFooterComponent={<Footer />}
+                        data={hasSearched ? searchResults : DATA}
+                        key={`${numColumns}`}
+                        keyExtractor={(item) => item.id}
+                        renderItem={renderItem}
+                        ItemSeparatorComponent={() => <View style={{height: 30}}/>}
+                        ListEmptyComponent={Empty}
+                        numColumns={Math.round(width/moderateScale(215))}
+                        showsVerticalScrollIndicator={false}
+                      />
+                  </View>
               </View>
           </View>
       </SafeAreaView>

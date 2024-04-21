@@ -42,11 +42,32 @@ function ListingItem({ navigation }) {
     const route = useRoute();
     const { item } = route.params;
     const companyName = "UMarket";
+
+    const {height, width, scale, fontScale} = useWindowDimensions();
+    const [shortDimension, longDimension] = width < height ? [width, height] : [height, width];
+  
+    //Default guideline sizes are based on standard ~5" screen mobile device
+    const guidelineBaseWidth = 350;
+    const guidelineBaseHeight = 680;
+  
+    function scaleIt(size: number) {
+        return shortDimension / guidelineBaseWidth * size;
+    }
+    function verticalScale(size: number) {
+        return longDimension / guidelineBaseHeight * size;
+    }
+    function moderateScale(size: number, factor = 0.5) {
+        return size + (scaleIt(size) - size) * factor;
+    }
+    function moderateVerticalScale(size: number, factor = 0.5) {
+        return size + (verticalScale(size) - size) * factor;
+    }
+
     return (
         <SafeAreaView style={styles.safeContainer}>
             <MainHeader isListing={false} onInput={false}></MainHeader>
             <View style={{ flex: 1, flexDirection: "row", justifyContent: "center" }}>
-                <View style={{ alignItems: "flex-start", marginLeft: scale(7), marginTop: scale(7), }}>
+                <View style={{ alignItems: "flex-start", marginLeft: scaleIt(7), marginTop: scaleIt(7), }}>
                     <Pressable style={({ pressed }) => [
                         { borderRadius: 100 },
                         pressed && { backgroundColor: 'black' }
@@ -56,14 +77,17 @@ function ListingItem({ navigation }) {
                     </Pressable>
                 </View>
                 <ScrollView contentContainerStyle={styles.scrollingContainer}>
-                    <View style={styles.container}>
-                        <View style={{ flex: 1 }}>
+
+                    <View style={{flex: 1}}></View>
+
+                    <View style={[styles.container, {width: scaleIt(273)}]}>
+                        <View style={{}}>
                             <View style={{ alignItems: "center", gap: 0 }}>
-                                <Text style={{ fontWeight: "bold", fontSize: scale(20) }}>{item.title}</Text>
-                                <Image source={{ uri: item.image }} style={styles.productImage} resizeMode="contain" />
+                                <Text style={{ fontWeight: "bold", fontSize: scaleIt(20) }}>{item.title}</Text>
+                                <Image source={{ uri: item.image }} style={[styles.productImage, {height: moderateScale(300), width: scaleIt(237)}]} resizeMode="contain" />
                             </View>
                         </View>
-                        <View style={styles.productInformation}>
+                        <View style={[styles.productInformation, {width: scaleIt(237)}]}>
                             <View>
                                 <View>
                                     <View>
@@ -94,6 +118,9 @@ function ListingItem({ navigation }) {
                             </View>
                         </View>
                     </View>
+
+                    <View style={{flex: 1}}></View>
+
                 </ScrollView>
                 <View style={{width: moderateScale(37)}}></View>
             </View>
@@ -106,30 +133,31 @@ const styles = StyleSheet.create({
         //backgroundColor: "red",
         flex: 1,
         alignItems: 'center',
+        flexDirection: "row",
     },
     safeContainer: {
         flex: 1,
         backgroundColor: "rgb(59 130 246 / .5)", // Changed background color to light gray
     },
     container: {
-        flex: 1,
+        //flex: 7,
         alignItems: 'center',
         justifyContent: 'center',
         fontFamily: 'Roboto',
         backgroundColor: 'white', // Encase content in a white box
         borderRadius: 10,
         padding: moderateScale(10), // Ensure there's padding around the content
-        margin: moderateScale(10), // Add margin to separate the content box from the edges
-        width: '50%', // Adjust width to fit within the screen nicely
+        //margin: moderateScale(10), // Add margin to separate the content box from the edges
+        //width: '50%', // Adjust width to fit within the screen nicely
     },
     productImage: {
         //flex: 1,
-        width: moderateScale(300),
-        height: moderateScale(300),
+        //width: moderateScale(300),
+        //height: moderateScale(300),
         borderRadius: 30, // Optional, if you want rounded corners for the image
     },
     productInformation: {
-        width: '100%', // Use full width of the container
+        alignSelf: "center", // Use full width of the container
         padding: 10,
         marginTop: moderateScale(10),
     },

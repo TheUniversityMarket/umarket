@@ -45,66 +45,31 @@ function moderateVerticalScale(size: number, factor = 0.5) {
     return size + (verticalScale(size) - size) * factor;
 }
 
-function returnTags(tagList: string | any[]) {
-  let stringReturn = ""
-  for (let i=0; i<tagList.length; i++) {
-      stringReturn += "#" + tagList[i]
-  }
-  return stringReturn
-}
-
-function Item(props: { id: any; title: any; image: any; description: any; price: any; tags: any; }) {
-  const { id, title, image, description, price, tags} = props
-  
-  return (
-    <View style={styles.item}>
-      <View style={{flexDirection: "row", justifyContent: "space-between"}}>
-      </View>
-      <Image style={{ width: moderateScale(155), height: moderateVerticalScale(170), borderRadius: 0, marginTop: 10, borderWidth: 0, borderColor: "rgb(34 197 94)"}} source={{uri: image}} />
-      <View style={{backgroundColor: "rgb(34 197 94)", position: "absolute", left:6, bottom:13, padding: 7, borderRadius: 24}}>
-        <Text style={{fontFamily: 'Roboto', fontWeight: "bold", fontSize: moderateScale(10), color:"white"}}>{title}</Text>
-      </View>
-      <View>
-        <Text style={{marginBottom: 10, fontSize: moderateScale(10), position:"absolute"}}>{returnTags(tags)}</Text>
-      </View>
-      <View style={{backgroundColor: "rgb(34 197 94)", position: "absolute", right:8, bottom:16, padding: 7, borderRadius: 24}}>
-        <Text style={{fontSize: moderateScale(10), color:"white"}}> 
-         {price}
-        </Text>
-      </View>
-      {/* <View style={{width: moderateScale(155), backgroundColor:"#e5e7eb", padding: 10 }}>
-        <View>
-            <View>
-                <View style={{}}>
-                    <Text style={{fontWeight: "bold", fontSize: moderateScale(17) }}>{title}</Text>
-                </View>
-                <Text style={{marginBottom: 10, fontSize: moderateScale(10)}}>
-                    {returnTags(tags)}
-                </Text>
-            </View>
-        </View>
-        <View style={{marginTop: 3}}>
-            <View>
-                <Text style={{fontSize: moderateScale(13)}}>
-                    Price: {price}
-                </Text>
-            </View>
-        </View>
-    </View> */}
-    </View>
-  )
-}
-
-const companyName = "Market"
-
 //const width = Dimensions.get('window').width
 const numberOfColumns = Math.round(width/215
 )
+
+
 
 function Chat() {
 
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState('');
+
+  let chatIndex = 1;
+  const [currentIndex, setCurrentindex] = useState(chatIndex);
+
+  function ChatItem({ item }) {
+    return (
+    <Pressable onPress={() => setCurrentindex(item.id)}>
+      <View style={[styles.item, currentIndex == item.id && { backgroundColor: "rgb(34 197 94)" }]}>
+        <Text style={[styles.otherUser, currentIndex == item.id && { color: "white" }]}>{item.otherUser}</Text>
+        <Text style={[styles.lastMessage, currentIndex == item.id && { color: "white" }]}>{item.lastMessage}</Text>
+        <Text style={[styles.time, currentIndex == item.id && { color: "white" }]}>{item.time}</Text>
+      </View>
+    </Pressable>
+    )
+  };
 
   const sendMessage = () => {
     if (inputText.trim() !== '') {
@@ -169,11 +134,17 @@ function Chat() {
               <MainHeader onInput={null} isListing={false}></MainHeader>
                 <View style={{flex: 1, flexDirection: "row"}}>
                     
-                    <View style={{flex: 3, backgroundColor: "blue"}}>
+                    <View style={{flex: 3, borderRightWidth: 1, borderRightColor: "#cccccc"}}>
+                      <FlatList
+                        data={CHATS}
+                        keyExtractor={item => item.id}
+                        renderItem={({ item }) => <ChatItem item={item} />}
+                      />
                     </View>
                     
                     <View style={{flex: 12, backgroundColor: "white"}}>
                     <FlatList
+                        contentContainerStyle={{justifyContent: 'flex-end', flex: 1}}
                         data={messages}
                         renderItem={renderMessage}
                         keyExtractor={(item) => item.id.toString()}
@@ -289,20 +260,20 @@ const styles = StyleSheet.create({
     //flexDirection: "row",
     flexWrap: "wrap",
   },
-  item: {
-    //borderWidth: 1,
-    overflow: "hidden",
-    padding: 0,
-    marginVertical: 8,
-    marginHorizontal: 10,
-    //borderRadius: 25,
-    //flexDirection: "row",
-    //justifyContent: "space-around",
-    textAlign: "center",
-    fontFamily: 'Roboto',
-    borderColor: "rgb(34 197 94)",
-    //borderWidth: 1,
-  },
+  // item: {
+  //   //borderWidth: 1,
+  //   overflow: "hidden",
+  //   padding: 0,
+  //   marginVertical: 8,
+  //   marginHorizontal: 10,
+  //   //borderRadius: 25,
+  //   //flexDirection: "row",
+  //   //justifyContent: "space-around",
+  //   textAlign: "center",
+  //   fontFamily: 'Roboto',
+  //   borderColor: "rgb(34 197 94)",
+  //   //borderWidth: 1,
+  // },
   resultsContainer: {
     marginTop: 20,
     paddingHorizontal: 10,
@@ -348,6 +319,23 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  item: {
+    padding: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#cccccc',
+  },
+  otherUser: {
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  lastMessage: {
+    color: '#666666',
+  },
+  time: {
+    color: '#666666',
+    fontSize: 12,
+    marginTop: 5,
   },
 });
 
