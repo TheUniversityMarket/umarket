@@ -15,6 +15,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import { SimpleLineIcons } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
+import ImagePicker from "../components/ImagePicker";
 import { BottomSheetSlideOutSpec } from "@react-navigation/stack/lib/typescript/src/TransitionConfigs/TransitionSpecs";
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -327,14 +328,13 @@ function Post({ navigation }) {
                     <View style={styles.prodImgSuperContainer}>  
                         <Text style={styles.prodImgTxt}>
                             Add Picture:
-                            <Pressable onPress={() => { // 
-                                        
-                                        }}>
-                                <View style={styles.prodImgContainer}>
+                            <Pressable onPress={() => {ImagePicker}}>
+                                {/* <View style={styles.prodImgContainer}>
                                     <Text style= {{color: "white"}}>
                                         Img
                                     </Text>
-                                </View>
+                                </View> */}
+                                <ImagePicker />
                             </Pressable>
                         </Text> 
                         {sellType=="Clothing" && <View style={{marginLeft:150, borderColor:"red", borderWidth:1, width:250, height:40, flexDirection:"row", alignItems:"center"}}>

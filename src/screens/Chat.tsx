@@ -12,6 +12,19 @@ import MainHeader from "../components/MainHeader";
 // import { scale, verticalScale, moderateScale, moderateVerticalScale } from "/Users/jevontwitty/Documents/GitHub/UMarket/src/components/Scaling"
 // import { FlatList } from 'react-native-gesture-handler';
 
+
+const CHATS = [
+  {id: "1", otherUser: "Jevon Twitty", lastMessage: "Hey, how are you?", time: "7:37 PM"},
+  {id: "2", otherUser: "Nash Moore", lastMessage: "No", time: "10:41 PM"},
+  {id: "3", otherUser: "Paul Evans", lastMessage: "lmaooo", time: "9:52 PM"},
+  {id: "4", otherUser: "Yubin Kim", lastMessage: "Thx bro", time: "10:33 AM"},
+  {id: "5", otherUser: "Dylan Holley", lastMessage: "It means a lot you even agreed to sit down", time: "6:56 PM"},
+  {id: "6", otherUser: "Enrique Iglesias", lastMessage: "Food?", time: "8:16 PM"},
+  {id: "7", otherUser: "King Ladzekpo", lastMessage: "Lmk what you're thinking before you do anything", time: "3:43 PM"},
+  {id: "8", otherUser: "Bob", lastMessage: "Hey, I'm Bob", time: "12:00 PM"},
+]
+
+
 const { width, height } = Dimensions.get('window');
 const [shortDimension, longDimension] = width < height ? [width, height] : [height, width];
 
@@ -157,7 +170,6 @@ function Chat() {
                 <View style={{flex: 1, flexDirection: "row"}}>
                     
                     <View style={{flex: 3, backgroundColor: "blue"}}>
-
                     </View>
                     
                     <View style={{flex: 12, backgroundColor: "white"}}>

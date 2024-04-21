@@ -52,7 +52,7 @@ function ListingItem({ navigation }) {
                         pressed && { backgroundColor: 'black' }
                     ]}
                         onPress={() => navigation.navigate('Listings', { item })}>
-                        <Ionicons name="arrow-back-circle-sharp" size={moderateScale(37)} color="white" />
+                        <Ionicons name="arrow-back-circle-sharp" size={moderateScale(37)} color="rgb(34 197 94)" />
                     </Pressable>
                 </View>
                 <ScrollView contentContainerStyle={styles.scrollingContainer}>
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     },
     safeContainer: {
         flex: 1,
-        backgroundColor: "rgb(34 197 94)", // Changed background color to light gray
+        backgroundColor: "rgb(59 130 246 / .5)", // Changed background color to light gray
     },
     container: {
         flex: 1,
