@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { StatusBar } from 'expo-status-bar'
-import { StyleSheet, Text, View, SafeAreaView, Image, FlatList, ScrollView, Dimensions, useWindowDimensions, Pressable, Animated } from 'react-native'
+import { StyleSheet, Text, View, SafeAreaView, ScrollView, Image, FlatList, Dimensions, useWindowDimensions, Pressable, Animated } from 'react-native'
 import { AntDesign } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -9,13 +9,31 @@ import { TextInput } from 'react-native-gesture-handler';
 import SearchBar from "../components/SearchBar";
 import MainHeader from "../components/MainHeader";
 import { useRoute } from "@react-navigation/native";
+import Carousel from '../components/Carousel';
+import Footer from '../components/Footer';
 
 // import { scale, verticalScale, moderateScale, moderateVerticalScale } from "/Users/jevontwitty/Documents/GitHub/UMarket/src/components/Scaling"
 // import { FlatList } from 'react-native-gesture-handler';
 
 const { width, height } = Dimensions.get('window');
+const [shortDimension, longDimension] = width < height ? [width, height] : [height, width];
 
-import { scale, verticalScale, moderateScale, moderateVerticalScale } from '../components/Scaling';
+//Default guideline sizes are based on standard ~5" screen mobile device
+const guidelineBaseWidth = 350;
+const guidelineBaseHeight = 680;
+
+function scale(size: number) {
+    return shortDimension / guidelineBaseWidth * size;
+}
+function verticalScale(size: number) {
+    return longDimension / guidelineBaseHeight * size;
+}
+function moderateScale(size: number, factor = 0.5) {
+    return size + (scale(size) - size) * factor;
+}
+function moderateVerticalScale(size: number, factor = 0.5) {
+    return size + (verticalScale(size) - size) * factor;
+}
 
 function returnTags(tagList) {
   // Map each tag to a Text component wrapped in a View component styled to look like a small grey pill-shaped box
@@ -97,12 +115,33 @@ const SectionedDATA = [
 //const width = Dimensions.get('window').width
 const numberOfColumns = Math.round(width/215)
 
-function Listings( {navigation} ) {
+function Listings() {
+  const {height, width, scale, fontScale} = useWindowDimensions();
+  const [shortDimension, longDimension] = width < height ? [width, height] : [height, width];
+
+  //Default guideline sizes are based on standard ~5" screen mobile device
+  const guidelineBaseWidth = 350;
+  const guidelineBaseHeight = 680;
+
+  function scaleIt(size: number) {
+      return shortDimension / guidelineBaseWidth * size;
+  }
+  function verticalScale(size: number) {
+      return longDimension / guidelineBaseHeight * size;
+  }
+  function moderateScale(size: number, factor = 0.5) {
+      return size + (scaleIt(size) - size) * factor;
+  }
+  function moderateVerticalScale(size: number, factor = 0.5) {
+      return size + (verticalScale(size) - size) * factor;
+  }
 
   const numColumns = Math.round(width/moderateScale(215))
 
+
   const [searchResults, setSearchResults] = useState<Object[]>([]);
   const [hasSearched, sethasSearched] = useState(false);
+  const navigation = useNavigation()
   const route = useRoute()
   
   function Item(props) {
@@ -141,7 +180,7 @@ function Listings( {navigation} ) {
           }}
           source={{ uri: image }}
         />
-        <View style={{ marginTop: 10 }}>
+        <View style={{ marginTop: 10, width: moderateScale(155) }}>
           <Text style={{ fontWeight: "bold", fontSize: moderateScale(10), color: "black" }}>
             {title}
           </Text>
@@ -175,6 +214,15 @@ function Listings( {navigation} ) {
       handleSearch(q);
     }
   }, [q, h]);
+
+  function returnTags(tagList) {
+    // Map each tag to a Text component wrapped in a View component styled to look like a small grey pill-shaped box
+    return tagList.map((tag, index) => (
+      <View key={index} style={styles.tag}>
+        <Text style={styles.tagText}>{tag}</Text>
+      </View>
+    ));
+  }
 
   function renderItem({item}) {
     return (
@@ -212,39 +260,136 @@ function Listings( {navigation} ) {
     }
   }
   console.log()
+
+  // function listing(text: string, image: string) {
+  //   return (
+  //   //<ScrollView horizontal>
+  //     <View style={styles.products}>
+  //       <Image style={{ width: 200, height: 200, borderRadius: 10, marginTop: 10}} source={{uri: image}}></Image>
+  //       <Text style={styles.productsText}>
+  //         {text}
+  //       </Text>
+  //     </View>
+  //   //</ScrollView>
+  //   )
+  // }
   
   if (true) {
     return (
       <SafeAreaView style={styles.safeContainer}>
           <View style={styles.container}>
             <MainHeader onInput={checkSearch} isListing={true}></MainHeader>
-                <View style={{height: 40, flexDirection: "row", borderBottomWidth: 1, borderBottomColor: "#d3d3d3", alignItems: "center"}}>
+              <View style={{height: 40}}>
+                <View style={{flex: 1, flexDirection: "row", borderBottomWidth: 1, borderBottomColor: "#d3d3d3", alignItems: "center"}}>
                   <FlatList
                     horizontal={true}
                     data={DATA}
                     keyExtractor={(item) => item.id}
                     renderItem={renderTags}
                     ItemSeparatorComponent={() => <View style={{width: 0}}/>}
-                    contentContainerStyle={{alignItems: "center", justifyContent: "center", flexGrow: 1}}
                     ListEmptyComponent={Empty}
+                    showsVerticalScrollIndicator={false}
                   />
                 </View>
-                <View style={styles.resultsContainer}>
-                    {(<FlatList
-                    data={hasSearched ? searchResults : DATA}
+              </View>
+              <View style={styles.page}>
+                {/* <Carousel /> */}
+                {/* <ScrollView> */}
+                  {/* {listing("Mac", laptop)}
+
+                  {listing("Refrigerator", fridge)}
+
+                  {listing("Microwave", microwave)} */}
+                  <View style={styles.resultsContainer}>
+                      {hasSearched && (<FlatList
+                      ListHeaderComponent={<Carousel />}
+                      ListFooterComponent={<Footer />}
+                      data={searchResults}
+                      key={`${numColumns}`}
+                      keyExtractor={(item) => item.id}
+                      renderItem={renderItem}
+                      ItemSeparatorComponent={() => <View style={{height: 30}}/>}
+                      ListEmptyComponent={Empty}
+                      numColumns={Math.round(width/moderateScale(215))}
+                      showsVerticalScrollIndicator={false}
+                      />)}
+                  </View>
+                  {!hasSearched && (<FlatList
+                    //ListHeaderComponent={<Carousel />}
+                    data={DATA}
                     key={`${numColumns}`}
-                    keyExtractor={(item) => item.id}
                     renderItem={renderItem}
+                    keyExtractor={(item) => item.id}
                     ItemSeparatorComponent={() => <View style={{height: 30}}/>}
                     ListEmptyComponent={Empty}
-                    contentContainerStyle={{alignItems: "center", justifyContent: "center", flexGrow: 1}}
-                    numColumns={Math.round(width/moderateScale(215))}
-                    />
-                    )}
+                    numColumns={numColumns}
+                    showsVerticalScrollIndicator={false}
+                    />)}
+                {/* </ScrollView> */}
               </View>
           </View>
       </SafeAreaView>
     );
+  // } else {
+  //   return (
+  //     <SafeAreaView style={styles.safeContainer}>
+  //         <View style={styles.container}>
+  //             <View style={styles.header}>
+  //                 <Image style={styles.logo} source={require('./assets/logo.jpg')}></Image>
+  //                 <Text style={styles.compName}>
+  //                     {companyName}
+  //                 </Text>
+  //                 <View style={styles.search}>
+  //                   <AntDesign name="search1" size={24} color="rgb(34 197 94)" />
+  //                   <SearchBar onSearch={handleSearch}/>
+  //                 </View>
+
+  //                 <StatusBar style="auto" />
+  //             </View>
+  //             <View style={{height: 40}}>
+  //               <View style={{flex: 1, flexDirection: "row", borderBottomWidth: 1, borderBottomColor: "#d3d3d3"}}>
+  //                 <FlatList
+  //                   horizontal={true}
+  //                   data={DATA}
+  //                   keyExtractor={(item) => item.id}
+  //                   renderItem={renderTags}
+  //                   ItemSeparatorComponent={() => <View style={{width: 0}}/>}
+  //                   ListEmptyComponent={Empty}
+  //                 />
+  //               </View>
+  //             </View>
+  //             <View style={styles.page}>
+  //               {/* <ScrollView> */}
+  //                 {/* {listing("Mac", laptop)}
+
+  //                 {listing("Refrigerator", fridge)}
+
+  //                 {listing("Microwave", microwave)} */}
+  //                 <View style={styles.resultsContainer}>
+  //                     {hasSearched && (<FlatList
+  //                     data={searchResults}
+  //                     keyExtractor={(item) => item.id}
+  //                     renderItem={renderItem}
+  //                     ItemSeparatorComponent={() => <View style={{height: 30}}/>}
+  //                     ListEmptyComponent={Empty}
+  //                     numColumns={Math.round(width/moderateScale(215))}
+  //                     />)}
+  //                 </View>
+  //                 <View style={styles.container}>
+  //                 {!hasSearched && (<FlatList      
+  //                   data={DATA}
+  //                   renderItem={renderItem}
+  //                   keyExtractor={(item) => item.id}
+  //                   ItemSeparatorComponent={() => <View style={{height: 30}}/>}
+  //                   ListEmptyComponent={Empty}
+  //                   numColumns={Math.round(width/moderateScale(215))}
+  //                   />)}
+  //                 </View>
+  //               {/* </ScrollView> */}
+  //             </View>
+  //         </View>
+  //     </SafeAreaView>
+  //   );
   }
 }
 
@@ -253,6 +398,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexGrow: 1,
     backgroundColor: "white",
+    overflow: "scroll"
   },
   container: {
     flex: 1,
@@ -329,6 +475,16 @@ const styles = StyleSheet.create({
     //overflow: "hidden",
     // borderRadius: 20,
   },
+  page: {
+    flex: 1,
+    alignContent: "center",
+    alignItems: "center",
+    //borderWidth: 1,
+    // borderColor: "red",
+    //flexDirection: "row",
+    flexWrap: "wrap",
+    overflow: "scroll",
+  },
   item: {
     //borderWidth: 1,
     overflow: "hidden",
@@ -347,6 +503,7 @@ const styles = StyleSheet.create({
   resultsContainer: {
     marginTop: 20,
     paddingHorizontal: 10,
+    flex:1
   },
 
   tag: {

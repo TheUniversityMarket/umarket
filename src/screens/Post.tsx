@@ -17,7 +17,6 @@ import { SimpleLineIcons } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import ImagePicker from "../components/ImagePicker";
 import { BottomSheetSlideOutSpec } from "@react-navigation/stack/lib/typescript/src/TransitionConfigs/TransitionSpecs";
-import 'react-datepicker/dist/react-datepicker.css';
 
 // import { AntDesign } from '@expo/vector-icons';
 // import { useNavigation } from '@react-navigation/native';
