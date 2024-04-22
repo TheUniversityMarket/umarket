@@ -6,9 +6,33 @@ import { useNavigation } from '@react-navigation/native';
 import MainHeader from "../components/MainHeader";
 import React, { useEffect, useRef } from 'react';
 import { Alert } from 'react-native';
-
-import {auth, db} from '../firebase/firebaseConfig';
+import { collection, doc, getDoc, updateDoc } from "firebase/firestore";
+import { auth, db } from "../firebase/firebaseConfig";
 import { signOut } from "firebase/auth";
+
+const fetchUserProfile = async (userId) => {
+    try {
+        const docRef = doc(db, "users", userId);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+            return docSnap.data();
+        } else {
+            return null;
+        }
+    } catch (error) {
+        console.error("Error fetching user profile:", error);
+        return null;
+    }
+};
+
+const updateProfile = async (userId, newData) => {
+    try {
+        const userDocRef = doc(db, "users", userId);
+        await updateDoc(userDocRef, newData);
+    } catch (error) {
+        throw error;
+    }
+};
 
 const { width, height } = Dimensions.get('window');
 
@@ -79,6 +103,42 @@ function Empty() {
   
 
 function Settings({ navigation }) {
+
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [email, setEmail] = useState("");
+    const [phoneNumber, setPhoneNumber] = useState("");
+
+    useEffect(() => {
+        // Fetch user profile data from Firestore
+        const userId = auth.currentUser!.uid;
+        fetchUserProfile(userId).then((userData) => {
+            if (userData) {
+                setFirstName(userData.firstName || "");
+                setLastName(userData.lastName || "");
+                setEmail(userData.email || "");
+                setPhoneNumber(userData.phoneNumber || "");
+            }
+        });
+    }, []);
+
+    const handleSaveInfo = async () => {
+        // Save updated user profile data to Firestore
+        const userId = auth.currentUser!.uid;
+        try {
+            await updateProfile(userId, {
+                firstName,
+                lastName,
+                email,
+                phoneNumber,
+            });
+            Alert.alert("Success", "Profile information saved successfully");
+        } catch (error) {
+            console.error("Error saving profile information:", error);
+            Alert.alert("Error", "Failed to save profile information");
+        }
+    };
+
     const companyName = "UMarket";
     
     const handleSignOut = async () => {
@@ -180,7 +240,7 @@ function Settings({ navigation }) {
                             onMouseEnter={() => handleMouseEnter(0)}
                             onMouseLeave={() => handleMouseLeave(0)}
                         >
-                            <TextInput placeholder="Nash" style={styles.nameCont} />
+                            <TextInput placeholder={"Enter First Name"} placeholderTextColor={'#B3B3B3'} value={firstName} onChangeText={(text) => setFirstName(text)} style={styles.nameCont} />
                             </Animated.View>
                         {/* <View style={styles.nameCont2}> */}
                         </View>
@@ -195,7 +255,7 @@ function Settings({ navigation }) {
                             onMouseEnter={() => handleMouseEnter(1)}
                             onMouseLeave={() => handleMouseLeave(1)}
                         >
-                            <TextInput placeholder="Moore" style={styles.nameCont} />
+                            <TextInput placeholder={"Enter Last Name"} placeholderTextColor={'#B3B3B3'} value={lastName} onChangeText={(text) => setLastName(text)} style={styles.nameCont} />
                             </Animated.View>
                         </View>
                         <View style={{flex: 1}}></View>
@@ -214,7 +274,7 @@ function Settings({ navigation }) {
                             onMouseEnter={() => handleMouseEnter(2)}
                             onMouseLeave={() => handleMouseLeave(2)}
                         >
-                            <Text style={styles.nameCont}>nmoore66@gatech.edu</Text>
+                            <Text style={[styles.nameCont, {color: "#B3B3B3"}]}>{email}</Text>
                             </Animated.View>
                         {/* <View style={styles.nameCont2}> */}
                         </View>
@@ -229,7 +289,7 @@ function Settings({ navigation }) {
                             onMouseEnter={() => handleMouseEnter(3)}
                             onMouseLeave={() => handleMouseLeave(3)}
                         >
-                            <TextInput placeholder="214-304-9926" style={styles.nameCont} />
+                            <TextInput placeholder={"Enter Phone Number"} placeholderTextColor={'#B3B3B3'} value={phoneNumber} onChangeText={(text) => setPhoneNumber(text)} style={styles.nameCont} />
                             </Animated.View>
                         </View>
                         <View style={{flex: 1}}></View>
@@ -256,6 +316,7 @@ function Settings({ navigation }) {
                         styles.submitContainer,
                         pressed && { backgroundColor: "#E5E4E2" }
                     ]}
+                    onPress={handleSaveInfo}
                     >
                         <Text style={{fontSize: 20, textAlign:"center", alignSelf:"center", color:"white"}}>Save Info</Text>
               
