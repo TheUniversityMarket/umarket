@@ -3,6 +3,7 @@ import { useRoute } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import MainHeader from '../components/MainHeader';
+import React from 'react';
 
 const USERS = [
     { id: '1', name: "Jevon", image: "https://www.pngitem.com/pimgs/m/146-1462217_profile-icon-orange-png-transparent-png.png", description: 'I am a student at Georgia Tech.', tags: ['student', 'computer science'] },
@@ -41,6 +42,7 @@ function returnTags(tagList) {
 function ListingItem({ navigation }) {
     const route = useRoute();
     const { item } = route.params;
+    console.log(item);
     const companyName = "UMarket";
 
     const {height, width, scale, fontScale} = useWindowDimensions();

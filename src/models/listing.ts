@@ -8,7 +8,7 @@ interface Listing {
     tags: string[];        
 }
 
-interface ClothingListing extends Listing {
+interface Clothing extends Listing {
     size: string;
     condition: string;
 }
@@ -30,3 +30,5 @@ interface Tickets extends Listing {
 interface Service extends Listing {
     paymentFrequency: string;
 }
+
+export type { Listing, Clothing, Item, Housing, Tickets, Service };

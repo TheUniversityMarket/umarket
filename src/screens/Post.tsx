@@ -21,6 +21,11 @@ import { BottomSheetSlideOutSpec } from "@react-navigation/stack/lib/typescript/
 import DateSelector from "../components/DatePicker";
 import DatePicker from 'react-datepicker';
 import { scale, verticalScale, moderateScale, moderateVerticalScale } from "../components/Scaling";
+import { db, storage } from '../firebase/firebaseConfig';
+import { Listing, Item, Service, Clothing, Housing, Tickets } from '../models/listing';
+import { collection, setDoc, doc } from 'firebase/firestore';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+
 
 
 // import { AntDesign } from '@expo/vector-icons';
@@ -73,10 +78,11 @@ const FadeInView = (props) => {
 function Post({ navigation }) {
     const [sellType, setSellType] = useState("none");
     const companyName = "Market";
-    const [name, setName] = useState('');
+    const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [price, setPrice] = useState('');
     const [tags, setTags] = useState('');   
+    const [images, setImages] = useState([]);
     const [isMenuVisible, setIsMenuVisible] = useState(false);
     const options = ['New', 'Used', 'Worn'];
     const options2 = ['Monthly', 'Weekly', 'Daily', 'Biannual', 'Yearly'];
@@ -91,9 +97,120 @@ function Post({ navigation }) {
     const {height, width, scale, fontScale} = useWindowDimensions();
     const [shortDimension, longDimension] = width < height ? [width, height] : [height, width];
 
+    const handleImageUpload = async (image) => {
+        const response = await fetch(image);
+        const blob = await response.blob();
+        const imageRef = ref(storage, `images/${Date.now()}`);
+    
+        await uploadBytes(imageRef, blob);
+        const imageUrl = await getDownloadURL(imageRef);
+
+        setImages([...images, imageUrl]);
+        console.log(images);
+    };
+
+      const handlePostListing = async () => {
+        console.log("Posting listing... ");
+        try {
+          const imageUrls = [];
+          // Upload each image to Firebase Storage
+          for (const image of images) {
+            imageUrls.push(image);
+          }
+        
+          let newListing: Listing = {
+            id: Math.random().toString(36).substring(7), // Generate random ID
+            title,
+            description,
+            price,
+            tags: tags.split(',').map(tag => tag.trim()), // Convert comma-separated string to array of tags
+            images: imageUrls,
+           };
+
+           if (sellType == 'Item') {
+                const newItem: Item = {
+                    ...newListing,
+                    condition: selectedOption,
+            };
+            newListing = newItem;
+            } else if (sellType == 'Clothing') {
+                const newClothing: Clothing = {
+                    ...newListing,
+                    condition: selectedOption,
+                    size: 'M',
+            };
+            newListing = newClothing;
+            } else if (sellType == 'Housing') {
+                const newHousing: Housing = {
+                    ...newListing,
+                    paymentFrequency: housingOption,
+                    leaseDuration: '1 year',
+            };
+            newListing = newHousing;
+            } else if (sellType == 'Tickets') {
+            const newTickets: Tickets = {
+                ...newListing,
+                eventDate: date,
+                eventTime: '12:00 pm',
+            };
+            newListing = newTickets;
+            } else if (sellType == 'Services') {
+            const newService: Service = {
+                ...newListing,
+                paymentFrequency: serviceOption,
+            };
+            newListing = newService;
+            } else {
+                    alert('Please select a listing type.');
+                    return;
+            }
+    
+            // Add listing to Firestore
+        await setDoc(doc(db, "listings", newListing.id), newListing);
+        alert('Listing posted successfully.');
+        // Clear form fields
+        setTitle('');
+        setDescription('');
+        setPrice('');
+        setTags('');
+        setImages([]);
+        } catch (error) {
+          console.error('Error posting listing: ', error);
+          alert('Failed to post listing.');
+        }
+        navigation.navigate('Listings');
+      };
+
+
     const handleDateChange = (selectedDate) => {
         setDate(selectedDate);
       };
+
+      useEffect(() => {
+        const fetchImages = async () => {
+          const imageRefs = []; // Array to store image references
+          
+          // Iterate over each image URI in the state
+          images.forEach(async (imageUri) => {
+            try {
+              // Get a reference to the image in Firebase Storage
+              const imageRef = ref(storage, imageUri);
+              // Get the download URL of the image
+              const downloadUrl = await getDownloadURL(imageRef);
+              // Push the download URL to the array
+                imageRefs.push(downloadUrl);
+            } catch (error) {
+              console.error('Error fetching image:', error);
+            }
+          });
+    
+          setImages(imageRefs);
+          //log 
+          //console.log(imageRefs);
+        };
+    
+        fetchImages();
+      }, []);
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -149,8 +266,8 @@ function Post({ navigation }) {
       }
     ).start();
   }, [fadeAnim]);
-  console.log(`The width is: ${width}`);
-  console.log(height);
+  //console.log(`The width is: ${width}`);
+  //console.log(height);
 //
     return (
          <SafeAreaView style={styles.safeContainer}>
@@ -254,7 +371,9 @@ function Post({ navigation }) {
                             <View style={styles.prodNameContainer}>
                                 <TextInput style={styles.prodNameIn}
                                 placeholder="Enter Title"
-                                placeholderTextColor={"#B3B3B3"}>
+                                placeholderTextColor={"#B3B3B3"}
+                                value={title}
+                                onChangeText={setTitle}>
                                 </TextInput>
                             </View>
                         </Text>   
@@ -265,7 +384,10 @@ function Post({ navigation }) {
                             <View style={styles.prodPriceContainer}>
                                 <TextInput style={styles.prodPriceIn}
                                 placeholder="$$$"
-                                placeholderTextColor={"#B3B3B3"}>
+                                placeholderTextColor={"#B3B3B3"}
+                                value={price}
+                                onChangeText={setPrice}
+                                >
                                 </TextInput>
                                 {/* <Text style={styles.prodPrice$}>$</Text>   */}
                             </View>
@@ -347,7 +469,10 @@ function Post({ navigation }) {
                             <View style={styles.prodTagsContainer}>
                                 <TextInput style= {styles.prodTagsIn}
                                 placeholder="Eg: Books, Appliances, Fridges..."
-                                placeholderTextColor={"#B3B3B3"}>
+                                placeholderTextColor={"#B3B3B3"}
+                                value={tags}
+                                onChangeText={setTags}
+                                >
                                 </TextInput>
                             </View>
                         </Text> 
@@ -358,7 +483,10 @@ function Post({ navigation }) {
                             <View style={styles.prodDesContainer}>
                                 <TextInput style={styles.prodDesIn}
                                 placeholder="Enter Descrition"
-                                placeholderTextColor={"#B3B3B3"}>
+                                placeholderTextColor={"#B3B3B3"}
+                                value={description}
+                                onChangeText={setDescription}
+                                >
                                 </TextInput>
                             </View>
                         </Text> 
@@ -476,7 +604,7 @@ function Post({ navigation }) {
                                         Img
                                     </Text>
                                 </View> */}
-                                <ImagePicker />
+                                <ImagePicker onImageSelected={handleImageUpload}/>
                             </Pressable>
                         </Text> 
                     </View>}
@@ -495,10 +623,15 @@ function Post({ navigation }) {
                                         Img
                                     </Text>
                                 </View> */}
-                                <ImagePicker />
+                                <ImagePicker onImageSelected={handleImageUpload}/>
                                 </View>
                             </Pressable>
                         </Text> 
+                        </View>
+                        <View style={{ flexDirection: 'row' }}>
+                        {images.map((imageUrl, index) => (
+                            <Image key={index} source={{ uri: imageUrl }} style={{ width: 100, height: 100, marginRight: 10 }} />
+                        ))}
                         </View>
                         {sellType=="Clothing" && <View style={{marginLeft:150, borderColor:"red", borderWidth:1, width:250, height:40, flexDirection:"row", alignItems:"center"}}>
                             <Text style={{fontSize: 20,
@@ -537,10 +670,9 @@ function Post({ navigation }) {
                     </View>}
                     <View style={styles.prodPostSuperContainer}>  
                         <View> 
-                            <Pressable onPress={() => {navigation.navigate('Listings');
-                                }}>
-                                    <View style={styles.prodImgContainer}>                                  
-                                <Text style={{color:"white", fontWeight:2}}>Post</Text>
+                            <Pressable onPress={() => {handlePostListing()}}>
+                                <View style={styles.prodImgContainer}>                                  
+                                    <Text style={{color:"white", fontWeight:2}}>Post</Text>
                                 </View>  
                             </Pressable>
                         </View>

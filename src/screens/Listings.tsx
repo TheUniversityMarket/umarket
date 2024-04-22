@@ -11,6 +11,9 @@ import MainHeader from "../components/MainHeader";
 import { useRoute } from "@react-navigation/native";
 import Carousel from '../components/Carousel';
 import Footer from '../components/Footer';
+import { app, auth, db } from '../firebase/firebaseConfig';
+import { collection, onSnapshot } from 'firebase/firestore';
+import { Listing, Item, Service, Clothing, Housing, Tickets } from '../models/listing';
 
 // import { scale, verticalScale, moderateScale, moderateVerticalScale } from "/Users/jevontwitty/Documents/GitHub/UMarket/src/components/Scaling"
 // import { FlatList } from 'react-native-gesture-handler';
@@ -46,9 +49,9 @@ function returnTags(tagList) {
 
 function Empty() {
   return (
-    <View>
+    <View style={{alignItems: "center", flex: 1, margin: 20}}>
       <Text>
-        NO LISTINGS
+        There are no listings to display.
       </Text>
     </View>
   )
@@ -70,16 +73,16 @@ const USERS = [
   { id: '3', name: "Paul", image: "https://www.pngitem.com/pimgs/m/146-1462217_profile-icon-orange-png-transparent-png.png", description: 'I am a student at Georgia Tech.', tags: ['student', 'computer science'] },
 ]
 
-const DATA = [
-  { id: '1', title: "Microwave", image: microwave, description: 'A microwave is a kitchen appliance that heats and cook food quickly.', price: "$730", tags: ['kitchen', 'electrical','cooking'], posterID: '1' },
-  { id: '2', title: "Fridge", image: fridge, description: 'A fridge is where you keep your food.', price: "$899", tags: ['kitchen', 'electrical','cooking'], posterID: '2' },
-  { id: '3', title: "Laptop", image: laptop, description: 'A laptop is a computer that sits on your lap.', price: "$1200", tags: ['computer','electrical'], posterID: '3' },
-  { id: '4', title: "Lamp", image: lamp, description: 'A lamp is an electric light source.', price:"$50", tags: ['appliance', 'electrical'], posterID: '1' },
-  { id: '5', title: "Microwave", image: microwave, description: 'A microwave is a kitchen appliance that uses electromagnetic waves to heat and cook food quickly.', price:"$200", tags: ['kitchen', 'electrical','cooking'], posterID: '2' },
-  { id: '6', title: "Microwave", image: microwave, description: 'A microwave is a kitchen appliance that uses electromagnetic waves to heat and cook food quickly.', price:"$700", tags: ['kitchen', 'electrical','cooking'], posterID: '3' },
-  { id: '7', title: "Microwave", image: microwave, description: 'A microwave is a kitchen appliance that uses electromagnetic waves to heat and cook food quickly.', price:"$500", tags: ['kitchen', 'electrical','cooking'], posterID: '1' },
-  { id: '8', title: "Microwave", image: microwave, description: 'A microwave is a kitchen appliance that uses electromagnetic waves to heat and cook food quickly.', price:"$630", tags: ['kitchen', 'electrical','cooking'], posterID: '2' },
-]
+// const DATA = [
+//   { id: '1', title: "Microwave", image: microwave, description: 'A microwave is a kitchen appliance that heats and cook food quickly.', price: "$730", tags: ['kitchen', 'electrical','cooking'], posterID: '1' },
+//   { id: '2', title: "Fridge", image: fridge, description: 'A fridge is where you keep your food.', price: "$899", tags: ['kitchen', 'electrical','cooking'], posterID: '2' },
+//   { id: '3', title: "Laptop", image: laptop, description: 'A laptop is a computer that sits on your lap.', price: "$1200", tags: ['computer','electrical'], posterID: '3' },
+//   { id: '4', title: "Lamp", image: lamp, description: 'A lamp is an electric light source.', price:"$50", tags: ['appliance', 'electrical'], posterID: '1' },
+//   { id: '5', title: "Microwave", image: microwave, description: 'A microwave is a kitchen appliance that uses electromagnetic waves to heat and cook food quickly.', price:"$200", tags: ['kitchen', 'electrical','cooking'], posterID: '2' },
+//   { id: '6', title: "Microwave", image: microwave, description: 'A microwave is a kitchen appliance that uses electromagnetic waves to heat and cook food quickly.', price:"$700", tags: ['kitchen', 'electrical','cooking'], posterID: '3' },
+//   { id: '7', title: "Microwave", image: microwave, description: 'A microwave is a kitchen appliance that uses electromagnetic waves to heat and cook food quickly.', price:"$500", tags: ['kitchen', 'electrical','cooking'], posterID: '1' },
+//   { id: '8', title: "Microwave", image: microwave, description: 'A microwave is a kitchen appliance that uses electromagnetic waves to heat and cook food quickly.', price:"$630", tags: ['kitchen', 'electrical','cooking'], posterID: '2' },
+// ]
 
 const TAGS = [
   {tag: "kitchen"},
@@ -118,6 +121,25 @@ const numberOfColumns = Math.round(width/215)
 function Listings() {
   const {height, width, scale, fontScale} = useWindowDimensions();
   const [shortDimension, longDimension] = width < height ? [width, height] : [height, width];
+
+  const [listings, setListings] = useState<Listing[]>([]);
+  useEffect(() => {
+    const unsubscribe = onSnapshot(collection(db, 'listings'), snapshot => {
+      const listingsData: Listing[] = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      console.log("Before setting listings:", listingsData);
+      setListings(listingsData);
+      console.log("After setting listings:", listings);
+    });
+  
+    // Cleanup function to unsubscribe from the snapshot listener when the component unmounts
+    return () => {
+      console.log("Unsubscribing from listings...");
+      unsubscribe();};
+  }, []);
+  
 
   //Default guideline sizes are based on standard ~5" screen mobile device
   const guidelineBaseWidth = 350;
@@ -197,7 +219,7 @@ function Listings() {
 
   const handleSearch = (query: any) => {
     sethasSearched(true);
-    const filteredItems = DATA.filter(Item =>
+    const filteredItems = listings.filter(Item =>
       (Item.title.toLowerCase().includes(query.toLowerCase()) || Item.tags.some(tag => tag.includes(query))
     ));
     setSearchResults(filteredItems);
@@ -225,6 +247,7 @@ function Listings() {
   }
 
   function renderItem({item}) {
+    console.log('item rendered');
     return (
       <Pressable
         style={({ pressed }) => [
@@ -284,7 +307,7 @@ function Listings() {
                   <View style={{flex: 1, flexDirection: "row", borderBottomWidth: 1, borderBottomColor: "#d3d3d3", alignItems: "center"}}>
                     <FlatList
                       horizontal={true}
-                      data={DATA}
+                      data={listings}
                       keyExtractor={(item) => item.id}
                       renderItem={renderTags}
                       ItemSeparatorComponent={() => <View style={{width: 0}}/>}
@@ -302,10 +325,10 @@ function Listings() {
 
                     {listing("Microwave", microwave)} */}
                     <View style={styles.resultsContainer}>
-                        {hasSearched && (<FlatList
+                        <FlatList
                         ListHeaderComponent={<Carousel />}
                         ListFooterComponent={<Footer />}
-                        data={searchResults}
+                        data={hasSearched ? searchResults : listings}
                         key={`${numColumns}`}
                         keyExtractor={(item) => item.id}
                         renderItem={renderItem}
@@ -313,19 +336,8 @@ function Listings() {
                         ListEmptyComponent={Empty}
                         numColumns={Math.round(width/moderateScale(215))}
                         showsVerticalScrollIndicator={false}
-                        />)}
+                      />
                     </View>
-                    {!hasSearched && (<FlatList
-                      //ListHeaderComponent={<Carousel />}
-                      data={DATA}
-                      key={`${numColumns}`}
-                      renderItem={renderItem}
-                      keyExtractor={(item) => item.id}
-                      ItemSeparatorComponent={() => <View style={{height: 30}}/>}
-                      ListEmptyComponent={Empty}
-                      numColumns={numColumns}
-                      showsVerticalScrollIndicator={false}
-                      />)}
                   {/* </ScrollView> */}
                 </View>
             </View>
