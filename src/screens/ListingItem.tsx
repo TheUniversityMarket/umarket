@@ -111,7 +111,7 @@ function ListingItem({ navigation }) {
                             <View style={{ marginTop: 10 }}>
                                 <View>
                                     <Text style={{ fontSize: moderateScale(13) }}>
-                                        Price: {item.price}
+                                        Price: ${item.price}
                                     </Text>
                                 </View>
                                 <Pressable style={{ marginTop: 7 }}>

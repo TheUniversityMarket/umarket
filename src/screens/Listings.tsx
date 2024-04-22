@@ -233,7 +233,7 @@ useEffect(() => {
             {title}
           </Text>
           <Text style={{ fontSize: moderateScale(10), color: "black" }}>
-            {price}
+            ${price}
           </Text>
           <Text style={{ fontSize: moderateScale(10), color: "black" }}>
             {returnTags(tags)}
@@ -339,7 +339,6 @@ useEffect(() => {
   if (true) {
     return (
       <SafeAreaView style={styles.safeContainer}>
-        <ScrollView style={{flexGrow: 1, flex: 1}} contentContainerStyle={{flex: 1, flexGrow: 1}}>
             <View style={styles.container}>
               <MainHeader onInput={checkSearch} isListing={true}></MainHeader>
                 <View style={{height: 40}}>
@@ -356,31 +355,30 @@ useEffect(() => {
                   </View>
                 </View>
                 <View style={styles.page}>
-                  {/* <Carousel /> */}
-                  {/* <ScrollView> */}
-                    {/* {listing("Mac", laptop)}
+                      {/* <Carousel /> */}
+                      {/* {listing("Mac", laptop)}
 
-                    {listing("Refrigerator", fridge)}
+                      {listing("Refrigerator", fridge)}
 
-                    {listing("Microwave", microwave)} */}
-                    <View style={styles.resultsContainer}>
-                        <FlatList
-                        ListHeaderComponent={<Carousel />}
-                        ListFooterComponent={<Footer />}
-                        data={searchResults}
-                        key={`${numColumns}`}
-                        keyExtractor={(item) => item.id}
-                        renderItem={renderItem}
-                        ItemSeparatorComponent={() => <View style={{height: 30}}/>}
-                        ListEmptyComponent={Empty}
-                        numColumns={Math.round(width/moderateScale(215))}
-                        // showsVerticalScrollIndicator={false}
-                      />
-                    </View>
-                  {/* </ScrollView> */}
+                      {listing("Microwave", microwave)} */}
+                      <View style={[styles.resultsContainer]}>
+                          <FlatList
+                          ListHeaderComponent={<Carousel />}
+                          // ListFooterComponent={<Footer />}
+                          style={{flex: 1, paddingHorizontal: width - (moderateScale(160) * numColumns), width: width - (moderateScale(160) * numColumns)}}
+                          data={searchResults}
+                          key={`${numColumns}`}
+                          keyExtractor={(item) => item.id}
+                          renderItem={renderItem}
+                          ItemSeparatorComponent={() => <View style={{height: 30, width: 30}}/>}
+                          ListEmptyComponent={Empty}
+                          numColumns={Math.round(width/moderateScale(215))}
+                          // showsVerticalScrollIndicator={false}
+                        />
+                      </View>
+                      <Footer />
                 </View>
             </View>
-            </ScrollView>
       </SafeAreaView>
     );
   // } else {
@@ -534,8 +532,8 @@ const styles = StyleSheet.create({
     //borderWidth: 1,
     // borderColor: "red",
     //flexDirection: "row",
-    flexWrap: "wrap",
-    overflow: "scroll",
+    // flexWrap: "wrap",
+    // overflow: "scroll",
   },
   item: {
     //borderWidth: 1,
@@ -553,9 +551,17 @@ const styles = StyleSheet.create({
   },
 
   resultsContainer: {
-    marginTop: 20,
-    paddingHorizontal: 10,
-    flex:1
+    // marginTop: 120,
+    flex:1,
+    width: "100%",
+    height: 2000,
+    flexGrow: 1,
+    flexDirection: "row",
+
+    // width: "100%",
+    // alignContent: "center",
+    // alignItems: "center",
+    // borderWidth: 1,
   },
 
   tag: {

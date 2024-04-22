@@ -1,3 +1,4 @@
+import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { View, Text, Stylesheet, Pressable, useWindowDimensions, Image, StyleSheet, ImageBackground, ImageSourcePropType } from 'react-native';
 import { useState } from 'react';
@@ -144,6 +145,7 @@ const styles = StyleSheet.create({
         height: 40,
         justifyContent: "center",
         alignItems: "center",
+        marginBottom: 50,
     },
     dot: {
         backgroundColor: "white",
