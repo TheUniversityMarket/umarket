@@ -277,57 +277,59 @@ function Listings() {
   if (true) {
     return (
       <SafeAreaView style={styles.safeContainer}>
-          <View style={styles.container}>
-            <MainHeader onInput={checkSearch} isListing={true}></MainHeader>
-              <View style={{height: 40}}>
-                <View style={{flex: 1, flexDirection: "row", borderBottomWidth: 1, borderBottomColor: "#d3d3d3", alignItems: "center"}}>
-                  <FlatList
-                    horizontal={true}
-                    data={DATA}
-                    keyExtractor={(item) => item.id}
-                    renderItem={renderTags}
-                    ItemSeparatorComponent={() => <View style={{width: 0}}/>}
-                    ListEmptyComponent={Empty}
-                    showsVerticalScrollIndicator={false}
-                  />
-                </View>
-              </View>
-              <View style={styles.page}>
-                {/* <Carousel /> */}
-                {/* <ScrollView> */}
-                  {/* {listing("Mac", laptop)}
-
-                  {listing("Refrigerator", fridge)}
-
-                  {listing("Microwave", microwave)} */}
-                  <View style={styles.resultsContainer}>
-                      {hasSearched && (<FlatList
-                      ListHeaderComponent={<Carousel />}
-                      ListFooterComponent={<Footer />}
-                      data={searchResults}
-                      key={`${numColumns}`}
+        <ScrollView style={{flexGrow: 1, flex: 1}} contentContainerStyle={{flex: 1, flexGrow: 1}}>
+            <View style={styles.container}>
+              <MainHeader onInput={checkSearch} isListing={true}></MainHeader>
+                <View style={{height: 40}}>
+                  <View style={{flex: 1, flexDirection: "row", borderBottomWidth: 1, borderBottomColor: "#d3d3d3", alignItems: "center"}}>
+                    <FlatList
+                      horizontal={true}
+                      data={DATA}
                       keyExtractor={(item) => item.id}
+                      renderItem={renderTags}
+                      ItemSeparatorComponent={() => <View style={{width: 0}}/>}
+                      ListEmptyComponent={Empty}
+                      showsVerticalScrollIndicator={false}
+                    />
+                  </View>
+                </View>
+                <View style={styles.page}>
+                  {/* <Carousel /> */}
+                  {/* <ScrollView> */}
+                    {/* {listing("Mac", laptop)}
+
+                    {listing("Refrigerator", fridge)}
+
+                    {listing("Microwave", microwave)} */}
+                    <View style={styles.resultsContainer}>
+                        {hasSearched && (<FlatList
+                        ListHeaderComponent={<Carousel />}
+                        ListFooterComponent={<Footer />}
+                        data={searchResults}
+                        key={`${numColumns}`}
+                        keyExtractor={(item) => item.id}
+                        renderItem={renderItem}
+                        ItemSeparatorComponent={() => <View style={{height: 30}}/>}
+                        ListEmptyComponent={Empty}
+                        numColumns={Math.round(width/moderateScale(215))}
+                        showsVerticalScrollIndicator={false}
+                        />)}
+                    </View>
+                    {!hasSearched && (<FlatList
+                      //ListHeaderComponent={<Carousel />}
+                      data={DATA}
+                      key={`${numColumns}`}
                       renderItem={renderItem}
+                      keyExtractor={(item) => item.id}
                       ItemSeparatorComponent={() => <View style={{height: 30}}/>}
                       ListEmptyComponent={Empty}
-                      numColumns={Math.round(width/moderateScale(215))}
+                      numColumns={numColumns}
                       showsVerticalScrollIndicator={false}
                       />)}
-                  </View>
-                  {!hasSearched && (<FlatList
-                    //ListHeaderComponent={<Carousel />}
-                    data={DATA}
-                    key={`${numColumns}`}
-                    renderItem={renderItem}
-                    keyExtractor={(item) => item.id}
-                    ItemSeparatorComponent={() => <View style={{height: 30}}/>}
-                    ListEmptyComponent={Empty}
-                    numColumns={numColumns}
-                    showsVerticalScrollIndicator={false}
-                    />)}
-                {/* </ScrollView> */}
-              </View>
-          </View>
+                  {/* </ScrollView> */}
+                </View>
+            </View>
+            </ScrollView>
       </SafeAreaView>
     );
   // } else {
@@ -398,7 +400,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexGrow: 1,
     backgroundColor: "white",
-    overflow: "scroll"
   },
   container: {
     flex: 1,

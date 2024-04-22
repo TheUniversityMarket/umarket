@@ -1,6 +1,6 @@
 import { Header } from "@react-navigation/stack";
 import React from 'react'
-import { Text, Button, View, StyleSheet, SafeAreaView, Pressable, Image, Modal, TouchableOpacity, Platform, Animated} from "react-native";
+import { Text, Button, View, useWindowDimensions, Dimensions, StyleSheet, SafeAreaView, Pressable, Image, Modal, TouchableOpacity, Platform, Animated} from "react-native";
 import { TextInput } from "react-native";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import { useState, useEffect, useRef } from "react"
@@ -20,6 +20,7 @@ import ImagePicker from "../components/ImagePicker";
 import { BottomSheetSlideOutSpec } from "@react-navigation/stack/lib/typescript/src/TransitionConfigs/TransitionSpecs";
 import DateSelector from "../components/DatePicker";
 import DatePicker from 'react-datepicker';
+import { scale, verticalScale, moderateScale, moderateVerticalScale } from "../components/Scaling";
 
 
 // import { AntDesign } from '@expo/vector-icons';
@@ -87,6 +88,8 @@ function Post({ navigation }) {
     const [date, setDate] = useState(new Date());
     const [showDatePicker, setShowDatePicker] = useState(false);
     const fadeAnim = useRef(new Animated.Value(0)).current;
+    const {height, width, scale, fontScale} = useWindowDimensions();
+    const [shortDimension, longDimension] = width < height ? [width, height] : [height, width];
 
     const handleDateChange = (selectedDate) => {
         setDate(selectedDate);
@@ -146,24 +149,26 @@ function Post({ navigation }) {
       }
     ).start();
   }, [fadeAnim]);
-
+  console.log(`The width is: ${width}`);
+  console.log(height);
+//
     return (
          <SafeAreaView style={styles.safeContainer}>
             <MainHeader isListing={false} onInput={true}></MainHeader>
             <ScrollView contentContainerStyle={{flex: 1}}>
-                <View style={{backgroundColor:"#E1E1E1", zIndex:1}}>
-                    <View style={{alignSelf: "center", borderRadius:20, width:1000, height: 1500, borderColor: "red", borderWidth: 1, opacity:1, backgroundColor:"white", zIndex:999}}>
-                <Text style={{fontSize: 40, marginLeft: 30, marginTop:25, fontWeight: 2}}>Post Your Item:</Text>
+                <View style={{backgroundColor: (width < height && width < 500) ? "white" : "#E1E1E1", zIndex:1}}>
+                    <View style={{alignSelf: "center", borderRadius:20, width:(width*5)/6, height: (height*3)/2, borderColor: "red", borderWidth: 1, opacity:1, backgroundColor:"white", zIndex:999}}>
+                <Text style={{fontSize: width/25, marginLeft: width/(800/40), marginTop:height/25, fontWeight: 2}}>Post Your Item:</Text>
                 <View style={styles.container}>
-                    <View style={{borderColor:"red", borderWidth: 1, width: 800, height: 230, borderRadius: 30, marginTop: 20}}>
-                        <Text style={{fontSize: 35, marginLeft: 20, fontWeight: 2}}>What type of item are you listing?</Text>
-                        <View style={{alignSelf:"center", flexDirection: "row", justifyContent: "space-evenly", borderColor:"red", borderWidth: 1, width: 700, height: 140, borderRadius: 30, marginTop: 15, alignItems: "center"}}>
+                    <View style={{borderColor:"red", borderWidth: 1, width: width*3/4, height: height/3, borderRadius: 30, marginTop: height/30}}>
+                        <Text style={{fontSize: width/30, marginLeft: 300/(width/100), fontWeight: 2}}>What type of item are you listing?</Text>
+                        <View style={{alignSelf:"center", flexDirection: "row", justifyContent: "space-evenly", borderColor:"red", borderWidth: 1, width: width*2/3, height: height/(700/140), borderRadius: 30, marginTop: height/40, alignItems: "center"}}>
                         <Pressable
                             onPress={() => handlePress("Item")}>
-                            <View style={{borderColor: "red", borderWidth: 1, width: 100, height: 130, borderRadius: 20}}>
-                                {sellType!="Item" && <View style={{borderColor: "red", borderWidth: 1, width: 100, height: 100, borderRadius: 20, alignItems: "center", justifyContent: "center",}}>
+                            <View style={{borderColor: "red", minHeight:130, flex:1, borderWidth: 1, height: width/12, borderRadius: 20/((1200*600)/(height*width))}}>
+                                {sellType!="Item" && <View style={{borderColor: "red", borderWidth: 1, minHeight:70, minWidth:55, width: width/12, height: width/12, borderRadius: 20, alignItems: "center", justifyContent: "center",}}>
                                 <AntDesign>
-                                    <MaterialIcons name="computer" size={50} color="black" />
+                                    <MaterialIcons name="computer" size={Math.round(50*Math.sqrt(width)/Math.sqrt(1200))} color="black" />
                                 </AntDesign>
                                 </View>}
                                 {sellType=="Item" && <View style={{borderColor: "red", borderWidth: 1, width: 100, height: 100, borderRadius: 20, alignItems: "center", justifyContent: "center", backgroundColor:"rgb(34 197 94)"}}>
@@ -176,10 +181,10 @@ function Post({ navigation }) {
                         </Pressable>
                         <Pressable
                             onPress={() => handlePress("Clothing")}>
-                            <View style={{borderColor: "red", borderWidth: 1, width: 100, height: 130, borderRadius: 20}}>
-                                {sellType!="Clothing" && <View style={{borderColor: "red", borderWidth: 1, width: 100, height: 100, borderRadius: 20, alignItems: "center", justifyContent: "center",}}>
+                            <View style={{borderColor: "red", minHeight:130, flex:1, borderWidth: 1, height: width/12, borderRadius: 20/((1200*600)/(height*width))}}>
+                                {sellType!="Clothing" && <View style={{borderColor: "red", borderWidth: 1, minHeight:70, minWidth:55, width: width/12, height: width/12, borderRadius: 20, alignItems: "center", justifyContent: "center",}}>
                                 <AntDesign>
-                                    <Ionicons name="shirt-outline" size={50} color="black" />
+                                    <Ionicons name="shirt-outline" size={Math.round(50*Math.sqrt(width)/Math.sqrt(1200))} color="black" />
                                 </AntDesign>
                                 </View>}
                                 {sellType=="Clothing" && <View style={{borderColor: "red", borderWidth: 1, width: 100, height: 100, borderRadius: 20, alignItems: "center", justifyContent: "center", backgroundColor:"rgb(34 197 94)"}}>
@@ -192,10 +197,10 @@ function Post({ navigation }) {
                         </Pressable>
                         <Pressable
                             onPress={() => handlePress("Housing")}>
-                            <View style={{borderColor: "red", borderWidth: 1, width: 100, height: 130, borderRadius: 20}}>
-                                {sellType!="Housing" &&<View style={{borderColor: "red", borderWidth: 1, width: 100, height: 100, borderRadius: 20, alignItems: "center", justifyContent: "center",}}>
+                            <View style={{borderColor: "red", minHeight:130, flex:1, borderWidth: 1, height: width/12, borderRadius: 20/((1200*600)/(height*width))}}>
+                                {sellType!="Housing" &&<View style={{borderColor: "red", borderWidth: 1, minHeight:70, minWidth:55, width: width/12, height: width/12, borderRadius: 20, alignItems: "center", justifyContent: "center",}}>
                                 <AntDesign>
-                                    <AntDesign name="home" size={50} color="black" />
+                                    <AntDesign name="home" size={Math.round(50*Math.sqrt(width)/Math.sqrt(1200))} color="black" />
                                 </AntDesign>
                                 </View>}
                                 {sellType=="Housing" && <View style={{borderColor: "red", borderWidth: 1, width: 100, height: 100, borderRadius: 20, alignItems: "center", justifyContent: "center", backgroundColor:"rgb(34 197 94)"}}>
@@ -208,10 +213,10 @@ function Post({ navigation }) {
                         </Pressable>
                         <Pressable
                             onPress={() => handlePress("Tickets")}>
-                            <View style={{borderColor: "red", borderWidth: 1, width: 100, height: 130, borderRadius: 20}}>
-                                {sellType!="Tickets" && <View style={{borderColor: "red", borderWidth: 1, width: 100, height: 100, borderRadius: 20, alignItems: "center", justifyContent: "center",}}>
+                            <View style={{borderColor: "red", minHeight:130, flex:1, borderWidth: 1, height: width/12, borderRadius: 20/((1200*600)/(height*width))}}>
+                                {sellType!="Tickets" && <View style={{borderColor: "red", borderWidth: 1,minHeight:70, minWidth:55, width: width/12, height: width/12, borderRadius: 20, alignItems: "center", justifyContent: "center",}}>
                                 <AntDesign>
-                                    <Ionicons name="ticket-outline" size={50} color="black" />
+                                    <Ionicons name="ticket-outline" size={Math.round(50*Math.sqrt(width)/Math.sqrt(1200))} color="black" />
                                 </AntDesign>
                                 </View>}
                                 {sellType=="Tickets" && <View style={{borderColor: "red", borderWidth: 1, width: 100, height: 100, borderRadius: 20, alignItems: "center", justifyContent: "center", backgroundColor:"rgb(34 197 94)"}}>
@@ -224,10 +229,10 @@ function Post({ navigation }) {
                         </Pressable>
                         <Pressable
                             onPress={() => handlePress("Services")}>
-                            <View style={{borderColor: "red", borderWidth: 1, width: 100, height: 130, borderRadius: 20}}>
-                                {sellType!="Services" && <View style={{borderColor: "red", borderWidth: 1, width: 100, height: 100, borderRadius: 20, alignItems: "center", justifyContent: "center",}}>
+                            <View style={{borderColor: "red", minHeight:130, flex:1, borderWidth: 1, height: width/12, borderRadius: 20/((1200*600)/(height*width))}}>
+                                {sellType!="Services" && <View style={{borderColor: "red", borderWidth: 1, minHeight:70, minWidth:55, width: width/12, height: width/12, borderRadius: 20, alignItems: "center", justifyContent: "center",}}>
                                 <AntDesign>
-                                    <Feather name="scissors" size={50} color="black" />
+                                    <Feather name="scissors" size={Math.round(50*Math.sqrt(width)/Math.sqrt(1200))} color="black" />
                                 </AntDesign>
                                 </View>}
                                 {sellType=="Services" && <View style={{borderColor: "red", borderWidth: 1, width: 100, height: 100, borderRadius: 20, alignItems: "center", justifyContent: "center", backgroundColor:"rgb(34 197 94)"}}>
