@@ -1,4 +1,4 @@
-import { View, Pressable, StyleSheet } from 'react-native';
+import { View, Pressable, StyleSheet, Text } from 'react-native';
 import { launchImageLibraryAsync } from 'expo-image-picker';
 //import { Alert } from 'react-native/types';
 
@@ -19,7 +19,9 @@ const pickImageAsync = async () => {
 export default function ImagePicker() {
     return (
         <View>
-            <Pressable style={[styles.button, { backgroundColor: '#fff' }]} onPress={pickImageAsync}/>
+            <Pressable style={[styles.button, { backgroundColor: 'green' }]} onPress={pickImageAsync}>
+              <Text style={{color:"white"}}>Img</Text>
+            </Pressable>
         </View>
     )
 }
@@ -35,6 +37,7 @@ const styles = StyleSheet.create({
         height: 40,
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: "rgb(34 197 94)"
+        backgroundColor: "rgb(34 197 94)",
+        zIndex: 1
     }
 })
