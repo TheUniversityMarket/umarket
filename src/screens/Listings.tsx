@@ -19,24 +19,8 @@ import { Listing, Item, Service, Clothing, Housing, Tickets } from '../models/li
 // import { FlatList } from 'react-native-gesture-handler';
 
 const { width, height } = Dimensions.get('window');
-const [shortDimension, longDimension] = width < height ? [width, height] : [height, width];
 
-//Default guideline sizes are based on standard ~5" screen mobile device
-const guidelineBaseWidth = 350;
-const guidelineBaseHeight = 680;
-
-function scale(size: number) {
-    return shortDimension / guidelineBaseWidth * size;
-}
-function verticalScale(size: number) {
-    return longDimension / guidelineBaseHeight * size;
-}
-function moderateScale(size: number, factor = 0.5) {
-    return size + (scale(size) - size) * factor;
-}
-function moderateVerticalScale(size: number, factor = 0.5) {
-    return size + (verticalScale(size) - size) * factor;
-}
+import { scale, verticalScale, moderateScale, moderateVerticalScale } from "../components/Scaling"
 
 function returnTags(tagList) {
   // Map each tag to a Text component wrapped in a View component styled to look like a small grey pill-shaped box
@@ -84,18 +68,6 @@ const companyName = "Market"
 //   { id: '8', title: "Microwave", image: microwave, description: 'A microwave is a kitchen appliance that uses electromagnetic waves to heat and cook food quickly.', price:"$630", tags: ['kitchen', 'electrical','cooking'], posterID: '2' },
 // ]
 
-const TAGS = [
-  {tag: "item", id: "1"},
-  {tag: "clothing", id: "2"},
-  {tag: "services", id: "3"},
-  {tag: "housing", id: "4"},
-  {tag: "tickets", id: "5"},
-  {tag: "electronics", id: "6"},
-  {tag: "appliances", id: "7"},
-  {tag: "furniture", id: "8"},
-  {tag: "kitchen", id: "9"},
-]
-
 // const SectionedDATA = [
 //   {
 //     title: "Kitchenware",
@@ -122,6 +94,18 @@ const TAGS = [
 //     ]
 //   }
 //  ];
+
+const TAGS = [
+  {tag: "item", id: "1"},
+  {tag: "clothing", id: "2"},
+  {tag: "services", id: "3"},
+  {tag: "housing", id: "4"},
+  {tag: "tickets", id: "5"},
+  {tag: "electronics", id: "6"},
+  {tag: "appliances", id: "7"},
+  {tag: "furniture", id: "8"},
+  {tag: "kitchen", id: "9"},
+]
 
 //const width = Dimensions.get('window').width
 const numberOfColumns = Math.round(width/215)
@@ -175,25 +159,8 @@ useEffect(() => {
     };
 }, []); // Removed listings from the dependency array to prevent infinite re-renders
 
-  //Default guideline sizes are based on standard ~5" screen mobile device
-  const guidelineBaseWidth = 350;
-  const guidelineBaseHeight = 680;
-
-  function scaleIt(size: number) {
-      return shortDimension / guidelineBaseWidth * size;
-  }
-  function verticalScale(size: number) {
-      return longDimension / guidelineBaseHeight * size;
-  }
-  function moderateScale(size: number, factor = 0.5) {
-      return size + (scaleIt(size) - size) * factor;
-  }
-  function moderateVerticalScale(size: number, factor = 0.5) {
-      return size + (verticalScale(size) - size) * factor;
-  }
 
   const numColumns = Math.round(width/moderateScale(215))
-
 
   const [searchResults, setSearchResults] = useState<Object[]>([]);
   const [hasSearched, sethasSearched] = useState(false);
@@ -501,7 +468,6 @@ const styles = StyleSheet.create({
     // marginTop: 120,
     flex:1,
     width: "100%",
-    height: 2000,
     flexGrow: 1,
     flexDirection: "row",
 
