@@ -1,0 +1,74 @@
+import React, { useState } from 'react';
+import { View, Text, Button, Modal, StyleSheet, TouchableOpacity } from 'react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
+
+const DatePickerComponent = () => {
+  const [date, setDate] = useState(new Date());
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const handleConfirmDate = () => {
+    setModalVisible(false);
+    // Do something with the selected date
+  };
+
+  return (
+    <View style={styles.container}>
+      <TouchableOpacity onPress={() => setModalVisible(true)}>
+        <Text style={styles.buttonText}>Open Date Picker</Text>
+      </TouchableOpacity>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.pickerContainer}>
+            <DateTimePicker
+              value={date}
+              mode="date"
+              onChange={(event, selectedDate) => {
+                setDate(selectedDate || date);
+                if (event.type === "set") {
+                  handleConfirmDate();
+                }
+              }}
+            />
+            <Button title="Confirm" onPress={handleConfirmDate} />
+          </View>
+        </View>
+      </Modal>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  buttonText: {
+    fontSize: 18,
+    color: 'blue',
+    marginBottom: 20,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent black background
+  },
+  pickerContainer: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    elevation: 5, // Shadow for Android
+    shadowColor: '#000', // Shadow for iOS
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+  },
+});
+
+export default DatePickerComponent;
