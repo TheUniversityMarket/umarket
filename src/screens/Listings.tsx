@@ -12,7 +12,7 @@ import { useRoute } from "@react-navigation/native";
 import Carousel from '../components/Carousel';
 import Footer from '../components/Footer';
 import { app, auth, db } from '../firebase/firebaseConfig';
-import { collection, onSnapshot } from 'firebase/firestore';
+import { collection, onSnapshot, getDocs } from 'firebase/firestore';
 import { Listing, Item, Service, Clothing, Housing, Tickets } from '../models/listing';
 
 // import { scale, verticalScale, moderateScale, moderateVerticalScale } from "/Users/jevontwitty/Documents/GitHub/UMarket/src/components/Scaling"
@@ -123,23 +123,49 @@ function Listings() {
   const [shortDimension, longDimension] = width < height ? [width, height] : [height, width];
 
   const [listings, setListings] = useState<Listing[]>([]);
-  useEffect(() => {
-    const unsubscribe = onSnapshot(collection(db, 'listings'), snapshot => {
-      const listingsData: Listing[] = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-      console.log("Before setting listings:", listingsData);
-      setListings(listingsData);
-      console.log("After setting listings:", listings);
+
+useEffect(() => {
+    let unsubscribe: () => void; // Declare unsubscribe outside the fetchData function
+
+    const fetchData = async () => {
+        try {
+            const snapshot = await getDocs(collection(db, 'listings'));
+            const listingsData: Listing[] = snapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }));
+            console.log("Before setting listings:", listingsData);
+            setListings(listingsData);
+            console.log("After setting listings:", listings);
+        } catch (error) {
+            console.error("Error fetching listings:", error);
+        }
+    };
+
+    fetchData(); // Invoke the fetchData function immediately
+
+    // Set up the listener and assign the unsubscribe function
+    unsubscribe = onSnapshot(collection(db, 'listings'), snapshot => {
+        const listingsData: Listing[] = snapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+        }));
+        console.log("Updated listings:", listingsData);
+        setListings(prevListings => {
+            // Check if the new listings are different from the current state to prevent unnecessary re-renders
+            if (JSON.stringify(prevListings) !== JSON.stringify(listingsData)) {
+                return listingsData;
+            }
+            return prevListings;
+        });
     });
-  
+
     // Cleanup function to unsubscribe from the snapshot listener when the component unmounts
     return () => {
-      console.log("Unsubscribing from listings...");
-      unsubscribe();};
-  }, []);
-  
+        console.log("Unsubscribing from listings...");
+        unsubscribe(); // Call unsubscribe here
+    };
+}, []); // Removed listings from the dependency array to prevent infinite re-renders
 
   //Default guideline sizes are based on standard ~5" screen mobile device
   const guidelineBaseWidth = 350;
@@ -217,7 +243,17 @@ function Listings() {
     );
   }
 
+  // update searchResults when listings change
+  useEffect(() => {
+    setSearchResults(listings);
+  }, [listings]);
+
   const handleSearch = (query: any) => {
+    if (query === "") {
+      sethasSearched(false);
+      setSearchResults(listings.filter(Item => Item));
+      return;
+    }
     sethasSearched(true);
     const filteredItems = listings.filter(Item =>
       (Item.title.toLowerCase().includes(query.toLowerCase()) || Item.tags.some(tag => tag.includes(query))
@@ -236,6 +272,9 @@ function Listings() {
       handleSearch(q);
     }
   }, [q, h]);
+  useEffect(() => {
+    console.log("Listings state:", listings);
+  }, [listings]);
 
   function returnTags(tagList) {
     // Map each tag to a Text component wrapped in a View component styled to look like a small grey pill-shaped box
@@ -258,7 +297,7 @@ function Listings() {
         ]}
         onPress={() => navigation.navigate('ListingItem', { item })}
       >
-        <Item id={item.id} title={item.title} image={item.image} description={item.description} price={item.price} tags={item.tags}/>
+        <Item id={item.id} title={item.title} image={item.images[0]} description={item.description} price={item.price} tags={item.tags}/>
       </Pressable>
     )
   }
@@ -307,7 +346,7 @@ function Listings() {
                   <View style={{flex: 1, flexDirection: "row", borderBottomWidth: 1, borderBottomColor: "#d3d3d3", alignItems: "center"}}>
                     <FlatList
                       horizontal={true}
-                      data={listings}
+                      data={searchResults}
                       keyExtractor={(item) => item.id}
                       renderItem={renderTags}
                       ItemSeparatorComponent={() => <View style={{width: 0}}/>}
@@ -328,14 +367,14 @@ function Listings() {
                         <FlatList
                         ListHeaderComponent={<Carousel />}
                         ListFooterComponent={<Footer />}
-                        data={hasSearched ? searchResults : listings}
+                        data={searchResults}
                         key={`${numColumns}`}
                         keyExtractor={(item) => item.id}
                         renderItem={renderItem}
                         ItemSeparatorComponent={() => <View style={{height: 30}}/>}
                         ListEmptyComponent={Empty}
                         numColumns={Math.round(width/moderateScale(215))}
-                        showsVerticalScrollIndicator={false}
+                        // showsVerticalScrollIndicator={false}
                       />
                     </View>
                   {/* </ScrollView> */}

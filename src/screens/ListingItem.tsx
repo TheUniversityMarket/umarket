@@ -86,7 +86,7 @@ function ListingItem({ navigation }) {
                         <View style={{}}>
                             <View style={{ alignItems: "center", gap: 0 }}>
                                 <Text style={{ fontWeight: "bold", fontSize: scaleIt(20) }}>{item.title}</Text>
-                                <Image source={{ uri: item.image }} style={[styles.productImage, {height: moderateScale(300), width: scaleIt(237)}]} resizeMode="contain" />
+                                <Image source={{ uri: item.images[0] }} style={[styles.productImage, {height: moderateScale(300), width: scaleIt(237)}]} resizeMode="contain" />
                             </View>
                         </View>
                         <View style={[styles.productInformation, {width: scaleIt(237)}]}>
