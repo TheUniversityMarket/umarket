@@ -2,7 +2,7 @@ interface Listing {
     id: string;
     userId: string;
     title: string;          
-    images: string[];        
+    images: string[]; // array of image objects, which will be stored as URLs (render with Image component in React Native using source={{ uri: images[position].url }})     
     description: string;  
     price: string;    
     tags: string[];        
