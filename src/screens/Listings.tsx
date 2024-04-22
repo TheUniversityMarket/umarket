@@ -59,19 +59,19 @@ function Empty() {
 
 const companyName = "Market"
 // const microwave = "/Users/jevontwitty/Documents/GitHub/UMarket/Images/Microwave.jpg"
-const microwave = "https://images.craigslist.org/00Q0Q_clz03CCkybF_0CI0t2_600x450.jpg"
-// const fridge = "/Users/jevontwitty/Documents/GitHub/UMarket/Images/Fridge.webp"
-const fridge = "https://i.ebayimg.com/images/g/5JAAAOSwdB9hnRZ6/s-l1600.jpg"
-// const laptop = "/Users/jevontwitty/Documents/GitHub/UMarket/Images/Laptop.webp"
-const laptop = "https://www.digitaltrends.com/wp-content/uploads/2023/06/macbookair15-03.jpg?fit=1500%2C1000&p=1"
-// const lamp = "/Users/jevontwitty/Documents/GitHub/UMarket/Images/Lamp.jpg"
-const lamp = "https://image.lampsplus.com/is/image/b9gt8/possini-euro-organic-twist-29-1-8-sculptural-rustic-modern-table-lamp__427p1cropped.jpg?qlt=75&wid=376&hei=376&op_sharpen=1&resMode=sharp2&fmt=jpeg"
+// const microwave = "https://images.craigslist.org/00Q0Q_clz03CCkybF_0CI0t2_600x450.jpg"
+// // const fridge = "/Users/jevontwitty/Documents/GitHub/UMarket/Images/Fridge.webp"
+// const fridge = "https://i.ebayimg.com/images/g/5JAAAOSwdB9hnRZ6/s-l1600.jpg"
+// // const laptop = "/Users/jevontwitty/Documents/GitHub/UMarket/Images/Laptop.webp"
+// const laptop = "https://www.digitaltrends.com/wp-content/uploads/2023/06/macbookair15-03.jpg?fit=1500%2C1000&p=1"
+// // const lamp = "/Users/jevontwitty/Documents/GitHub/UMarket/Images/Lamp.jpg"
+// const lamp = "https://image.lampsplus.com/is/image/b9gt8/possini-euro-organic-twist-29-1-8-sculptural-rustic-modern-table-lamp__427p1cropped.jpg?qlt=75&wid=376&hei=376&op_sharpen=1&resMode=sharp2&fmt=jpeg"
 
-const USERS = [
-  { id: '1', name: "Jevon", image: "https://www.pngitem.com/pimgs/m/146-1462217_profile-icon-orange-png-transparent-png.png", description: 'I am a student at Georgia Tech.', tags: ['student', 'computer science'] },
-  { id: '2', name: "Nash", image: "https://www.pngitem.com/pimgs/m/146-1462217_profile-icon-orange-png-transparent-png.png", description: 'I am a student at Georgia Tech.', tags: ['student', 'computer science'] },
-  { id: '3', name: "Paul", image: "https://www.pngitem.com/pimgs/m/146-1462217_profile-icon-orange-png-transparent-png.png", description: 'I am a student at Georgia Tech.', tags: ['student', 'computer science'] },
-]
+// const USERS = [
+//   { id: '1', name: "Jevon", image: "https://www.pngitem.com/pimgs/m/146-1462217_profile-icon-orange-png-transparent-png.png", description: 'I am a student at Georgia Tech.', tags: ['student', 'computer science'] },
+//   { id: '2', name: "Nash", image: "https://www.pngitem.com/pimgs/m/146-1462217_profile-icon-orange-png-transparent-png.png", description: 'I am a student at Georgia Tech.', tags: ['student', 'computer science'] },
+//   { id: '3', name: "Paul", image: "https://www.pngitem.com/pimgs/m/146-1462217_profile-icon-orange-png-transparent-png.png", description: 'I am a student at Georgia Tech.', tags: ['student', 'computer science'] },
+// ]
 
 // const DATA = [
 //   { id: '1', title: "Microwave", image: microwave, description: 'A microwave is a kitchen appliance that heats and cook food quickly.', price: "$730", tags: ['kitchen', 'electrical','cooking'], posterID: '1' },
@@ -85,35 +85,43 @@ const USERS = [
 // ]
 
 const TAGS = [
-  {tag: "kitchen"},
+  {tag: "item", id: "1"},
+  {tag: "clothing", id: "2"},
+  {tag: "services", id: "3"},
+  {tag: "housing", id: "4"},
+  {tag: "tickets", id: "5"},
+  {tag: "electronics", id: "6"},
+  {tag: "appliances", id: "7"},
+  {tag: "furniture", id: "8"},
+  {tag: "kitchen", id: "9"},
 ]
 
-const SectionedDATA = [
-  {
-    title: "Kitchenware",
-    data: [
-    { id: '1', title: "Microwave", image: microwave, description: 'A microwave is a kitchen appliance that heats and cook food quickly.', tags: ['kitchen', 'electrical','cooking'] },
-    { id: '2', title: "Fridge", image: fridge, description: 'A fridge is where you keep your food.', tags: ['kitchen', 'electrical','cooking'] },
-    { id: '5', title: "Microwave", image: microwave, description: 'A microwave is a kitchen appliance that uses electromagnetic waves to heat and cook food quickly.', tags: ['kitchen', 'electrical','cooking'] },
-    { id: '6', title: "Microwave", image: microwave, description: 'A microwave is a kitchen appliance that uses electromagnetic waves to heat and cook food quickly.', tags: ['kitchen', 'electrical','cooking'] },
-    { id: '7', title: "Microwave", image: microwave, description: 'A microwave is a kitchen appliance that uses electromagnetic waves to heat and cook food quickly.', tags: ['kitchen', 'electrical','cooking'] },
-    { id: '8', title: "Microwave", image: microwave, description: 'A microwave is a kitchen appliance that uses electromagnetic waves to heat and cook food quickly.', tags: ['kitchen', 'electrical','cooking'] },
-  ]
-  },
-  {
-    title: "Technologies",
-    data: [
-      { id: '3', title: "Laptop", image: laptop, description: 'A laptop is a computer that sits on your lap.', tags: ['computer','electrical'] },
-    ]
-  },
+// const SectionedDATA = [
+//   {
+//     title: "Kitchenware",
+//     data: [
+//     { id: '1', title: "Microwave", image: microwave, description: 'A microwave is a kitchen appliance that heats and cook food quickly.', tags: ['kitchen', 'electrical','cooking'] },
+//     { id: '2', title: "Fridge", image: fridge, description: 'A fridge is where you keep your food.', tags: ['kitchen', 'electrical','cooking'] },
+//     { id: '5', title: "Microwave", image: microwave, description: 'A microwave is a kitchen appliance that uses electromagnetic waves to heat and cook food quickly.', tags: ['kitchen', 'electrical','cooking'] },
+//     { id: '6', title: "Microwave", image: microwave, description: 'A microwave is a kitchen appliance that uses electromagnetic waves to heat and cook food quickly.', tags: ['kitchen', 'electrical','cooking'] },
+//     { id: '7', title: "Microwave", image: microwave, description: 'A microwave is a kitchen appliance that uses electromagnetic waves to heat and cook food quickly.', tags: ['kitchen', 'electrical','cooking'] },
+//     { id: '8', title: "Microwave", image: microwave, description: 'A microwave is a kitchen appliance that uses electromagnetic waves to heat and cook food quickly.', tags: ['kitchen', 'electrical','cooking'] },
+//   ]
+//   },
+//   {
+//     title: "Technologies",
+//     data: [
+//       { id: '3', title: "Laptop", image: laptop, description: 'A laptop is a computer that sits on your lap.', tags: ['computer','electrical'] },
+//     ]
+//   },
 
-  {
-    title: "Furniture",
-    data: [
-      { id: '4', title: "Lamp", image: lamp, description: 'A lamp is an electric light source.', tags: ['appliance', 'electrical'] },
-    ]
-  }
- ];
+//   {
+//     title: "Furniture",
+//     data: [
+//       { id: '4', title: "Lamp", image: lamp, description: 'A lamp is an electric light source.', tags: ['appliance', 'electrical'] },
+//     ]
+//   }
+//  ];
 
 //const width = Dimensions.get('window').width
 const numberOfColumns = Math.round(width/215)
@@ -321,22 +329,21 @@ useEffect(() => {
       }
     }
   }
-  console.log()
 
-  // function listing(text: string, image: string) {
-  //   return (
-  //   //<ScrollView horizontal>
-  //     <View style={styles.products}>
-  //       <Image style={{ width: 200, height: 200, borderRadius: 10, marginTop: 10}} source={{uri: image}}></Image>
-  //       <Text style={styles.productsText}>
-  //         {text}
-  //       </Text>
-  //     </View>
-  //   //</ScrollView>
-  //   )
-  // }
+  function renderHardTags({item}) {
+    const tag = item.tag;
+    return (
+      <Pressable onPress = {() => handleSearch(tag)}>
+      <View style={{justifyContent: "center", marginLeft: 40}}>
+        <Text style={{fontWeight: "bold", color: "gray"}}>
+          {tag}
+        </Text>
+      </View>
+      </Pressable>
+    )
+  }
+  console.log()
   
-  if (true) {
     return (
       <SafeAreaView style={styles.safeContainer}>
             <View style={styles.container}>
@@ -345,9 +352,9 @@ useEffect(() => {
                   <View style={{flex: 1, flexDirection: "row", borderBottomWidth: 1, borderBottomColor: "#d3d3d3", alignItems: "center"}}>
                     <FlatList
                       horizontal={true}
-                      data={searchResults}
+                      data={TAGS}
                       keyExtractor={(item) => item.id}
-                      renderItem={renderTags}
+                      renderItem={renderHardTags}
                       ItemSeparatorComponent={() => <View style={{width: 0}}/>}
                       ListEmptyComponent={Empty}
                       showsVerticalScrollIndicator={false}
@@ -381,68 +388,8 @@ useEffect(() => {
             </View>
       </SafeAreaView>
     );
-  // } else {
-  //   return (
-  //     <SafeAreaView style={styles.safeContainer}>
-  //         <View style={styles.container}>
-  //             <View style={styles.header}>
-  //                 <Image style={styles.logo} source={require('./assets/logo.jpg')}></Image>
-  //                 <Text style={styles.compName}>
-  //                     {companyName}
-  //                 </Text>
-  //                 <View style={styles.search}>
-  //                   <AntDesign name="search1" size={24} color="rgb(34 197 94)" />
-  //                   <SearchBar onSearch={handleSearch}/>
-  //                 </View>
-
-  //                 <StatusBar style="auto" />
-  //             </View>
-  //             <View style={{height: 40}}>
-  //               <View style={{flex: 1, flexDirection: "row", borderBottomWidth: 1, borderBottomColor: "#d3d3d3"}}>
-  //                 <FlatList
-  //                   horizontal={true}
-  //                   data={DATA}
-  //                   keyExtractor={(item) => item.id}
-  //                   renderItem={renderTags}
-  //                   ItemSeparatorComponent={() => <View style={{width: 0}}/>}
-  //                   ListEmptyComponent={Empty}
-  //                 />
-  //               </View>
-  //             </View>
-  //             <View style={styles.page}>
-  //               {/* <ScrollView> */}
-  //                 {/* {listing("Mac", laptop)}
-
-  //                 {listing("Refrigerator", fridge)}
-
-  //                 {listing("Microwave", microwave)} */}
-  //                 <View style={styles.resultsContainer}>
-  //                     {hasSearched && (<FlatList
-  //                     data={searchResults}
-  //                     keyExtractor={(item) => item.id}
-  //                     renderItem={renderItem}
-  //                     ItemSeparatorComponent={() => <View style={{height: 30}}/>}
-  //                     ListEmptyComponent={Empty}
-  //                     numColumns={Math.round(width/moderateScale(215))}
-  //                     />)}
-  //                 </View>
-  //                 <View style={styles.container}>
-  //                 {!hasSearched && (<FlatList      
-  //                   data={DATA}
-  //                   renderItem={renderItem}
-  //                   keyExtractor={(item) => item.id}
-  //                   ItemSeparatorComponent={() => <View style={{height: 30}}/>}
-  //                   ListEmptyComponent={Empty}
-  //                   numColumns={Math.round(width/moderateScale(215))}
-  //                   />)}
-  //                 </View>
-  //               {/* </ScrollView> */}
-  //             </View>
-  //         </View>
-  //     </SafeAreaView>
-  //   );
   }
-}
+
 
 const styles = StyleSheet.create({
   safeContainer: {
