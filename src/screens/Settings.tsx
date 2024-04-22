@@ -109,6 +109,52 @@ function Settings({ navigation }) {
     const [email, setEmail] = useState("");
     const [phoneNumber, setPhoneNumber] = useState("");
 
+    const [listings, setListings] = useState<Listing[]>([]);
+
+useEffect(() => {
+    let unsubscribe: () => void; // Declare unsubscribe outside the fetchData function
+
+    const fetchData = async () => {
+        try {
+            const snapshot = await getDocs(collection(db, 'listings'));
+            const listingsData: Listing[] = snapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }));
+            console.log("Before setting listings:", listingsData);
+            setListings(listingsData);
+            console.log("After setting listings:", listings);
+        } catch (error) {
+            console.error("Error fetching listings:", error);
+        }
+    };
+
+    fetchData(); // Invoke the fetchData function immediately
+
+    // Set up the listener and assign the unsubscribe function
+    unsubscribe = onSnapshot(collection(db, 'listings'), snapshot => {
+        const listingsData: Listing[] = snapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+        }));
+        console.log("Updated listings:", listingsData);
+        setListings(prevListings => {
+            // Check if the new listings are different from the current state to prevent unnecessary re-renders
+            if (JSON.stringify(prevListings) !== JSON.stringify(listingsData)) {
+                return listingsData;
+            }
+            return prevListings;
+        });
+    });
+
+    // Cleanup function to unsubscribe from the snapshot listener when the component unmounts
+    return () => {
+        console.log("Unsubscribing from listings...");
+        unsubscribe(); // Call unsubscribe here
+    };
+}, []); // Removed listings from the dependency array to prevent infinite re-renders
+
+
     useEffect(() => {
         // Fetch user profile data from Firestore
         const userId = auth.currentUser!.uid;
@@ -165,7 +211,7 @@ function Settings({ navigation }) {
   
     const handleMouseEnter = (index) => {
       Animated.timing(scaleValues[index], {
-        toValue: 1.1,
+        toValue: 1.03,
         duration: 200,
         useNativeDriver: true,
       }).start();

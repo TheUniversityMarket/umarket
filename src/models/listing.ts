@@ -2,13 +2,13 @@ interface Listing {
     id: string;
     userId: string;
     title: string;          
-    images: string[];        
+    images: string[]; // array of image objects, which will be stored as URLs (render with Image component in React Native using source={{ uri: images[position].url }})     
     description: string;  
     price: string;    
     tags: string[];        
 }
 
-interface ClothingListing extends Listing {
+interface Clothing extends Listing {
     size: string;
     condition: string;
 }
@@ -30,3 +30,5 @@ interface Tickets extends Listing {
 interface Service extends Listing {
     paymentFrequency: string;
 }
+
+export type { Listing, Clothing, Item, Housing, Tickets, Service };
