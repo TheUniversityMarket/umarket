@@ -20,7 +20,6 @@ import ImagePicker from "../components/ImagePicker";
 import { BottomSheetSlideOutSpec } from "@react-navigation/stack/lib/typescript/src/TransitionConfigs/TransitionSpecs";
 import DateSelector from "../components/DatePicker";
 import DatePicker from 'react-datepicker';
-import { scale, verticalScale, moderateScale, moderateVerticalScale } from "../components/Scaling";
 
 
 // import { AntDesign } from '@expo/vector-icons';
@@ -88,8 +87,22 @@ function Post({ navigation }) {
     const [date, setDate] = useState(new Date());
     const [showDatePicker, setShowDatePicker] = useState(false);
     const fadeAnim = useRef(new Animated.Value(0)).current;
-    const {height, width, scale, fontScale} = useWindowDimensions();
+    const {height, width, fontScale} = useWindowDimensions();
     const [shortDimension, longDimension] = width < height ? [width, height] : [height, width];
+    const guidelineBaseWidth = 350;
+    const guidelineBaseHeight = 680;
+    function scale(size: number) {
+        return shortDimension / guidelineBaseWidth * size;
+    }
+    function verticalScale(size: number) {
+        return longDimension / guidelineBaseHeight * size;
+    }
+    function moderateScale(size: number, factor = 0.5) {
+        return size + (scale(size) - size) * factor;
+    }
+    function moderateVerticalScale(size: number, factor = 0.5) {
+        return size + (verticalScale(size) - size) * factor;
+    }
 
     const handleDateChange = (selectedDate) => {
         setDate(selectedDate);
@@ -157,102 +170,106 @@ function Post({ navigation }) {
             <MainHeader isListing={false} onInput={true}></MainHeader>
             <ScrollView contentContainerStyle={{flex: 1}}>
                 <View style={{backgroundColor: (width < height && width < 500) ? "white" : "#E1E1E1", zIndex:1}}>
-                    <View style={{alignSelf: "center", borderRadius:20, width:(width*5)/6, height: (height*3)/2, borderColor: "red", borderWidth: 1, opacity:1, backgroundColor:"white", zIndex:999}}>
+                    <View style={{alignSelf: "center", borderRadius:20, width: width<450 ? width : (width*5)/6, height: (height*3)/2, borderColor: "red", borderWidth: 1, opacity:1, backgroundColor:"white", zIndex:999}}>
                 <Text style={{fontSize: width/25, marginLeft: width/(800/40), marginTop:height/25, fontWeight: 2}}>Post Your Item:</Text>
                 <View style={styles.container}>
-                    <View style={{borderColor:"red", borderWidth: 1, width: width*3/4, height: height/3, borderRadius: 30, marginTop: height/30}}>
-                        <Text style={{fontSize: width/30, marginLeft: 300/(width/100), fontWeight: 2}}>What type of item are you listing?</Text>
-                        <View style={{alignSelf:"center", flexDirection: "row", justifyContent: "space-evenly", borderColor:"red", borderWidth: 1, width: width*2/3, height: height/(700/140), borderRadius: 30, marginTop: height/40, alignItems: "center"}}>
+                    <View style={{borderColor:"red", borderWidth: 1, width: width*3/4, height: width/(1200/300), borderRadius: 30, marginTop: width/60}}>
+                        <Text style={{fontSize: width/30, alignSelf:"center", fontWeight: 2}}>What type of item are you listing?</Text>
+                        <View style={{alignSelf:"center", flexDirection: "row", justifyContent: "space-evenly", borderColor:"red", borderWidth: 1, width: width*2/3, height: width/(1200/140), borderRadius: 30, marginTop: height/40, alignItems: "center"}}>
                         <Pressable
                             onPress={() => handlePress("Item")}>
-                            <View style={{borderColor: "red", minHeight:130, flex:1, borderWidth: 1, height: width/12, borderRadius: 20/((1200*600)/(height*width))}}>
-                                {sellType!="Item" && <View style={{borderColor: "red", borderWidth: 1, minHeight:70, minWidth:55, width: width/12, height: width/12, borderRadius: 20, alignItems: "center", justifyContent: "center",}}>
+                            <View style={{borderColor: "red", width:width/8, borderWidth: 1, height: width/8, borderRadius: 20/((1200*600)/(height*width))}}>
+                                {sellType!="Item" && <View style={{borderColor: "red", borderWidth: 1, flex:1, borderRadius: 20/((1200*600)/(height*width)), alignItems: "center", justifyContent: "center",}}>
                                 <AntDesign>
                                     <MaterialIcons name="computer" size={Math.round(50*Math.sqrt(width)/Math.sqrt(1200))} color="black" />
                                 </AntDesign>
                                 </View>}
-                                {sellType=="Item" && <View style={{borderColor: "red", borderWidth: 1, width: 100, height: 100, borderRadius: 20, alignItems: "center", justifyContent: "center", backgroundColor:"rgb(34 197 94)"}}>
+                                {sellType=="Item" && <View style={{borderColor: "red", borderWidth: 1, flex:1, borderRadius: 20/((1200*600)/(height*width)), alignItems: "center", justifyContent: "center", backgroundColor:"rgb(34 197 94)"}}>
                                 <AntDesign>
-                                    <MaterialIcons name="computer" size={50} color="white" />
+                                    <MaterialIcons name="computer" size={Math.round(50*Math.sqrt(width)/Math.sqrt(1200))} color="white" />
                                 </AntDesign>
                                 </View>}
-                                <Text style={{fontSize:18, alignSelf:"center", fontWeight: 2}}>Items</Text>
+                                <Text style={{fontSize:width/50, alignSelf:"center", fontWeight: 2}}>Items</Text>
                             </View>
                         </Pressable>
                         <Pressable
                             onPress={() => handlePress("Clothing")}>
-                            <View style={{borderColor: "red", minHeight:130, flex:1, borderWidth: 1, height: width/12, borderRadius: 20/((1200*600)/(height*width))}}>
-                                {sellType!="Clothing" && <View style={{borderColor: "red", borderWidth: 1, minHeight:70, minWidth:55, width: width/12, height: width/12, borderRadius: 20, alignItems: "center", justifyContent: "center",}}>
+                            <View style={{borderColor: "red", width:width/8, borderWidth: 1, height: width/8, borderRadius: 20/((1200*600)/(height*width))}}>
+                                {sellType!="Clothing" && <View style={{borderColor: "red", borderWidth: 1, flex:1, borderRadius: 20/((1200*600)/(height*width)), alignItems: "center", justifyContent: "center",}}>
                                 <AntDesign>
                                     <Ionicons name="shirt-outline" size={Math.round(50*Math.sqrt(width)/Math.sqrt(1200))} color="black" />
                                 </AntDesign>
                                 </View>}
-                                {sellType=="Clothing" && <View style={{borderColor: "red", borderWidth: 1, width: 100, height: 100, borderRadius: 20, alignItems: "center", justifyContent: "center", backgroundColor:"rgb(34 197 94)"}}>
+                                {sellType=="Clothing" && <View style={{borderColor: "red", borderWidth: 1, flex:1, borderRadius: 20/((1200*600)/(height*width)), alignItems: "center", justifyContent: "center", backgroundColor:"rgb(34 197 94)"}}>
                                 <AntDesign>
-                                    <Ionicons name="shirt-outline" size={50} color="white" />
+                                    <Ionicons name="shirt-outline" size={Math.round(50*Math.sqrt(width)/Math.sqrt(1200))} color="white" />
                                 </AntDesign>
                                 </View>}
-                                <Text style={{fontSize:18, alignSelf:"center", fontWeight: 2}}>Clothing</Text>
+                                <Text style={{fontSize:width/50, alignSelf:"center", fontWeight: 2}}>Clothing</Text>
                             </View>
                         </Pressable>
                         <Pressable
                             onPress={() => handlePress("Housing")}>
-                            <View style={{borderColor: "red", minHeight:130, flex:1, borderWidth: 1, height: width/12, borderRadius: 20/((1200*600)/(height*width))}}>
-                                {sellType!="Housing" &&<View style={{borderColor: "red", borderWidth: 1, minHeight:70, minWidth:55, width: width/12, height: width/12, borderRadius: 20, alignItems: "center", justifyContent: "center",}}>
+                            <View style={{borderColor: "red", width:width/8, borderWidth: 1, height: width/8, borderRadius: 20/((1200*600)/(height*width))}}>
+                                {sellType!="Housing" &&<View style={{borderColor: "red", borderWidth: 1, flex:1, borderRadius: 20/((1200*600)/(height*width)), alignItems: "center", justifyContent: "center",}}>
                                 <AntDesign>
                                     <AntDesign name="home" size={Math.round(50*Math.sqrt(width)/Math.sqrt(1200))} color="black" />
                                 </AntDesign>
                                 </View>}
-                                {sellType=="Housing" && <View style={{borderColor: "red", borderWidth: 1, width: 100, height: 100, borderRadius: 20, alignItems: "center", justifyContent: "center", backgroundColor:"rgb(34 197 94)"}}>
+                                {sellType=="Housing" && <View style={{borderColor: "red", borderWidth: 1, flex:1, borderRadius: 20/((1200*600)/(height*width)), alignItems: "center", justifyContent: "center", backgroundColor:"rgb(34 197 94)"}}>
                                 <AntDesign>
-                                    <AntDesign name="home" size={50} color="white" />
+                                    <AntDesign name="home" size={Math.round(50*Math.sqrt(width)/Math.sqrt(1200))} color="white" />
                                 </AntDesign>
                                 </View>}
-                                <Text style={{fontSize:18, alignSelf:"center", fontWeight: 2}}>Housing</Text>
+                                <Text style={{fontSize:width/50, alignSelf:"center", fontWeight: 2}}>Housing</Text>
                             </View>
                         </Pressable>
                         <Pressable
-                            onPress={() => handlePress("Tickets")}>
-                            <View style={{borderColor: "red", minHeight:130, flex:1, borderWidth: 1, height: width/12, borderRadius: 20/((1200*600)/(height*width))}}>
-                                {sellType!="Tickets" && <View style={{borderColor: "red", borderWidth: 1,minHeight:70, minWidth:55, width: width/12, height: width/12, borderRadius: 20, alignItems: "center", justifyContent: "center",}}>
+                            onPress={() => handlePress("Ticket")}>
+                            <View style={{borderColor: "red", width:width/8, borderWidth: 1, height: width/8, borderRadius: 20/((1200*600)/(height*width))}}>
+                                {sellType!="Ticket" && <View style={{borderColor: "red", borderWidth: 1, flex:1, borderRadius: 20/((1200*600)/(height*width)), alignItems: "center", justifyContent: "center",}}>
                                 <AntDesign>
                                     <Ionicons name="ticket-outline" size={Math.round(50*Math.sqrt(width)/Math.sqrt(1200))} color="black" />
                                 </AntDesign>
                                 </View>}
-                                {sellType=="Tickets" && <View style={{borderColor: "red", borderWidth: 1, width: 100, height: 100, borderRadius: 20, alignItems: "center", justifyContent: "center", backgroundColor:"rgb(34 197 94)"}}>
+                                {sellType=="Ticket" && <View style={{borderColor: "red", borderWidth: 1, flex:1, borderRadius: 20/((1200*600)/(height*width)), alignItems: "center", justifyContent: "center", backgroundColor:"rgb(34 197 94)"}}>
                                 <AntDesign>
-                                    <Ionicons name="ticket-outline" size={50} color="white" />
+                                    <Ionicons name="ticket-outline" size={Math.round(50*Math.sqrt(width)/Math.sqrt(1200))} color="white" />
                                 </AntDesign>
                                 </View>}
-                                <Text style={{fontSize:18, alignSelf:"center", fontWeight: 2}}>Tickets</Text>
+                                <Text style={{fontSize:width/50, alignSelf:"center", fontWeight: 2}}>Tickets</Text>
                             </View>
                         </Pressable>
                         <Pressable
-                            onPress={() => handlePress("Services")}>
-                            <View style={{borderColor: "red", minHeight:130, flex:1, borderWidth: 1, height: width/12, borderRadius: 20/((1200*600)/(height*width))}}>
-                                {sellType!="Services" && <View style={{borderColor: "red", borderWidth: 1, minHeight:70, minWidth:55, width: width/12, height: width/12, borderRadius: 20, alignItems: "center", justifyContent: "center",}}>
+                            onPress={() => handlePress("Service")}>
+                            <View style={{borderColor: "red", width:width/8, borderWidth: 1, height: width/8, borderRadius: 20/((1200*600)/(height*width))}}>
+                                {sellType!="Service" && <View style={{borderColor: "red", borderWidth: 1, flex:1, borderRadius: 20/((1200*600)/(height*width)), alignItems: "center", justifyContent: "center",}}>
                                 <AntDesign>
                                     <Feather name="scissors" size={Math.round(50*Math.sqrt(width)/Math.sqrt(1200))} color="black" />
                                 </AntDesign>
                                 </View>}
-                                {sellType=="Services" && <View style={{borderColor: "red", borderWidth: 1, width: 100, height: 100, borderRadius: 20, alignItems: "center", justifyContent: "center", backgroundColor:"rgb(34 197 94)"}}>
+                                {sellType=="Service" && <View style={{borderColor: "red", borderWidth: 1, flex:1, borderRadius: 20/((1200*600)/(height*width)), alignItems: "center", justifyContent: "center", backgroundColor:"rgb(34 197 94)"}}>
                                 <AntDesign>
-                                    <Feather name="scissors" size={50} color="white" />
+                                    <Feather name="scissors" size={Math.round(50*Math.sqrt(width)/Math.sqrt(1200))} color="white" />
                                 </AntDesign>
                                 </View>}
-                                <Text style={{fontSize:18, alignSelf:"center", fontWeight: 2}}>Services</Text>
+                                <Text style={{fontSize:width/50, alignSelf:"center", fontWeight: 2}}>Services</Text>
                             </View>
                         </Pressable>
                         </View>
                     </View>
                     <FadeInView>
                     {sellType!="none" && <View style={{borderWidth:1,
-        borderColor: "red", width: 600, alignItems: "center"}}>
-                        <View style={styles.prodNameSuperContainer}>
-                        <Text style={styles.prodNameTxt}>
+        borderColor: "red", width: width/2, alignItems: "center"}}>
+                        <View style={[styles.prodNameSuperContainer,{width:width/2, marginTop: shortDimension/(600/20), height: shortDimension/(600/70),}]}>
+                        <Text style={[styles.prodNameTxt, {fontSize:width/(1200/20), marginLeft:width/(1200/10)}]}>
                             Listing Title:
-                            <View style={styles.prodNameContainer}>
-                                <TextInput style={styles.prodNameIn}
+                            <View style={[styles.prodNameContainer, {marginLeft: width/(1200/10),
+                                    borderRadius: 5/((1200*600)/(height*width)),
+                                    width: width/(1200/190), 
+                                    height: shortDimension/(600/40),}]}>
+                                <TextInput style={[styles.prodNameIn, {fontSize: width/(1200/17),
+                                    padding: 10}]}
                                 placeholder="Enter Title"
                                 placeholderTextColor={"#B3B3B3"}>
                                 </TextInput>
@@ -260,103 +277,128 @@ function Post({ navigation }) {
                         </Text>   
                     {/* </View> */}
                     {/* <View style={styles.prodPriceSuperContainer}>   */}
-                        {(sellType=="Clothing" || sellType=="Item" || sellType=="Tickets") && <Text style={styles.prodPriceTxt}>
+                        {(sellType=="Clothing" || sellType=="Item" || sellType=="Ticket") && <Text style={[styles.prodPriceTxt, { marginLeft: width/(1200/55),
+                            fontSize: width/(1200/20),}]}>
                             Listing Price:  
-                            <View style={styles.prodPriceContainer}>
-                                <TextInput style={styles.prodPriceIn}
+                            <View style={[styles.prodPriceContainer, {
+                                    marginLeft: width/(1200/10),
+                                    borderRadius: width/(1200/5),
+                                    width: width/(1200/50),
+                                    height: shortDimension/(600/40),}]}>
+                                <TextInput style={[styles.prodPriceIn, {fontSize: width/(1200/17),
+                                    padding: 10}]}
                                 placeholder="$$$"
                                 placeholderTextColor={"#B3B3B3"}>
                                 </TextInput>
                                 {/* <Text style={styles.prodPrice$}>$</Text>   */}
                             </View>
                         </Text>}
-                        {sellType=="Housing" && <Text style={styles.prodPriceTxt}>
+                        {sellType=="Housing" && <Text style={[styles.prodPriceTxt, { marginLeft: width/(1200/55),
+                                fontSize: width/(1200/20),}]}>
                             Price:
-                            <View style={styles.prodPriceContainer}>
-                                <TextInput style={styles.prodPriceIn}
+                            <View style={[styles.prodPriceContainer, {
+                                    marginLeft: width/(1200/10),
+                                    borderRadius: width/(1200/5),
+                                    width: width/(1200/50),
+                                    height: shortDimension/(600/40),}]}>
+                                <TextInput style={[styles.prodPriceIn, {fontSize: width/(1200/17),
+                                    padding: 10}]}
                                 placeholder="$$$"
                                 placeholderTextColor={"#B3B3B3"}>
                                 </TextInput>
                                 {/* <Text style={styles.prodPrice$}>$</Text>   */}
                             </View>
-                            {housingOption==null && <Text style={{marginLeft: 10,
-                                fontSize: 20,
+                            {housingOption==null && <Text style={{marginLeft: width/(1200/10),
+                                fontSize: width/(1200/20),
                                 color: "rgb(34 197 94)",
                                 textAlign: "auto",
                                 fontWeight:2}}></Text>}
-                            {housingOption=='Yearly' && <Text style={{marginLeft: 10,
-                                fontSize: 20,
+                            {housingOption=='Yearly' && <Text style={{marginLeft: width/(1200/10),
+                                fontSize: width/(1200/20),
                                 color: "rgb(34 197 94)",
                                 textAlign: "auto",
                                 fontWeight:2}}>/ Year</Text>}
-                            {housingOption=='Weekly' && <Text style={{marginLeft: 10,
-                                fontSize: 20,
+                            {housingOption=='Weekly' && <Text style={{marginLeft: width/(1200/10),
+                                fontSize: width/(1200/20),
                                 color: "rgb(34 197 94)",
                                 textAlign: "auto",
                                 fontWeight:2}}>/ Week</Text>}
-                            {housingOption=='Monthly' && <Text style={{marginLeft: 10,
-                                fontSize: 20,
+                            {housingOption=='Monthly' && <Text style={{marginLeft: width/(1200/10),
+                                fontSize: width/(1200/20),
                                 color: "rgb(34 197 94)",
                                 textAlign: "auto",
                                 fontWeight:2}}>/ Month</Text>}
-                            {housingOption=='Daily' && <Text style={{marginLeft: 10,
-                                fontSize: 20,
+                            {housingOption=='Daily' && <Text style={{marginLeft: width/(1200/10),
+                                fontSize: width/(1200/20),
                                 color: "rgb(34 197 94)",
                                 textAlign: "auto",
                                 fontWeight:2}}>/ Day</Text>}
-                            {housingOption=='Biannual' && <Text style={{marginLeft: 10,
-                                fontSize: 18,
+                            {housingOption=='Biannual' && <Text style={{marginLeft: width/(1200/10),
+                                fontSize: width/(1200/20),
                                 color: "rgb(34 197 94)",
                                 textAlign: "auto",
                                 fontWeight:2}}>/ 6 Months</Text>}
                         </Text>}
-                        {sellType=="Services" && <Text style={styles.prodPriceTxt}>
+                        {sellType=="Service" && <Text style={[styles.prodPriceTxt, { marginLeft: width/(1200/55),
+        fontSize: width/(1200/20),}]}>
                             Price:
-                            <View style={styles.prodPriceContainer}>
-                                <TextInput style={styles.prodPriceIn}
+                            <View style={[styles.prodPriceContainer, {
+                                    marginLeft: width/(1200/10),
+                                    borderRadius: width/(1200/5),
+                                    width: width/(1200/50),
+                                    height: shortDimension/(600/40),}]}>
+                                <TextInput style={[styles.prodPriceIn, {fontSize: width/(1200/17),
+                                    padding: 10}]}
                                 placeholder="$$$"
                                 placeholderTextColor={"#B3B3B3"}>
                                 </TextInput>
                                 {/* <Text style={styles.prodPrice$}>$</Text>   */}
                             </View>
-                            {serviceOption==null && <Text style={{marginLeft: 10,
-                                fontSize: 20,
+                            {serviceOption==null && <Text style={{marginLeft: width/(1200/10),
+                                fontSize: width/(1200/20),
                                 color: "rgb(34 197 94)",
-                                textAlign: "auto",}}></Text>}
-                            {serviceOption=="Per Minute" && <Text style={{marginLeft: 10,
-                                fontSize: 20,
+                                textAlign: "auto",
+                                fontWeight:2}}></Text>}
+                            {serviceOption=="Per Minute" && <Text style={{marginLeft: width/(1200/10),
+                                fontSize: width/(1200/20),
                                 color: "rgb(34 197 94)",
-                                textAlign: "auto",}}>/ Minute</Text>}
-                            {serviceOption=="Hourly" && <Text style={{marginLeft: 10,
-                                fontSize: 20,
+                                textAlign: "auto",
+                                fontWeight:2}}>/ Minute</Text>}
+                            {serviceOption=="Hourly" && <Text style={{marginLeft: width/(1200/10),
+                                fontSize: width/(1200/20),
                                 color: "rgb(34 197 94)",
-                                textAlign: "auto",}}>/ Hour</Text>}
-                            {serviceOption=="Daily" && <Text style={{marginLeft: 10,
-                                fontSize: 20,
+                                textAlign: "auto",
+                                fontWeight:2}}>/ Hour</Text>}
+                            {serviceOption=="Daily" && <Text style={{marginLeft: width/(1200/10),
+                                fontSize: width/(1200/20),
                                 color: "rgb(34 197 94)",
-                                textAlign: "auto",}}>/ Day</Text>}
-                            {serviceOption=="Flat" && <Text style={{marginLeft: 10,
-                                fontSize: 20,
+                                textAlign: "auto",
+                                fontWeight:2}}>/ Day</Text>}
+                            {serviceOption=="Flat" && <Text style={{marginLeft: width/(1200/10),
+                                fontSize: width/(1200/20),
                                 color: "rgb(34 197 94)",
-                                textAlign: "auto",}}>/ Service</Text>}
+                                textAlign: "auto",
+                                fontWeight:2}}>/ Service</Text>}
                         </Text>}
                     </View>
-                    <View style={styles.prodTagsSuperContainer}>  
-                        <Text style={styles.prodTagsTxt}>
+                    <View style={[styles.prodTagsSuperContainer, {marginTop: shortDimension/(600/30),
+                            width: width/2,
+                            height: width/(1200/70),}]}>  
+                        <Text style={[styles.prodTagsTxt, {}]}>
                             Add Tags:
-                            <View style={styles.prodTagsContainer}>
-                                <TextInput style= {styles.prodTagsIn}
+                            <View style={[styles.prodTagsContainer, {}]}>
+                                <TextInput style= {[styles.prodTagsIn, {}]}
                                 placeholder="Eg: Books, Appliances, Fridges..."
                                 placeholderTextColor={"#B3B3B3"}>
                                 </TextInput>
                             </View>
                         </Text> 
                     </View>
-                    <View style={[styles.prodDesSuperContainer]}>  
-                        <Text style={styles.prodDesTxt}>
+                    <View style={[styles.prodDesSuperContainer, {}]}>  
+                        <Text style={[styles.prodDesTxt, {}]}>
                             Enter Brief Description:{"\n"}
-                            <View style={styles.prodDesContainer}>
-                                <TextInput style={styles.prodDesIn}
+                            <View style={[styles.prodDesContainer, {}]}>
+                                <TextInput style={[styles.prodDesIn, {}]}
                                 placeholder="Enter Descrition"
                                 placeholderTextColor={"#B3B3B3"}>
                                 </TextInput>
@@ -410,7 +452,7 @@ function Post({ navigation }) {
                             )}
                             </View>
                         </View>}
-                        {(sellType=="Tickets") && <View style={{flexDirection: "column", borderColor: "red", borderWidth: 1, marginLeft: 30, height: 200, width: 240}}>
+                        {(sellType=="Ticket") && <View style={{flexDirection: "column", borderColor: "red", borderWidth: 1, marginLeft: 30, height: 200, width: 240}}>
                         <View style={{ flex:1, alignItems: 'center', opacity: 1, zIndex:999, borderWidth:1, borderColor:"red"}}>
                         <Text style={{fontSize:20, color:"green", marginTop: 10}}>Event Date:</Text>
                         <DateSelector></DateSelector>
@@ -427,7 +469,8 @@ function Post({ navigation }) {
                                     width: 90,
                                     height: 40,
                                 }}>
-                                <TextInput style={styles.prodPriceIn}
+                                <TextInput style={[styles.prodPriceIn, {fontSize: width/(1200/17),
+                                    padding: 10}]}
                                 placeholder="12:00 pm"
                                 placeholderTextColor={"#B3B3B3"}>
                                 </TextInput>
@@ -435,7 +478,7 @@ function Post({ navigation }) {
                         </View>
                         </View>
                         </View>}
-                        {sellType=="Services" && <View style={{borderColor: "red", borderWidth: 1, marginLeft: 50, height: 200, width: 200}}>
+                        {sellType=="Service" && <View style={{borderColor: "red", borderWidth: 1, marginLeft: 50, height: 200, width: 200}}>
                         <View style={styles.container}>
                             <TouchableOpacity onPress={toggleDropdown} style={styles.dropdownButton}>
                                 {serviceOption==null && <Text style={styles.buttonText}>{'Pricing:'}</Text>}
@@ -461,7 +504,7 @@ function Post({ navigation }) {
                             </View>
                         </View>}
                     </View>
-                    {sellType=="Tickets" && <View style={{marginTop: 30,
+                    {sellType=="Ticket" && <View style={{marginTop: 30,
                         width:  200,
                         borderWidth:1,
                         borderColor: "green",
@@ -480,7 +523,7 @@ function Post({ navigation }) {
                             </Pressable>
                         </Text> 
                     </View>}
-                    {sellType!="Tickets" && <View style={styles.prodImgSuperContainer}>
+                    {sellType!="Ticket" && <View style={styles.prodImgSuperContainer}>
                         <View style={{alignContent:"center", flexDirection:"row", alignItems: "center", borderWidth:1, borderColor:'red'}}>  
                         <Text style={{fontSize: 20,
                             color: "rgb(34 197 94)",
@@ -506,8 +549,13 @@ function Post({ navigation }) {
                             textAlign: "auto",
                             marginLeft:70,
                             fontWeight:2}}>Size:</Text>
-                            <View style={styles.prodPriceContainer}>
-                                <TextInput style={styles.prodPriceIn}
+                            <View style={[styles.prodPriceContainer, {
+                                    marginLeft: width/(1200/10),
+                                    borderRadius: width/(1200/5),
+                                    width: width/(1200/50),
+                                    height: shortDimension/(600/40),}]}>
+                                <TextInput style={[styles.prodPriceIn, {fontSize: width/(1200/17),
+                                    padding: 10}]}
                                 placeholder="XS"
                                 placeholderTextColor={"#B3B3B3"}>
                                 </TextInput>
@@ -527,7 +575,8 @@ function Post({ navigation }) {
                                     width: 95,
                                     height: 40,
                                 }}>
-                                <TextInput style={styles.prodPriceIn}
+                                <TextInput style={[styles.prodPriceIn, {fontSize: width/(1200/17),
+                                    padding: 10}]}
                                 placeholder="6 months"
                                 placeholderTextColor={"#B3B3B3"}>
                                 </TextInput>
@@ -595,9 +644,6 @@ const styles = StyleSheet.create({
     },
 
     prodNameSuperContainer: {
-        marginTop: 20,
-        width: 600,
-        height: 70,
         borderWidth:1,
         borderColor: "purple",
         flexDirection: "row",
@@ -609,26 +655,18 @@ const styles = StyleSheet.create({
     },
 
     prodNameTxt: {
-        fontSize: 20,
         color: "rgb(34 197 94)",
         textAlign: "auto",
-        marginLeft: 10,
         fontWeight: 2
     },
 
     prodNameContainer: {
-        marginLeft: 10,
-        borderRadius: 5,
         borderWidth: 1,
         borderColor: "red",
-        width: 190, 
-        height: 40,
         
     },
 
     prodNameIn: {
-        fontSize: 17,
-        padding: 10
     },
 
     prodPriceSuperContainer: {
@@ -646,24 +684,16 @@ const styles = StyleSheet.create({
     },
 
     prodPriceTxt: {
-        marginLeft: 55,
-        fontSize: 20,
         color: "rgb(34 197 94)",
         textAlign: "auto",
     },
 
     prodPriceContainer: {
-        marginLeft: 10,
-        borderRadius: 5,
         borderWidth: 1,
         borderColor: "red",
-        width: 60,
-        height: 40,
     },
 
     prodPriceIn: {
-        fontSize: 17,
-        padding: 10,
     },
 
     prodDesSuperContainer: {
@@ -738,9 +768,6 @@ const styles = StyleSheet.create({
     },
 
     prodTagsSuperContainer: {
-        marginTop: 30,
-        width: 600,
-        height: 70,
         borderWidth:1,
         borderColor: "purple",
         flexDirection: "row",
