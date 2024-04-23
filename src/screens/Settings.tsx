@@ -6,9 +6,10 @@ import { useNavigation } from '@react-navigation/native';
 import MainHeader from "../components/MainHeader";
 import React, { useEffect, useRef } from 'react';
 import { Alert } from 'react-native';
-import { collection, doc, getDoc, updateDoc } from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, updateDoc, onSnapshot } from "firebase/firestore";
 import { auth, db } from "../firebase/firebaseConfig";
 import { signOut } from "firebase/auth";
+import { Listing, Item, Service, Clothing, Housing, Tickets } from '../models/listing';
 
 const fetchUserProfile = async (userId) => {
     try {
@@ -46,7 +47,7 @@ const DATA = [
     { id: '2', title: "Fridge", image: fridge, description: 'A fridge is where you keep your food.', price: "$899", tags: ['kitchen', 'electrical','cooking'] },
   ]
 
-  function Item(props) {
+  function ListingItem(props) {
     const { id, title, image, description, price, tags } = props;
     const scaleValue = useRef(new Animated.Value(1)).current;
   
@@ -117,10 +118,11 @@ useEffect(() => {
     const fetchData = async () => {
         try {
             const snapshot = await getDocs(collection(db, 'listings'));
-            const listingsData: Listing[] = snapshot.docs.map(doc => ({
+            let listingsData: Listing[] = snapshot.docs.map(doc => ({
                 id: doc.id,
                 ...doc.data()
             }));
+            listingsData = listingsData.filter((listing) => listing.userId === auth.currentUser!.uid);
             console.log("Before setting listings:", listingsData);
             setListings(listingsData);
             console.log("After setting listings:", listings);
@@ -236,7 +238,7 @@ useEffect(() => {
             ]}
             onPress={() => navigation.navigate('ListingItem', { item })}
           >
-            <Item id={item.id} title={item.title} image={item.image} description={item.description} price={item.price} tags={item.tags} navigation={navigation} />
+            <ListingItem id={item.id} title={item.title} image={item.image} description={item.description} price={item.price} tags={item.tags} navigation={navigation} />
           </Pressable>
         );
       }
@@ -251,7 +253,7 @@ useEffect(() => {
           pressed && {backgroundColor: "rgb(34 197 94)"}
           ]}
           onPress={() => navigation.navigate('ListingItem', { item })}>
-          <Item id={item.id} title={item.title} image={item.image} description={item.description} price={item.price} tags={item.tags}/>
+          <ListingItem id={item.id} title={item.title} image={item.image} description={item.description} price={item.price} tags={item.tags}/>
         </Pressable>
       )
     }}
@@ -374,7 +376,7 @@ useEffect(() => {
             
                             <FlatList
                             scrollEnabled={false}
-                            data={DATA}
+                            data={listings}
                             renderItem={renderItem}
                             keyExtractor={(item) => item.id}
                             ItemSeparatorComponent={() => <View style={{height: 30}}/>}
