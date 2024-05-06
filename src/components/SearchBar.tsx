@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TextInput, View, StyleSheet } from 'react-native';
 import { Dimensions } from 'react-native';
 
@@ -22,23 +22,43 @@ function moderateVerticalScale(size: number, factor = 0.5) {
     return size + (verticalScale(size) - size) * factor;
 }
 
-const SearchBar = ({ onSearch }) => {
+const SearchBar = ({ onSearch, isListings }) => {
   const [searchText, setSearchText] = useState('');
+
+  useEffect(() => {
+    // This effect will run every time searchText changes
+    if (isListings) {
+      handleSearch();
+    }
+  }, [searchText]);
 
   const handleSearch = () => {
     onSearch(searchText);
   };
 
+  const handleTextChange = (text) => {
+    setSearchText(text);
+  };
+  
+
   return (
     <View style={styles.container}>
-      <TextInput
+      {isListings && <TextInput
+        style={styles.input}
+        placeholder="Search..."
+        placeholderTextColor={"rgb(34 197 94)"}
+        onChangeText={handleTextChange}
+        value={searchText}
+        onSubmitEditing={handleSearch}
+      />}
+      {!isListings && <TextInput
         style={styles.input}
         placeholder="Search..."
         placeholderTextColor={"rgb(34 197 94)"}
         onChangeText={setSearchText}
         value={searchText}
         onSubmitEditing={handleSearch}
-      />
+      />}
     </View>
   );
 };

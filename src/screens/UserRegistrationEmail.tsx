@@ -1,7 +1,10 @@
+import React, { useState } from 'react';
 import { Text, View, StyleSheet, SafeAreaView, Pressable, ImageBackground, Dimensions } from "react-native"
 import { TextInput } from "react-native";
 import { FontAwesome6 } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
+import { auth } from '../firebase/firebaseConfig'; 
+import { fetchSignInMethodsForEmail } from 'firebase/auth';
 
 //const school = "https://images.genius.com/018e964bd737e5d4600162dbcac48ce5.1000x1000x1.png" // School image will vary with different schools if we decide to expand later on.
 const school = "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Solid_white_bordered.svg/2048px-Solid_white_bordered.svg.png"
@@ -9,8 +12,9 @@ const school = "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Solid_
 import { moderateScale, verticalScale, moderateVerticalScale } from '../components/Scaling';
 const width = Dimensions.get('window').width;
 
-function UserRegistrationEmail( {navigation} ) {
+function UserRegistrationEmail({navigation}) {
     const companyName = "UMarket";
+    const [email, setEmail] = useState('');
 
     let buttonSingleProperties = {
         color1: "#22c55e",
@@ -23,61 +27,34 @@ function UserRegistrationEmail( {navigation} ) {
         buttonSingleProperties.color2 = x
     }
 
-    if (width < 700) {    
-        return (
-            <SafeAreaView style={styles.safeContainer}>
-                <View style={styles.container}>
-                    {/* <ImageBackground source={{uri: school}} style={styles.schoolBackGround}>
-                        <Text style={styles.signUp}>UMarket</Text>
-                    </ImageBackground> */}
-                    <View style={styles.header}>
-                        <Text style={styles.signUp}>UMarket</Text>
-                    </View>
-                    <View style={styles.registrationContainer}>
-                        <Text style={{fontWeight: "bold", fontSize: 25, marginBottom: 17, color:"rgb(17 24 39)"}}>Account Type</Text>
-                        <View style={{flexDirection: "row", gap: 30, marginBottom: verticalScale(3)}}>
-                            <Pressable style={ ({ pressed }) => [
-                            {backgroundColor: buttonSingleProperties.color1, padding: 13,borderRadius: 100, alignItems: "center"},
-                            pressed && {backgroundColor: "rgb(17 24 39)"}
-                            ]} onPress={changeSingleColor}>
-                                <View>
-                                    <FontAwesome5 name="user-alt" size={24} color="white" />
-                                </View>
-                                <View style={{alignItems: "center", marginTop: 3}}>
-                                    <Text style={{fontWeight: "bold", color: "white"}}>Single</Text>
-                                </View>
-                            </Pressable>
-                            <Pressable style={ ({ pressed }) => [
-                            {backgroundColor: "rgb(34 197 94)", padding: 13,borderRadius: 100, alignItems: "center"},
-                            pressed && {backgroundColor: "rgb(17 24 39)"}
-                            ]}>
-                                <View>
-                                    <FontAwesome6 name="user-group" size={24} color="white" />
-                                </View>
-                                <View style={{alignItems: "center", marginTop: 3}}>
-                                    <Text style={{fontWeight: "bold", color: "white"}}>Group</Text>
-                                </View>
-                            </Pressable>
-                        </View>
-                        <TextInput style={styles.emailInput} placeholder="Enter School Email" keyboardType="email-address" placeholderTextColor={"#B3B3B3"}/>
-                        <Pressable style={ ({ pressed }) => [
-                            styles.button,
-                            pressed && {backgroundColor: "green"}
-                            ]}
-                            onPress={() => navigation.navigate('UserVerification')}>
-                            <Text style={styles.buttonText}>Continue</Text>
-                        </Pressable>
-                    </View>
-                </View>
-            </SafeAreaView>
-        )
+    const handleContinue = () => {
+        checkEmail().then((emailExists) => {
+            if (!emailExists) {
+                alert("Email already exists. Please enter a new valid school email.");
+                return;
+            }
+            navigation.navigate('UserVerification', { email }); // Correct usage as per type definition
+        } 
+        );
+     };
+
+    const checkEmail = async () => {
+        try {    
+            const methods = await fetchSignInMethodsForEmail(auth, email);
+            if (methods.length == 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (error) {
+            // Handle errors, such as invalid email or network issues
+            console.error("Error checking email:", error);
+            return false;
+        }
     }
-    else {
-        return (
-            <SafeAreaView style={styles.safeContainer}>
-            <View style={{flex: 1, backgroundColor: "rgb(34 197 94)", width: "100%", height: "100%"}}>
-                
-            </View>
+ 
+    return (
+        <SafeAreaView style={styles.safeContainer}>
             <View style={styles.container}>
                 {/* <ImageBackground source={{uri: school}} style={styles.schoolBackGround}>
                     <Text style={styles.signUp}>UMarket</Text>
@@ -86,8 +63,8 @@ function UserRegistrationEmail( {navigation} ) {
                     <Text style={styles.signUp}>UMarket</Text>
                 </View>
                 <View style={styles.registrationContainer}>
-                    <Text style={{fontWeight: "bold", fontSize: 25, marginBottom: 17, color:"rgb(17 24 39)"}}>School Email</Text>
-                    {/* <View style={{flexDirection: "row", gap: 30, marginBottom: verticalScale(3)}}>
+                    <Text style={{fontWeight: "bold", fontSize: 25, marginBottom: 17, color:"rgb(17 24 39)"}}>Account Type</Text>
+                    <View style={{flexDirection: "row", gap: 30, marginBottom: verticalScale(3)}}>
                         <Pressable style={ ({ pressed }) => [
                         {backgroundColor: buttonSingleProperties.color1, padding: 13,borderRadius: 100, alignItems: "center"},
                         pressed && {backgroundColor: "rgb(17 24 39)"}
@@ -110,21 +87,21 @@ function UserRegistrationEmail( {navigation} ) {
                                 <Text style={{fontWeight: "bold", color: "white"}}>Group</Text>
                             </View>
                         </Pressable>
-                    </View> */}
-                    <TextInput style={styles.emailInput} placeholder="Enter School Email" keyboardType="email-address" placeholderTextColor={"#B3B3B3"}/>
+                    </View>
+                    <TextInput style={styles.emailInput} placeholder="Enter School Email" keyboardType="email-address" onChangeText={setEmail} value={email} placeholderTextColor={"#B3B3B3"}/>
                     <Pressable style={ ({ pressed }) => [
                         styles.button,
                         pressed && {backgroundColor: "green"}
                         ]}
-                        onPress={() => navigation.navigate('UserVerification')}>
+                        onPress={handleContinue}>
                         <Text style={styles.buttonText}>Continue</Text>
                     </Pressable>
                 </View>
             </View>
         </SafeAreaView>
-        )
-    }
+    )
 }
+
 
 const styles = StyleSheet.create({
     safeContainer: {

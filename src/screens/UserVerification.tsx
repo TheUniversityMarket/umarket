@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import { Text, View, StyleSheet, SafeAreaView, Pressable, ImageBackground, Dimensions } from "react-native"
 import { TextInput } from "react-native";
 import { FontAwesome6 } from '@expo/vector-icons';
@@ -37,8 +38,15 @@ function changeColor() {
     buttonProperties.color2 = x
 }
 
-function UserVerification({ navigation }) {
+function UserVerification({ navigation, route }) {
     const companyName = "UMarket";
+    const { email } = route.params;
+
+    console.log(email);
+
+    const handleContinue = () => {
+        navigation.navigate('AccountInformation', { email }); // Correct usage as per type definition
+      };
 
     if (width < 700) {    
         return (
@@ -58,7 +66,7 @@ function UserVerification({ navigation }) {
                             styles.button,
                             pressed && {backgroundColor: "green"}
                             ]}
-                            onPress={() => navigation.navigate('AccountInformation')}>
+                            onPress={() => navigation.navigate('AccountInformation', { email })}>
                             <Text style={styles.buttonText}>Continue</Text>
                         </Pressable>
                         </View>
@@ -88,7 +96,7 @@ function UserVerification({ navigation }) {
                             styles.button,
                             pressed && {backgroundColor: "green"}
                             ]}
-                            onPress={() => navigation.navigate('AccountInformation')}>
+                            onPress={handleContinue}>
                             <Text style={styles.buttonText}>Continue</Text>
                         </Pressable>
                         </View>

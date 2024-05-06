@@ -39,8 +39,8 @@ const Navigator: React.FC = () => {
             <>
                 {width > 700 ? (
                     <>
-                        <Stack.Screen name={'Chat'} component={Chat} options={{headerShown: false}}/>
                         <Stack.Screen name={'Listings'} component={Listings} options={{headerShown: false}}/>
+                        <Stack.Screen name={'Chat'} component={Chat} options={{headerShown: false}}/>
                         <Stack.Screen name={'Post'} component={Post} options={{headerShown: false}}/>
                         <Stack.Screen name={'Settings'} component={Settings} options={{headerShown: false}}/>
                     </>
@@ -49,13 +49,13 @@ const Navigator: React.FC = () => {
                 )}
                 <Stack.Screen name={'ListingsLoggedOut'} component={ListingsLoggedOut} options={{headerShown: false}}/>
                 <Stack.Screen name={'ListingItem'} component={ListingItem} options={{headerShown: false}}/>
-                <Stack.Screen name={'AccountInformation'} component={AccountInformation} options={{headerShown: false}}/>
             </>
         ) : (
             <>
                 <Stack.Screen name={'Login/SignUp'} component={UserLogin} options={{headerShown: false}} />
                 <Stack.Screen name={'UserRegistrationEmail'} component={UserRegistrationEmail} options={{headerShown: false}} />
                 <Stack.Screen name={'UserVerification'} component={UserVerification} options={{headerShown: false}} />
+                <Stack.Screen name={'AccountInformation'} component={AccountInformation} options={{headerShown: false}}/>
             </>    
         )}
       </Stack.Navigator>

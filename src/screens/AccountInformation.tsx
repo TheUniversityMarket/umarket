@@ -1,30 +1,17 @@
-import { Text, View, StyleSheet, SafeAreaView, Pressable, ImageBackground, Dimensions } from "react-native"
+import { Text, View, StyleSheet, SafeAreaView, Pressable, ImageBackground, Dimensions, Alert } from "react-native"
+import { useState } from 'react';
 import { TextInput } from "react-native";
-import { FontAwesome6 } from '@expo/vector-icons';
-import { FontAwesome5 } from '@expo/vector-icons';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
+import { auth, db } from '../firebase/firebaseConfig';
+import React from "react";
 
 //const school = "https://images.genius.com/018e964bd737e5d4600162dbcac48ce5.1000x1000x1.png" // School image will vary with different schools if we decide to expand later on.
 const school = "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Solid_white_bordered.svg/2048px-Solid_white_bordered.svg.png"
 
+// resizing imports
 const { width, height } = Dimensions.get('window');
-const [shortDimension, longDimension] = width < height ? [width, height] : [height, width];
-
-//Default guideline sizes are based on standard ~5" screen mobile device
-const guidelineBaseWidth = 350;
-const guidelineBaseHeight = 680;
-
-function scale(size: number) {
-    return shortDimension / guidelineBaseWidth * size;
-}
-function verticalScale(size: number) {
-    return longDimension / guidelineBaseHeight * size;
-}
-function moderateScale(size: number, factor = 0.5) {
-    return size + (scale(size) - size) * factor;
-}
-function moderateVerticalScale(size: number, factor = 0.5) {
-    return size + (verticalScale(size) - size) * factor;
-}
+import {scale, verticalScale, moderateScale, moderateVerticalScale} from '../components/Scaling';
 
 let buttonProperties = {
     color1: "rgb(17 24 39)",
@@ -37,11 +24,42 @@ function changeColor() {
     buttonProperties.color2 = x
 }
 
-function AccountInformation({ navigation }) {
+function AccountInformation({ navigation, route }) {
     const companyName = "UMarket";
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [password, setPassword] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
+    const { email } = route.params;
 
-    if (width > 700) {
-        return (
+    console.log(email);
+
+    const handleSignUp = async () => {
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
+
+        try {
+            await setDoc(doc(db, "users", user.uid), {
+                firstName,
+                lastName,
+                email,
+                phoneNumber,
+                dateJoined: new Date()
+            });
+            console.log("Document successfully written");
+        } catch (error) {
+            console.error("Error writing document: ", error);
+        }
+
+        navigation.navigate('Listings'); // Navigate to home after registration
+        
+    } catch (error: any) {
+            Alert.alert("Error", error.message);
+        }
+    };
+
+    return (
             <SafeAreaView style={styles.safeContainer}>
             <View style={{flex: 1, backgroundColor: "rgb(34 197 94)", width: "100%", height: "100%"}}>
 
@@ -62,44 +80,45 @@ function AccountInformation({ navigation }) {
                             <View style={{alignItems: "flex-start", width: "100%"}}>
                                 <Text style={{fontWeight: "bold", fontSize: moderateScale(13), marginBottom: 17, color:"rgb(17 24 39)"}}>First Name</Text>
                             </View>
-                            <TextInput style={styles.verificationCode} placeholder="First Name" keyboardType="email-address" placeholderTextColor={"#B3B3B3"}/>
+                            <TextInput style={styles.verificationCode} placeholder="First Name" onChangeText={setFirstName} value={firstName} keyboardType="email-address" placeholderTextColor={"#B3B3B3"}/>
 
 
 
                             <View style={{alignItems: "flex-start", width: "100%", marginTop: 10}}>
                                 <Text style={{fontWeight: "bold", fontSize: moderateScale(13), marginBottom: 17, color:"rgb(17 24 39)"}}>Last Name</Text>
                             </View>
-                            <TextInput style={styles.verificationCode} placeholder="Last Name" keyboardType="email-address" placeholderTextColor={"#B3B3B3"}/>
+                            <TextInput style={styles.verificationCode} placeholder="Last Name" onChangeText={setLastName} value={lastName} keyboardType="email-address" placeholderTextColor={"#B3B3B3"}/>
 
+                            <View style={{alignItems: "flex-start", width: "100%", marginTop: 10}}>
+                                <Text style={{fontWeight: "bold", fontSize: moderateScale(13), marginBottom: 17, color:"rgb(17 24 39)"}}>Phone Number</Text>
+                            </View>
+                            <TextInput style={styles.verificationCode} placeholder="Phone Number" onChangeText={setPhoneNumber} value={phoneNumber} keyboardType="email-address" placeholderTextColor={"#B3B3B3"}/>
 
 
                             <View style={{alignItems: "flex-start", width: "100%", marginTop: 10}}>
                                 <Text style={{fontWeight: "bold", fontSize: moderateScale(13), marginBottom: 17, color:"rgb(17 24 39)"}}>Password</Text>
                             </View>
-                            <TextInput style={styles.verificationCode} placeholder="Password" secureTextEntry placeholderTextColor={"#B3B3B3"}/>
+                            <TextInput style={styles.verificationCode} placeholder="Password" onChangeText={setPassword} value={password} secureTextEntry placeholderTextColor={"#B3B3B3"}/>
 
 
                             
                             <Pressable style={ ({ pressed }) => [
-                            styles.button,
-                            pressed && {backgroundColor: "green"}
-                            ]}
-                            onPress={() => navigation.navigate('Listings')}>
-                            <Text style={styles.buttonText}>Create Account</Text>
-                        </Pressable>
+                                styles.button,
+                                pressed && {backgroundColor: "green"}
+                                ]}
+                                onPress={handleSignUp}>
+                                <Text style={styles.buttonText}>Create Account</Text>
+                            </Pressable>
                         </View>
                     </View>
                 </View>
         </SafeAreaView>
         )
-    }
-    else {    
+    
+        {/*
         return (
             <SafeAreaView style={styles.safeContainer}>
                 <View style={styles.container}>
-                    {/* <ImageBackground source={{uri: school}} style={styles.schoolBackGround}>
-                        <Text style={styles.signUp}>UMarket</Text>
-                    </ImageBackground> */}
                     <View style={styles.header}>
                         <Text style={styles.signUp}>UMarket</Text>
                     </View>
@@ -131,18 +150,18 @@ function AccountInformation({ navigation }) {
 
                             
                             <Pressable style={ ({ pressed }) => [
-                            styles.button,
-                            pressed && {backgroundColor: "green"}
-                            ]}
-                            onPress={() => navigation.navigate('Home')}>
-                            <Text style={styles.buttonText}>Create Account</Text>
-                        </Pressable>
+                                styles.button,
+                                pressed && {backgroundColor: "green"}
+                                ]}
+                                onPress={() => navigation.navigate('Home')}>
+                                <Text style={styles.buttonText}>Create Account</Text>
+                            </Pressable>
                         </View>
                     </View>
                 </View>
             </SafeAreaView>
         )
-    }
+    */}
 }
 
 const styles = StyleSheet.create({
