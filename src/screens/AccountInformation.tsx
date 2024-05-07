@@ -4,6 +4,7 @@ import { TextInput } from "react-native";
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 import { auth, db } from '../firebase/firebaseConfig';
+import React from "react";
 
 //const school = "https://images.genius.com/018e964bd737e5d4600162dbcac48ce5.1000x1000x1.png" // School image will vary with different schools if we decide to expand later on.
 const school = "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Solid_white_bordered.svg/2048px-Solid_white_bordered.svg.png"
@@ -28,6 +29,7 @@ function AccountInformation({ navigation, route }) {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [password, setPassword] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
     const { email } = route.params;
 
     console.log(email);
@@ -37,21 +39,26 @@ function AccountInformation({ navigation, route }) {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
 
-            // Create Firestore document with user data
+        try {
             await setDoc(doc(db, "users", user.uid), {
                 firstName,
                 lastName,
                 email,
+                phoneNumber,
                 dateJoined: new Date()
             });
+            console.log("Document successfully written");
+        } catch (error) {
+            console.error("Error writing document: ", error);
+        }
 
-            navigation.navigate('Listings'); // Navigate to home after registration
-        } catch (error: any) {
+        navigation.navigate('Listings'); // Navigate to home after registration
+        
+    } catch (error: any) {
             Alert.alert("Error", error.message);
         }
     };
 
-   
     return (
             <SafeAreaView style={styles.safeContainer}>
             <View style={{flex: 1, backgroundColor: "rgb(34 197 94)", width: "100%", height: "100%"}}>
@@ -82,6 +89,10 @@ function AccountInformation({ navigation, route }) {
                             </View>
                             <TextInput style={styles.verificationCode} placeholder="Last Name" onChangeText={setLastName} value={lastName} keyboardType="email-address" placeholderTextColor={"#B3B3B3"}/>
 
+                            <View style={{alignItems: "flex-start", width: "100%", marginTop: 10}}>
+                                <Text style={{fontWeight: "bold", fontSize: moderateScale(13), marginBottom: 17, color:"rgb(17 24 39)"}}>Phone Number</Text>
+                            </View>
+                            <TextInput style={styles.verificationCode} placeholder="Phone Number" onChangeText={setPhoneNumber} value={phoneNumber} keyboardType="email-address" placeholderTextColor={"#B3B3B3"}/>
 
 
                             <View style={{alignItems: "flex-start", width: "100%", marginTop: 10}}>

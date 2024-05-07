@@ -5,12 +5,39 @@ import { Colors } from "react-native/Libraries/NewAppScreen";
 import { useNavigation } from '@react-navigation/native';
 import MainHeader from "../components/MainHeader";
 import React, { useEffect, useRef } from 'react';
+import { Alert } from 'react-native';
+import { collection, doc, getDoc, getDocs, updateDoc, onSnapshot } from "firebase/firestore";
+import { auth, db } from "../firebase/firebaseConfig";
+import { signOut } from "firebase/auth";
+import { Listing, Item, Service, Clothing, Housing, Tickets } from '../models/listing';
+
+const fetchUserProfile = async (userId) => {
+    try {
+        const docRef = doc(db, "users", userId);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+            return docSnap.data();
+        } else {
+            return null;
+        }
+    } catch (error) {
+        console.error("Error fetching user profile:", error);
+        return null;
+    }
+};
+
+const updateProfile = async (userId, newData) => {
+    try {
+        const userDocRef = doc(db, "users", userId);
+        await updateDoc(userDocRef, newData);
+    } catch (error) {
+        throw error;
+    }
+};
 
 const { width, height } = Dimensions.get('window');
-const [shortDimension, longDimension] = width < height ? [width, height] : [height, width];
-//Default guideline sizes are based on standard ~5" screen mobile device
-const guidelineBaseWidth = 350;
-const guidelineBaseHeight = 680;
+
+import { scale, verticalScale, moderateScale, moderateVerticalScale } from '../components/Scaling';
 
 const microwave = "https://images.craigslist.org/00Q0Q_clz03CCkybF_0CI0t2_600x450.jpg"
 const fridge = "https://i.ebayimg.com/images/g/5JAAAOSwdB9hnRZ6/s-l1600.jpg"
@@ -20,7 +47,7 @@ const DATA = [
     { id: '2', title: "Fridge", image: fridge, description: 'A fridge is where you keep your food.', price: "$899", tags: ['kitchen', 'electrical','cooking'] },
   ]
 
-  function Item(props) {
+  function ListingItem(props) {
     const { id, title, image, description, price, tags } = props;
     const scaleValue = useRef(new Animated.Value(1)).current;
   
@@ -63,18 +90,6 @@ const DATA = [
     );
   }
 
-function scale(size: number) {
-    return shortDimension / guidelineBaseWidth * size;
-}
-function verticalScale(size: number) {
-    return longDimension / guidelineBaseHeight * size;
-}
-function moderateScale(size: number, factor = 0.5) {
-    return size + (scale(size) - size) * factor;
-}
-function moderateVerticalScale(size: number, factor = 0.5) {
-    return size + (verticalScale(size) - size) * factor;
-}
 
 function Empty() {
     return (
@@ -88,9 +103,101 @@ function Empty() {
 
   
 
-function Settings() {
+function Settings({ navigation }) {
+
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [email, setEmail] = useState("");
+    const [phoneNumber, setPhoneNumber] = useState("");
+
+    const [listings, setListings] = useState<Listing[]>([]);
+
+useEffect(() => {
+    let unsubscribe: () => void; // Declare unsubscribe outside the fetchData function
+
+    const fetchData = async () => {
+        try {
+            const snapshot = await getDocs(collection(db, 'listings'));
+            let listingsData: Listing[] = snapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }));
+            listingsData = listingsData.filter((listing) => listing.userId === auth.currentUser!.uid);
+            console.log("Before setting listings:", listingsData);
+            setListings(listingsData);
+            console.log("After setting listings:", listings);
+        } catch (error) {
+            console.error("Error fetching listings:", error);
+        }
+    };
+
+    fetchData(); // Invoke the fetchData function immediately
+
+    // Set up the listener and assign the unsubscribe function
+    unsubscribe = onSnapshot(collection(db, 'listings'), snapshot => {
+        const listingsData: Listing[] = snapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+        }));
+        console.log("Updated listings:", listingsData);
+        setListings(prevListings => {
+            // Check if the new listings are different from the current state to prevent unnecessary re-renders
+            if (JSON.stringify(prevListings) !== JSON.stringify(listingsData)) {
+                return listingsData;
+            }
+            return prevListings;
+        });
+    });
+
+    // Cleanup function to unsubscribe from the snapshot listener when the component unmounts
+    return () => {
+        console.log("Unsubscribing from listings...");
+        unsubscribe(); // Call unsubscribe here
+    };
+}, []); // Removed listings from the dependency array to prevent infinite re-renders
+
+
+    useEffect(() => {
+        // Fetch user profile data from Firestore
+        const userId = auth.currentUser!.uid;
+        fetchUserProfile(userId).then((userData) => {
+            if (userData) {
+                setFirstName(userData.firstName || "");
+                setLastName(userData.lastName || "");
+                setEmail(userData.email || "");
+                setPhoneNumber(userData.phoneNumber || "");
+            }
+        });
+    }, []);
+
+    const handleSaveInfo = async () => {
+        // Save updated user profile data to Firestore
+        const userId = auth.currentUser!.uid;
+        try {
+            await updateProfile(userId, {
+                firstName,
+                lastName,
+                email,
+                phoneNumber,
+            });
+            Alert.alert("Success", "Profile information saved successfully");
+        } catch (error) {
+            console.error("Error saving profile information:", error);
+            Alert.alert("Error", "Failed to save profile information");
+        }
+    };
+
     const companyName = "UMarket";
-    const navigation = useNavigation();
+    
+    const handleSignOut = async () => {
+        try {
+            await signOut(auth);
+            navigation.navigate('UserLogin');
+        } catch (error) {
+            console.error("Sign out error:", error);
+            Alert.alert("Sign Out Failed", error.message);
+        }
+      };
 
     const [animatedValue] = useState(new Animated.Value(0));
 
@@ -106,7 +213,7 @@ function Settings() {
   
     const handleMouseEnter = (index) => {
       Animated.timing(scaleValues[index], {
-        toValue: 1.1,
+        toValue: 1.03,
         duration: 200,
         useNativeDriver: true,
       }).start();
@@ -131,7 +238,7 @@ function Settings() {
             ]}
             onPress={() => navigation.navigate('ListingItem', { item })}
           >
-            <Item id={item.id} title={item.title} image={item.image} description={item.description} price={item.price} tags={item.tags} navigation={navigation} />
+            <ListingItem id={item.id} title={item.title} image={item.image} description={item.description} price={item.price} tags={item.tags} navigation={navigation} />
           </Pressable>
         );
       }
@@ -146,7 +253,7 @@ function Settings() {
           pressed && {backgroundColor: "rgb(34 197 94)"}
           ]}
           onPress={() => navigation.navigate('ListingItem', { item })}>
-          <Item id={item.id} title={item.title} image={item.image} description={item.description} price={item.price} tags={item.tags}/>
+          <ListingItem id={item.id} title={item.title} image={item.image} description={item.description} price={item.price} tags={item.tags}/>
         </Pressable>
       )
     }}
@@ -155,6 +262,7 @@ function Settings() {
         <SafeAreaView style={styles.safeContainer}>
             <MainHeader onInput={true} isListing={false}></MainHeader>
             {/* <Animated.View style={[styles.container, { opacity: animatedValue }]}> */}
+            <View>
                 <View style={styles.headerContainer}>
                     <Text style={styles.header}>
                         Change Profile:
@@ -169,7 +277,7 @@ function Settings() {
                     <View style={{width: "100%", flexDirection: "row", gap: 10}}>
                         {/* <View style={styles.nameCont}> */}
                         <View style={{flex: 1}}></View>
-                        <View style={{flex: 1, padding: 10, minWidth: 225}}>
+                        <View style={{flex: 1, padding: 10, minWidth: 175}}>
                             <Text>First Name:</Text>
                             {/* <TextInput style={styles.itemIn} */}
                             <Animated.View 
@@ -180,11 +288,11 @@ function Settings() {
                             onMouseEnter={() => handleMouseEnter(0)}
                             onMouseLeave={() => handleMouseLeave(0)}
                         >
-                            <TextInput placeholder="Nash" style={styles.nameCont} />
+                            <TextInput placeholder={"Enter First Name"} placeholderTextColor={'#B3B3B3'} value={firstName} onChangeText={(text) => setFirstName(text)} style={styles.nameCont} />
                             </Animated.View>
                         {/* <View style={styles.nameCont2}> */}
                         </View>
-                        <View style={{flex: 1, padding: 10, minWidth: 225}}>
+                        <View style={{flex: 1, padding: 10, minWidth: 175}}>
                             <Text>Last Name:</Text>
                             {/* <TextInput style={styles.itemIn} */}
                             <Animated.View 
@@ -195,7 +303,7 @@ function Settings() {
                             onMouseEnter={() => handleMouseEnter(1)}
                             onMouseLeave={() => handleMouseLeave(1)}
                         >
-                            <TextInput placeholder="Moore" style={styles.nameCont} />
+                            <TextInput placeholder={"Enter Last Name"} placeholderTextColor={'#B3B3B3'} value={lastName} onChangeText={(text) => setLastName(text)} style={styles.nameCont} />
                             </Animated.View>
                         </View>
                         <View style={{flex: 1}}></View>
@@ -203,7 +311,7 @@ function Settings() {
                     <View style={{width: "100%", flexDirection: "row", gap: 10}}>
                         {/* <View style={styles.nameCont}> */}
                         <View style={{flex: 1}}></View>
-                        <View style={{flex: 1, padding: 10, minWidth: 225}}>
+                        <View style={{flex: 1, padding: 10, minWidth: 175}}>
                             <Text>Email:</Text>
                             {/* <TextInput style={styles.itemIn} */}
                             <Animated.View 
@@ -214,11 +322,11 @@ function Settings() {
                             onMouseEnter={() => handleMouseEnter(2)}
                             onMouseLeave={() => handleMouseLeave(2)}
                         >
-                            <Text style={styles.nameCont}>nmoore66@gatech.edu</Text>
+                            <Text style={[styles.nameCont, {color: "#B3B3B3"}]}>{email}</Text>
                             </Animated.View>
                         {/* <View style={styles.nameCont2}> */}
                         </View>
-                        <View style={{flex: 1, padding: 10, minWidth: 225}}>
+                        <View style={{flex: 1, padding: 10, minWidth: 175}}>
                             <Text>Phone Number:</Text>
                             {/* <TextInput style={styles.itemIn} */}
                             <Animated.View 
@@ -229,7 +337,7 @@ function Settings() {
                             onMouseEnter={() => handleMouseEnter(3)}
                             onMouseLeave={() => handleMouseLeave(3)}
                         >
-                            <TextInput placeholder="214-304-9926" style={styles.nameCont} />
+                            <TextInput placeholder={"Enter Phone Number"} placeholderTextColor={'#B3B3B3'} value={phoneNumber} onChangeText={(text) => setPhoneNumber(text)} style={styles.nameCont} />
                             </Animated.View>
                         </View>
                         <View style={{flex: 1}}></View>
@@ -256,6 +364,7 @@ function Settings() {
                         styles.submitContainer,
                         pressed && { backgroundColor: "#E5E4E2" }
                     ]}
+                    onPress={handleSaveInfo}
                     >
                         <Text style={{fontSize: 20, textAlign:"center", alignSelf:"center", color:"white"}}>Save Info</Text>
               
@@ -267,7 +376,7 @@ function Settings() {
             
                             <FlatList
                             scrollEnabled={false}
-                            data={DATA}
+                            data={listings}
                             renderItem={renderItem}
                             keyExtractor={(item) => item.id}
                             ItemSeparatorComponent={() => <View style={{height: 30}}/>}
@@ -276,15 +385,18 @@ function Settings() {
                             />
                         </View>
                     </View>
-                    <Pressable style={ ({ pressed }) => [
-                                styles.submitContainer,
-                                pressed && {backgroundColor: "#E5E4E2"}
-                                ]} onPress={() => {navigation.navigate('Login/SignUp');
-                                }}>
+                    <Pressable
+                        style={({ pressed }) => [
+                            styles.submitContainer,
+                            pressed && { backgroundColor: "#E5E4E2" }
+                        ]}
+                        onPress={() => signOut(auth)}
+                    >
                         <View>
-                            <Text style={{fontSize: 20, color:"white"}}>Sign Out</Text>
+                            <Text style={{ fontSize: 20, color: "white" }}>Sign Out</Text>
                         </View>
                     </Pressable>
+                </View>
             {/* </Animated.View> */}
         </SafeAreaView>
     );

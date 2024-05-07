@@ -66,7 +66,7 @@ function UserVerification({ navigation, route }) {
                             styles.button,
                             pressed && {backgroundColor: "green"}
                             ]}
-                            onPress={() => navigation.navigate('AccountInformation')}>
+                            onPress={() => navigation.navigate('AccountInformation', { email })}>
                             <Text style={styles.buttonText}>Continue</Text>
                         </Pressable>
                         </View>

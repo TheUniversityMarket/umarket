@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, Pressable, Dimensions, StyleSheet, TurboModuleRegistry } from 'react-native';
+import { View, Text, Image, Pressable, Dimensions, StyleSheet, TurboModuleRegistry, useWindowDimensions } from 'react-native';
 import { MaterialIcons, Entypo } from '@expo/vector-icons';
 import SearchBar from './SearchBar'; // Import the SearchBar component from its correct location
 import { AntDesign } from '@expo/vector-icons';
@@ -19,6 +19,7 @@ const guidelineBaseHeight = 680;
 const companyName = "Market";
 
 const MainHeader = ({isListing, onInput}) => {
+    const { width, height } = useWindowDimensions();
     const [searchText, setSearchText] = useState('');
     const navigation = useNavigation()
     const handleSearch = (query: string) => {

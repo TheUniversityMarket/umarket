@@ -3,6 +3,8 @@ import { Text, View, StyleSheet, SafeAreaView, Pressable, ImageBackground, Dimen
 import { TextInput } from "react-native";
 import { FontAwesome6 } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
+import { auth } from '../firebase/firebaseConfig'; 
+import { fetchSignInMethodsForEmail } from 'firebase/auth';
 
 //const school = "https://images.genius.com/018e964bd737e5d4600162dbcac48ce5.1000x1000x1.png" // School image will vary with different schools if we decide to expand later on.
 const school = "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Solid_white_bordered.svg/2048px-Solid_white_bordered.svg.png"
@@ -26,8 +28,30 @@ function UserRegistrationEmail({navigation}) {
     }
 
     const handleContinue = () => {
-        navigation.navigate('UserVerification', { email }); // Correct usage as per type definition
-      };
+        checkEmail().then((emailExists) => {
+            if (!emailExists) {
+                alert("Email already exists. Please enter a new valid school email.");
+                return;
+            }
+            navigation.navigate('UserVerification', { email }); // Correct usage as per type definition
+        } 
+        );
+     };
+
+    const checkEmail = async () => {
+        try {    
+            const methods = await fetchSignInMethodsForEmail(auth, email);
+            if (methods.length == 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (error) {
+            // Handle errors, such as invalid email or network issues
+            console.error("Error checking email:", error);
+            return false;
+        }
+    }
  
     return (
         <SafeAreaView style={styles.safeContainer}>
