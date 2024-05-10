@@ -24,11 +24,17 @@ function Footer() {
 
     const numColumns = Math.round(width/moderateScale(215))
 
+    // return (
+    //     <View style={{width: "100%", height: scaleIt(24), marginVertical: 17, alignSelf: "center", flexDirection: "row", justifyContent: "center", alignItems: "center", gap: 37, backgroundColor: "white", flex: 1}}>
+    //         <AntDesign name="twitter" size={moderateScale(24)} color="black" />
+    //         <AntDesign name="instagram" size={moderateScale(24)} color="black" />
+    //         <AntDesign name="linkedin-square" size={moderateScale(24)} color="black" />
+    //     </View>
+    // )
+
     return (
-        <View style={{width: "100%", height: scaleIt(24), marginVertical: 17, alignSelf: "center", flexDirection: "row", justifyContent: "center", alignItems: "center", gap: 37, backgroundColor: "white", flex: 1}}>
-            <AntDesign name="twitter" size={moderateScale(24)} color="black" />
-            <AntDesign name="instagram" size={moderateScale(24)} color="black" />
-            <AntDesign name="linkedin-square" size={moderateScale(24)} color="black" />
+        <View style={{width: "100%", backgroundColor: "red", flex: 1}}>
+
         </View>
     )
 }
