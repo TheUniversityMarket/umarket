@@ -352,11 +352,11 @@ useEffect(() => {
                       {listing("Refrigerator", fridge)}
 
                       {listing("Microwave", microwave)} */}
-                      <View style={[styles.resultsContainer, {minHeight: height, flexGrow: 1, paddingBottom: 150}]}>
+                      <View style={[styles.resultsContainer, {}]}>
                           <FlatList
                           ListHeaderComponent={<Carousel />}
                           // ListFooterComponent={<Footer />}
-                          contentContainerStyle={{flex: 1, alignItems: "center", flexGrow: 1, paddingBottom: 150}}
+                          contentContainerStyle={{flex: 1, alignItems: "center"}}
                           data={searchResults}
                           key={`${numColumns}`}
                           keyExtractor={(item) => item.id}
@@ -367,7 +367,6 @@ useEffect(() => {
                           // showsVerticalScrollIndicator={false}
                         />
                       </View>
-                      <View style={{ flex: 1, flexGrow: 1 }} />
                 </View>
             </View>
       </SafeAreaView>
