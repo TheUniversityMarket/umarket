@@ -44,7 +44,7 @@ const SearchBar = ({ onSearch, isListings }) => {
   return (
     <View style={styles.container}>
       {isListings && <TextInput
-        style={styles.input}
+        style={styles.newInput}
         placeholder="Search..."
         placeholderTextColor={"rgb(34 197 94)"}
         onChangeText={handleTextChange}
@@ -52,7 +52,7 @@ const SearchBar = ({ onSearch, isListings }) => {
         onSubmitEditing={handleSearch}
       />}
       {!isListings && <TextInput
-        style={styles.input}
+        style={styles.newInput}
         placeholder="Search..."
         placeholderTextColor={"rgb(34 197 94)"}
         onChangeText={setSearchText}
@@ -66,7 +66,8 @@ const SearchBar = ({ onSearch, isListings }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10,
+    //padding: 10,
+    justifyContent: 'center',
   },
   input: {
     //width: scale(130),
@@ -76,8 +77,32 @@ const styles = StyleSheet.create({
     //borderWidth: 1,
     borderRadius: 20,
     paddingHorizontal: 10,
-    outlineColor: "transparent",
+    //outlineColor: "transparent",
   },
+  newInput: {
+    //width: scale(130),
+    // borderWidth: 10,
+    borderWidth: 1,
+    borderColor: "#A9A9A9",
+    backgroundColor: "transparent",
+    borderRadius: 30,
+    flexDirection: "row",
+    padding: 14,
+    paddingLeft: 50,
+    //marginTop: 15,
+    //height: 50,
+    alignItems: "center",
+    justifyContent: "flex-start",
+    //marginRight: 20,
+    //marginLeft: 50,
+    //flex: 4,
+    width: "100%",
+    //maxWidth: 375,
+    //marginTop: 3,
+    //borderColor: "#E5E4E2",
+    fontSize: 17,
+    outlineColor: "rgb(34 197 94)",
+  }
 });
 
 export default SearchBar;
