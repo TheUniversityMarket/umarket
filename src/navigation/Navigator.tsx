@@ -38,7 +38,8 @@ const Navigator: React.FC = () => {
       <Stack.Navigator>
         {currentUser ? (
             <>
-                {width > 700 ? (
+                {/* {width > 700 ? ( */}
+                  {false ? (
                     <>
                         <Stack.Screen name={'Listings'} component={Listings} options={{headerShown: false}}/>
                         <Stack.Screen name={'Chat'} component={Chat} options={{headerShown: false}}/>
