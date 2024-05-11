@@ -102,6 +102,7 @@ const styles = StyleSheet.create({
     //borderColor: "#E5E4E2",
     fontSize: 17,
     outlineColor: "rgb(34 197 94)",
+    focusColor: "rgb(34 197 94)",
   }
 });
 
