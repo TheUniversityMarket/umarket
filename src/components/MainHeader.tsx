@@ -60,7 +60,7 @@ const MainHeader = ({isListing, onInput}) => {
                       {companyName}
                   </Text>}
                   <View style={styles.search}>
-                    <AntDesign name="search1" size={24} color="rgb(34 197 94)" />
+                    <AntDesign name="search1" size={24} color="rgb(34 197 94)" style={{left: 40}}/>
                     <SearchBar isListings={isListing} onSearch={handleSearch}/>
                   </View>
 
@@ -156,22 +156,23 @@ const styles = StyleSheet.create({
       paddingTop: 0,
     },
     search: {
-      //width: scale(130),
-      // borderWidth: 10,
-      borderWidth: 1,
-      borderColor: "#A9A9A9",
-      backgroundColor: "#fbfbfb",
-      borderRadius: 30,
+      //borderWidth: 1,
+      height: "100%",
+      // //width: scale(130),
+      // // borderWidth: 10,
+      // borderWidth: 1,
+      // borderColor: "#A9A9A9",
+      // backgroundColor: "#fbfbfb",
+      // borderRadius: 30,
       flexDirection: "row",
-      padding: 10,
-      marginTop: 15,
-      height: 50,
+      // padding: 10,
+      marginTop: 17,
+      // //height: 50,
       alignItems: "center",
-      justifyContent: "flex-start",
-      marginRight: 20,
-      marginLeft: 50,
+      // justifyContent: "flex-start",
+      // marginRight: 20,
+      // marginLeft: 50,
       flex: 4,
-
     },
     shoppingCart: {
       //backgroundColor: "black",
