@@ -17,11 +17,13 @@ const CHATS = [
   {id: "1", otherUser: "Jevon Twitty", lastMessage: "Hey, how are you?", time: "7:37 PM"},
   {id: "2", otherUser: "Nash Moore", lastMessage: "No", time: "10:41 PM"},
   {id: "3", otherUser: "Paul Evans", lastMessage: "lmaooo", time: "9:52 PM"},
-  {id: "4", otherUser: "Yubin Kim", lastMessage: "Thx bro", time: "10:33 AM"},
+  {id: "4", otherUser: "JD Suarez", lastMessage: "Alright, thanks", time: "12:00 PM"},
   {id: "5", otherUser: "Dylan Holley", lastMessage: "It means a lot you even agreed to sit down", time: "6:56 PM"},
   {id: "6", otherUser: "Enrique Iglesias", lastMessage: "Food?", time: "8:16 PM"},
   {id: "7", otherUser: "King Ladzekpo", lastMessage: "Lmk what you're thinking before you do anything", time: "3:43 PM"},
-  {id: "8", otherUser: "Bob", lastMessage: "Hey, I'm Bob", time: "12:00 PM"},
+  {id: "8", otherUser: "Yubin Kim", lastMessage: "Thx bro", time: "10:33 AM"},
+  {id: "9", otherUser: "Nicholas Stone", lastMessage: "Great Job", time: "5:35 PM"},
+  {id: "10", otherUser: "David Adamashvili", lastMessage: "Working on it", time: "12:42 PM"},
 ]
 
 
