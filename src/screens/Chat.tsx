@@ -55,6 +55,26 @@ const numberOfColumns = Math.round(width/215
 
 function Chat() {
 
+  const {height, width, scale, fontScale} = useWindowDimensions();
+  const [shortDimension, longDimension] = width < height ? [width, height] : [height, width];
+
+  //Default guideline sizes are based on standard ~5" screen mobile device
+  const guidelineBaseWidth = 350;
+  const guidelineBaseHeight = 680;
+
+  function scaleIt(size: number) {
+      return shortDimension / guidelineBaseWidth * size;
+  }
+  function verticalScale(size: number) {
+      return longDimension / guidelineBaseHeight * size;
+  }
+  function moderateScale(size: number, factor = 0.5) {
+      return size + (scaleIt(size) - size) * factor;
+  }
+  function moderateVerticalScale(size: number, factor = 0.5) {
+      return size + (verticalScale(size) - size) * factor;
+  }
+
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState('');
 
@@ -144,7 +164,7 @@ function Chat() {
                       />
                     </View>
                     
-                    <View style={{flex: 12, backgroundColor: "white"}}>
+                    { width >= 700 ? <View style={{flex: 12, backgroundColor: "white"}}>
                     <FlatList
                         contentContainerStyle={{justifyContent: 'flex-end', flex: 1}}
                         data={messages}
@@ -163,7 +183,7 @@ function Chat() {
                             <Text style={styles.sendButtonText}>Send</Text>
                           </TouchableOpacity>
                       </View>
-                    </View>
+                    </View> : null}
 
                 </View>
 
