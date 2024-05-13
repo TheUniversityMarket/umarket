@@ -80,7 +80,7 @@ function UserLogin( {navigation} ) {
   
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: "rgb(34 197 94)"}}>
-      <StatusBar translucent backgroundColor="rgb(34 197 94)" />
+      <StatusBar translucent backgroundColor="transparent" />
       <View style={{flex: 1, backgroundColor: "transparent"}}></View> 
 
       <View style={{flex: 7, flexDirection: "row"}}>
