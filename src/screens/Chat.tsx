@@ -1,28 +1,19 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { StatusBar } from 'expo-status-bar'
 import { StyleSheet, Text, View, SafeAreaView, ScrollView, Image, FlatList, Dimensions, useWindowDimensions, Pressable, TouchableOpacity } from 'react-native'
 import { AntDesign } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
 import { TextInput } from 'react-native-gesture-handler';
 import SearchBar from "../components/SearchBar";
 import MainHeader from "../components/MainHeader";
+import { useAuth } from '../context/AuthContext';
+import { db } from '../firebase/firebaseConfig';
+import { Timestamp, collection, doc, getDoc, getDocs, onSnapshot, orderBy, query, setDoc, where } from 'firebase/firestore';
 
-// import { scale, verticalScale, moderateScale, moderateVerticalScale } from "/Users/jevontwitty/Documents/GitHub/UMarket/src/components/Scaling"
-// import { FlatList } from 'react-native-gesture-handler';
-
-
-const CHATS = [
-  {id: "1", otherUser: "Jevon Twitty", lastMessage: "Hey, how are you?", time: "7:37 PM"},
-  {id: "2", otherUser: "Nash Moore", lastMessage: "No", time: "10:41 PM"},
-  {id: "3", otherUser: "Paul Evans", lastMessage: "lmaooo", time: "9:52 PM"},
-  {id: "4", otherUser: "Yubin Kim", lastMessage: "Thx bro", time: "10:33 AM"},
-  {id: "5", otherUser: "Dylan Holley", lastMessage: "It means a lot you even agreed to sit down", time: "6:56 PM"},
-  {id: "6", otherUser: "Enrique Iglesias", lastMessage: "Food?", time: "8:16 PM"},
-  {id: "7", otherUser: "King Ladzekpo", lastMessage: "Lmk what you're thinking before you do anything", time: "3:43 PM"},
-  {id: "8", otherUser: "Bob", lastMessage: "Hey, I'm Bob", time: "12:00 PM"},
-]
+// TODO: firebase does not support multiple array-contains queries... so dumb.
+// do just one, and then filter the result to find the one we are looking for
 
 
 const { width, height } = Dimensions.get('window');
@@ -56,25 +47,199 @@ function Chat() {
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState('');
 
-  let chatIndex = 1;
-  const [currentIndex, setCurrentindex] = useState(chatIndex);
+  // const sellerId = listingItemData.userId;
 
-  function ChatItem({ item }) {
+  const route = useRoute();
+  
+
+  const { currentUser, loading } = useAuth();
+  const [currentUserId,setCurrentUserId] = useState("");
+  const [otherUserIds, setOtherUserIds] = useState([]);
+
+  // {otherUserId: [{message1},{message2},...]}
+  const [chats,setChats] = useState({});
+
+  useEffect(()=>{
+    setCurrentUserId(currentUser?.uid);
+  },[currentUser])
+
+  const [activeChatId, setActiveChatId] = useState("");
+
+  useEffect(()=>{
+    const clickedSellerId = route.params?.item?.userId;
+    if(clickedSellerId){
+      // if the "message" button was clicked, focus the ui on the corresponding chat or
+      // create a new empty chat between the current user and the clicked user
+      
+      setActiveChatId(clickedSellerId);
+    }
+  },[])
+
+   // user doc info realtime. listen on changes to the otherUserIds list. update the sidebar based on that
+  useEffect(() => {
+    let unsubscribe = () => {};
+    if (currentUserId) {
+      unsubscribe = onSnapshot(doc(db, "users", currentUserId), (doc) => {
+        if (doc.exists() && doc.data().otherUserIds) {
+          setOtherUserIds(doc.data().otherUserIds);
+        } else {
+          console.log("No such document!");
+        }
+      });
+    }
+    
+
+    // Cleanup function to remove the listener when the component unmounts
+    return () => unsubscribe();
+  }, [currentUserId]);
+
+  const [listenerUnsubList, setListenerUnsubList] = useState([]);
+
+  function filterNewChats(serverSideChatsWithCurrentUser) {
+    /**
+      const chats = {
+      userId1: { firstName: 'John', lastName: 'Doe', messages: ['Hello', 'Hi'] },
+      userId2: { firstName: 'Jane', lastName: 'Smith', messages: ['Hey', 'What’s up?'] }
+      };
+
+      const otherUserIds = ['userId1', 'userId3', 'userId4'];
+
+      we want to return the ones that are in otherUserIds but not in chats
+     */
+    
+    return serverSideChatsWithCurrentUser.filter(id => !chats.hasOwnProperty(id));
+    }
+
+  useEffect(() => {
+    (async ()=>{
+      const chatsRef = collection(db,"chats");
+      // set up listeners on chats that don't have listeners yet
+      // the filter function gives us the id-s that don't have listeners
+      const filteredOtherUserIds = filterNewChats(otherUserIds);
+
+      for (const otherUserId of filteredOtherUserIds) {
+        const q = query(chatsRef, where("users", "array-contains", currentUser?.uid), where("users", "array-contains", otherUserId));
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach(async (doc) => {
+          const chatId = doc.id;
+          const messagesRef = collection(db,"chats",chatId,"messages");
+          // users == [this user's id, another user's id]
+          const users = doc.data().users;
+
+          const {firstName, lastName} = (await getDoc(db,"users",otherUserId)).data();
+
+          // listen on messages collection. order them by date
+          const unsub = onSnapshot(query(messagesRef,orderBy("date")), (querySnapshot) => {
+            const messages: any[] = [];
+            querySnapshot.forEach((message) => {
+                const {userId, text, date} = message.data();
+                messages.push({userId,text,date});
+            });
+            // possible race condition?
+            setChats({...chats,otherUserId:{firstName,lastName,messages}});
+          });
+
+          setListenerUnsubList([...listenerUnsubList, unsub]);
+
+        });
+      }
+
+      // when component unmounts, unsub from everything
+      return () => {
+        listenerUnsubList.forEach((unsub) => {
+          unsub();
+        })
+      }
+    })();
+  }, [JSON.stringify(otherUserIds)])
+
+
+  // TODO: create an "activeChatId". Have all chats on the left correspond to an id.
+  // Clicking changes the active id
+  // render messages depending on which id is active
+  // on load, select the chat with clickedSellerId
+  
+
+ 
+
+  
+  // if it does not exist, create it by adding clickedSellerId to the userDoc, adding uiserId to clicked seller doc, and creating
+  // a chat (would normally be done in a cloud function transaction with proper security, but whatever)
+
+  // create a listener for every chat that contains current user id in the users array, listen on messages
+
+
+  const chatsObjectToArray = () => {
+
+    /**
+     
+    Turn the following:
+
+    const chats = {
+      userId1: { firstName: 'John', lastName: 'Doe', messages: ['Hello', 'Hi'] },
+      userId2: { firstName: 'Jane', lastName: 'Smith', messages: ['Hey', 'What’s up?'] }
+      };
+
+    Into: [{userId1 : {...}},{userId2: {...}, ... }]
+
+    */
+
+    return Object.entries(chats).map(([userId, data]) => ({ [userId]: data }));
+
+  }
+
+
+  const renderMessages = () => {
+    if(activeChatId) {
+      const name = chats[activeChatId].firstName + " " + chats[activeChatId].lastName;
+      const messages = chats[activeChatId].messages;
+  
+      return messages.map((message, index) => {
+        <Text key={index}>{message.userId == currentUserId ? "You" : name}: {message.text} ------ {message.date}</Text>;
+      });
+    }
+  }
+
+  function ChatItem(chat) {
+    const thisChatUserId = getUserIdFromMessage(chat);
+    const {firstName,lastName,messages} = chat;
+
+    const lastMessage = messages[messages.length - 1];
+    const name = firstName + " " + lastName;
+    
     return (
-    <Pressable onPress={() => setCurrentindex(item.id)}>
-      <View style={[styles.item, currentIndex == item.id && { backgroundColor: "rgb(34 197 94)" }]}>
-        <Text style={[styles.otherUser, currentIndex == item.id && { color: "white" }]}>{item.otherUser}</Text>
-        <Text style={[styles.lastMessage, currentIndex == item.id && { color: "white" }]}>{item.lastMessage}</Text>
-        <Text style={[styles.time, currentIndex == item.id && { color: "white" }]}>{item.time}</Text>
-      </View>
-    </Pressable>
+      <Pressable onPress={() => setActiveChatId(item.id)}>
+        <View style={[styles.item, activeChatId == thisChatUserId && { backgroundColor: "rgb(34 197 94)" }]}>
+          <Text style={[styles.otherUser, activeChatId == thisChatUserId && { color: "white" }]}>{name}</Text>
+          <Text style={[styles.lastMessage, activeChatId == thisChatUserId && { color: "white" }]}>{lastMessage.text}</Text>
+          <Text style={[styles.time, activeChatId == thisChatUserId && { color: "white" }]}>{lastMessage.date}</Text>
+        </View>
+      </Pressable>
+
+    // return (
+    // <Pressable onPress={() => setActiveChatId(item.id)}>
+    //   <View style={[styles.item, currentIndex == item.id && { backgroundColor: "rgb(34 197 94)" }]}>
+    //     <Text style={[styles.otherUser, currentIndex == item.id && { color: "white" }]}>{item.otherUser}</Text>
+    //     <Text style={[styles.lastMessage, currentIndex == item.id && { color: "white" }]}>{item.lastMessage}</Text>
+    //     <Text style={[styles.time, currentIndex == item.id && { color: "white" }]}>{item.time}</Text>
+    //   </View>
+    // </Pressable>
     )
   };
 
-  const sendMessage = () => {
+  const sendMessage = async () => {
+    // TODO: send the message to corresponding "messages" doc
+
+    // this can be optimized, just store the document id along with the chat
+    const chatsRef = collection(db,"chats");
+    const q = query(chatsRef, where("users", "array-contains", currentUser?.uid), where("users", "array-contains", otherUserId));
+    const querySnapshot = await getDocs(q);
+    const chatId = querySnapshot.docs[0].id;
+    const messagesRef = collection(db,"chats",chatId,"messages");
     if (inputText.trim() !== '') {
-      const newMessage = { id: messages.length.toString(), text: inputText }
-      messages.push(newMessage)
+      const newMessage = {userId: currentUserId,date: Timestamp.fromDate(new Date()),id: messages.length.toString(), text: inputText };
+      const newMessageRef = doc(messagesRef);
+      await setDoc(newMessageRef,newMessage,{merge: true});
       setInputText('')
     }
   };
@@ -87,46 +252,11 @@ function Chat() {
     );
   };
 
-  const [searchResults, setSearchResults] = useState<Object[]>([]);
-  const [hasSearched, sethasSearched] = useState(false);
-  const handleSearch = (query: any) => {
-    if (!hasSearched) {
-      sethasSearched(!hasSearched);
-    }
-    const filteredItems = DATA.filter(Item =>
-      Item.title.toLowerCase().includes(query.toLowerCase())
-    );
-    setSearchResults(filteredItems);
-  };
-
-  console.log(width)
-  const navigation = useNavigation()
-  function renderItem({item}) {
-    return (
-      <Pressable style={ ({ pressed }) => [
-        {borderRadius: 10},
-        pressed && {backgroundColor: "rgb(34 197 94)",}
-        ]}
-        onPress={() => navigation.navigate('ListingItem', { item })}>
-        <Item id={item.id} title={item.title} image={item.image} description={item.description} price={item.price} tags={item.tags}/>
-      </Pressable>
-    )
+  const getUserIdFromMessage = (message) => {
+    return Object.keys(message)[0]
   }
 
-  let tags = [];
 
-  // function listing(text: string, image: string) {
-  //   return (
-  //   //<ScrollView horizontal>
-  //     <View style={styles.products}>
-  //       <Image style={{ width: 200, height: 200, borderRadius: 10, marginTop: 10}} source={{uri: image}}></Image>
-  //       <Text style={styles.productsText}>
-  //         {text}
-  //       </Text>
-  //     </View>
-  //   //</ScrollView>
-  //   )
-  // }
 
     return (
         <SafeAreaView style={styles.safeContainer}>
@@ -135,20 +265,28 @@ function Chat() {
                 <View style={{flex: 1, flexDirection: "row"}}>
                     
                     <View style={{flex: 3, borderRightWidth: 1, borderRightColor: "#cccccc"}}>
-                      <FlatList
+                      {/* <FlatList
                         data={CHATS}
                         keyExtractor={item => item.id}
                         renderItem={({ item }) => <ChatItem item={item} />}
+                      /> */}
+                      <FlatList
+                        // date= needs to be passed an array
+                        data={chatsObjectToArray()}
+                        keyExtractor={chat => getUserIdFromMessage(chat)}
+                        renderItem={(chat) => <ChatItem item={chat} />}
                       />
                     </View>
-                    
                     <View style={{flex: 12, backgroundColor: "white"}}>
-                    <FlatList
-                        contentContainerStyle={{justifyContent: 'flex-end', flex: 1}}
-                        data={messages}
-                        renderItem={renderMessage}
-                        keyExtractor={(item) => item.id.toString()}
-                    />
+                      <FlatList
+                          contentContainerStyle={{justifyContent: 'flex-end', flex: 1}}
+                          data={messages}
+                          renderItem={renderMessage}
+                          keyExtractor={(item) => item.id.toString()}
+                      />
+
+                      {renderMessages()}
+                      
                       <View style={styles.inputContainer}>
                           <TextInput
                           placeholderTextColor={"#B3B3B3"}
