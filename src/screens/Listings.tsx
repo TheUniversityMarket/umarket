@@ -18,9 +18,9 @@ import { Listing, Item, Service, Clothing, Housing, Tickets } from '../models/li
 // import { scale, verticalScale, moderateScale, moderateVerticalScale } from "/Users/jevontwitty/Documents/GitHub/UMarket/src/components/Scaling"
 // import { FlatList } from 'react-native-gesture-handler';
 
-const { width, height } = Dimensions.get('window');
+// const { width, height } = Dimensions.get('window');
 
-import { scale, verticalScale, moderateScale, moderateVerticalScale } from "../components/Scaling"
+//import { scale, verticalScale, moderateScale, moderateVerticalScale } from "../components/Scaling"
 
 function returnTags(tagList) {
   // Map each tag to a Text component wrapped in a View component styled to look like a small grey pill-shaped box
@@ -107,12 +107,29 @@ const TAGS = [
   {tag: "kitchen", id: "9"},
 ]
 
-//const width = Dimensions.get('window').width
-const numberOfColumns = Math.round(width/215)
+// const width = Dimensions.get('window').width
+// const numberOfColumns = Math.round(width/215)
 
 function Listings() {
   const {height, width, scale, fontScale} = useWindowDimensions();
   const [shortDimension, longDimension] = width < height ? [width, height] : [height, width];
+
+  //Default guideline sizes are based on standard ~5" screen mobile device
+  const guidelineBaseWidth = 350;
+  const guidelineBaseHeight = 680;
+
+  function scaleIt(size: number) {
+      return shortDimension / guidelineBaseWidth * size;
+  }
+  function verticalScale(size: number) {
+      return longDimension / guidelineBaseHeight * size;
+  }
+  function moderateScale(size: number, factor = 0.5) {
+      return size + (scaleIt(size) - size) * factor;
+  }
+  function moderateVerticalScale(size: number, factor = 0.5) {
+      return size + (verticalScale(size) - size) * factor;
+  }
 
   const [listings, setListings] = useState<Listing[]>([]);
 
@@ -335,11 +352,11 @@ useEffect(() => {
                       {listing("Refrigerator", fridge)}
 
                       {listing("Microwave", microwave)} */}
-                      <View style={[styles.resultsContainer]}>
+                      <View style={[styles.resultsContainer, {}]}>
                           <FlatList
                           ListHeaderComponent={<Carousel />}
                           // ListFooterComponent={<Footer />}
-                          style={{flex: 1, paddingHorizontal: width - (moderateScale(160) * numColumns), width: width - (moderateScale(160) * numColumns)}}
+                          contentContainerStyle={{flex: 1, alignItems: "center"}}
                           data={searchResults}
                           key={`${numColumns}`}
                           keyExtractor={(item) => item.id}
@@ -350,7 +367,6 @@ useEffect(() => {
                           // showsVerticalScrollIndicator={false}
                         />
                       </View>
-                      <Footer />
                 </View>
             </View>
       </SafeAreaView>
@@ -388,14 +404,14 @@ const styles = StyleSheet.create({
     marginLeft: 40,
     marginTop: 17,
   },
-  compName: {
-    fontSize: scale(17) < 20 ? 20 : scale(17),
-    color: "rgb(34 197 94)",
-    fontWeight: "bold",
-    //width: "20%",
-    marginTop: 15,
-    paddingTop: 0,
-  },
+  // compName: {
+  //   //fontSize: scale(17) < 20 ? 20 : scale(17),
+  //   color: "rgb(34 197 94)",
+  //   fontWeight: "bold",
+  //   //width: "20%",
+  //   marginTop: 15,
+  //   paddingTop: 0,
+  // },
   search: {
     //width: scale(130),
     // borderWidth: 10,
@@ -413,33 +429,34 @@ const styles = StyleSheet.create({
     marginLeft: 50,
     flex: 4,
   },
-  shoppingCart: {
-    //backgroundColor: "black",
-    padding: 10,
-    //borderRadius: 13,
-    //overflow: "hidden",
-  },
-  products: {
-    // flex: 1,
-    // flexDirection: "row",
-    //padding: 10,
-    width: (width/2),
-    //backgroundColor: "rgb(17 24 39)",
-    //borderWidth: 1,
-    //borderColor: "red",    
-  },
-  productsText: {
-    //height: 50,
-    width: (width/2),
-    //fontWeight: "bold",
-    padding: 0,
-    backgroundColor: "#e5e7eb",
-    color: "black",
-    fontSize: 23,
-    //overflow: "hidden",
-    // borderRadius: 20,
-  },
+  // shoppingCart: {
+  //   //backgroundColor: "black",
+  //   padding: 10,
+  //   //borderRadius: 13,
+  //   //overflow: "hidden",
+  // },
+  // products: {
+  //   // flex: 1,
+  //   // flexDirection: "row",
+  //   //padding: 10,
+  //   //width: (width/2),
+  //   //backgroundColor: "rgb(17 24 39)",
+  //   //borderWidth: 1,
+  //   //borderColor: "red",    
+  // },
+  // productsText: {
+  //   //height: 50,
+  //   //width: (width/2),
+  //   //fontWeight: "bold",
+  //   padding: 0,
+  //   backgroundColor: "#e5e7eb",
+  //   color: "black",
+  //   fontSize: 23,
+  //   //overflow: "hidden",
+  //   // borderRadius: 20,
+  // },
   page: {
+    //backgroundColor: "yellow",
     flex: 1,
     alignContent: "center",
     alignItems: "center",
@@ -466,15 +483,15 @@ const styles = StyleSheet.create({
 
   resultsContainer: {
     // marginTop: 120,
-    flex:1,
+    flex: 2,
     width: "100%",
-    flexGrow: 1,
-    flexDirection: "row",
-
+    //flexGrow: 1,
+    // flexDirection: "row",
     // width: "100%",
     // alignContent: "center",
     // alignItems: "center",
-    // borderWidth: 1,
+    // borderWidth: 10,
+    // borderColor: "red",
   },
 
   tag: {

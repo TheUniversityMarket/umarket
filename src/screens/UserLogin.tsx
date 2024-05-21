@@ -2,7 +2,7 @@ import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react"
 import { Text, View, StyleSheet, SafeAreaView, TextInput, Pressable, Dimensions, Image, useWindowDimensions } from "react-native"
 import { Alert } from 'react-native';
-import { scale, verticalScale, moderateScale, moderateVerticalScale } from '../components/Scaling';
+//import { scale, verticalScale, moderateScale, moderateVerticalScale } from '../components/Scaling';
 
 // firebase imports
 import { signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
@@ -12,6 +12,27 @@ import { auth, db } from '../firebase/firebaseConfig';
 const { width, height } = Dimensions.get('window');
 
 function UserLogin( {navigation} ) {
+
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const {height, width, scale, fontScale} = useWindowDimensions();
+  const [shortDimension, longDimension] = width < height ? [width, height] : [height, width];
+
+  //Default guideline sizes are based on standard ~5" screen mobile device
+  const guidelineBaseWidth = 350;
+  const guidelineBaseHeight = 680;
+
+  function scaleIt(size: number) {
+      return shortDimension / guidelineBaseWidth * size;
+  }
+  function verticalScale(size: number) {
+      return longDimension / guidelineBaseHeight * size;
+  }
+  function moderateScale(size: number, factor = 0.5) {
+      return size + (scaleIt(size) - size) * factor;
+  }
+  function moderateVerticalScale(size: number, factor = 0.5) {
+      return size + (verticalScale(size) - size) * factor;
+  }
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
