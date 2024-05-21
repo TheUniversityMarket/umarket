@@ -185,7 +185,7 @@ useEffect(() => {
   const route = useRoute()
   
   function Item(props) {
-    const { id, title, image, description, price, tags } = props;
+    const { id,userId, title, image, description, price, tags } = props;
     const scaleValue = useRef(new Animated.Value(1)).current; // Initial scale
   
     const handleMouseEnter = () => {
@@ -289,7 +289,7 @@ useEffect(() => {
         ]}
         onPress={() => navigation.navigate('ListingItem', { item })}
       >
-        <Item id={item.id} title={item.title} image={item.images[0]} description={item.description} price={item.price} tags={item.tags}/>
+        <Item userId={item.userId} id={item.id} title={item.title} image={item.images[0]} description={item.description} price={item.price} tags={item.tags}/>
       </Pressable>
     )
   }
