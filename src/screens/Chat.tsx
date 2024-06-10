@@ -321,7 +321,7 @@ function Chat() {
                             <Text style={styles.sendButtonText}>Send</Text>
                           </TouchableOpacity>
                       </View>
-                    </View> : null}
+                    </View>
 
                 </View>
 
