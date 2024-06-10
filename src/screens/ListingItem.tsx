@@ -47,13 +47,9 @@ function ListingItem({ navigation }) {
     const { item } = route.params;
     console.log(item);
     const companyName = "UMarket";
-    
+
     const {height, width, scale, fontScale} = useWindowDimensions();
     const [shortDimension, longDimension] = width < height ? [width, height] : [height, width];
-
-    const nav = useNavigation();
-
-    const { currentUser, loading } = useAuth();
   
     //Default guideline sizes are based on standard ~5" screen mobile device
     const guidelineBaseWidth = 350;
@@ -121,53 +117,7 @@ function ListingItem({ navigation }) {
                                         Price: ${item.price}
                                     </Text>
                                 </View>
-                                <Pressable onPress={async () => {
-                                    const currentUserId = currentUser?.uid;
-                                    const otherUserId:string = item.userId;
-                                    const chatsRef = collection(db,"chats");
-                                    const q = query(chatsRef, where("users", "array-contains", currentUser?.uid), where("users", "array-contains", item.userId));
-                                    const querySnapshot = await getDocs(q);
-                                    // if the chat does not exist, create it
-                                    if(querySnapshot.docs.length == 0) {
-                                        const currentUserDocRef = doc(db,"users",currentUserId);
-                                        const otherUserDocRef = doc(db,"users",otherUserId);
-                                        const newChatDocRef = doc(chatsRef); // creates a random id for the document
-
-
-                                        const chatObject = {
-                                                            users:[currentUserId,otherUserId]
-                                                        }
-                                        try {
-                                            await runTransaction(db, async (transaction) => {
-                                                // ids of users each of them are chatting with (bad naming convention, fix later)
-                                                const otherUserIds_current = (await transaction.get(currentUserDocRef)).data().otherUserIds;
-                                                const otherUserIds_other = (await transaction.get(otherUserDocRef)).data().otherUserIds;
-
-                                                otherUserIds_current.indexOf(otherUserId) === -1 ? otherUserIds_current.push(otherUserId) : console.log("this item already exists");
-                                                otherUserIds_other.indexOf(currentUserId) === -1 ? otherUserIds_other.push(currentUserId) : console.log("this item already exists");
-
-                                                const promise1 = transaction.set(currentUserDocRef,{otherUserIds:otherUserIds_current},{merge: true});
-                                                const promise2 = transaction.set(otherUserDocRef,{otherUserIds:otherUserIds_other},{merge: true});
-                                                const promise3 = transaction.set(newChatDocRef,chatObject,{merge: true});
-
-                                                await Promise.all([promise1,promise2,promise3]);
-
-                                                // a dummy message is needed so that we can access this collection at a later time
-                                                const dummyMessageRef = doc(collection(newChatDocRef, "messages"));
-                                                await transaction.set(dummyMessageRef, {userId: currentUserId, date: Timestamp.fromDate(new Date()), text: "Dummy message!"},{merge: true})
-                                                
-                                            });
-                                            console.log("Transaction successfully committed!");
-                                        } catch (e) {
-                                            console.log("Transaction failed: ", e);
-                                        }
-                                                          
-                                        
-                                        
-                            
-                                    }
-                                    nav.navigate('Chat', { item });
-                                }} style={{ marginTop: 7 }}>
+                                <Pressable style={{ marginTop: 7 }}>
                                     <Text style={{ fontSize: moderateScale(13), color: "#22c55e" }}>Message</Text>
                                 </Pressable>
                             </View>

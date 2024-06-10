@@ -120,7 +120,7 @@ function Post({ navigation }) {
         console.log(images);
     };
 
-      const handlePostListing = async () => {
+    const handlePostListing = async () => {
         console.log("Posting listing... ");
         try {
           const imageUrls = [];
