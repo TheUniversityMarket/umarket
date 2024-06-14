@@ -5,6 +5,7 @@ import { FontAwesome6 } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { auth } from '../firebase/firebaseConfig'; 
 import { fetchSignInMethodsForEmail } from 'firebase/auth';
+import { getVerificationCode } from '../api/api';
 
 //const school = "https://images.genius.com/018e964bd737e5d4600162dbcac48ce5.1000x1000x1.png" // School image will vary with different schools if we decide to expand later on.
 const school = "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Solid_white_bordered.svg/2048px-Solid_white_bordered.svg.png"
@@ -33,6 +34,7 @@ function UserRegistrationEmail({navigation}) {
                 alert("Email already exists. Please enter a new valid school email.");
                 return;
             }
+            getVerificationCode(email);
             navigation.navigate('UserVerification', { email }); // Correct usage as per type definition
         } 
         );
