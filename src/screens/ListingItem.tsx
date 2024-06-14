@@ -1,9 +1,12 @@
 import { StyleSheet, Text, View, SafeAreaView, ScrollView, Image, FlatList, Dimensions, useWindowDimensions, Pressable, ImageBackground, TextInput, StatusBar } from 'react-native';
-import { useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import MainHeader from '../components/MainHeader';
 import React from 'react';
+import { Firestore, Timestamp, collection, doc, getDocs, getFirestore, query, runTransaction, setDoc, where } from 'firebase/firestore';
+import { useAuth } from '../context/AuthContext';
+import { db } from '../firebase/firebaseConfig';
 
 const USERS = [
     { id: '1', name: "Jevon", image: "https://www.pngitem.com/pimgs/m/146-1462217_profile-icon-orange-png-transparent-png.png", description: 'I am a student at Georgia Tech.', tags: ['student', 'computer science'] },

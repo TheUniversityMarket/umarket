@@ -26,7 +26,7 @@ import { Listing, Item, Service, Clothing, Housing, Tickets } from '../models/li
 import { collection, setDoc, doc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
-
+import {useAuth} from "../context/AuthContext"
 
 // import { AntDesign } from '@expo/vector-icons';
 // import { useNavigation } from '@react-navigation/native';
@@ -97,6 +97,17 @@ function Post({ navigation }) {
     const {height, width, scale, fontScale} = useWindowDimensions();
     const [shortDimension, longDimension] = width < height ? [width, height] : [height, width];
 
+    const {currentUser} = useAuth();
+
+    const [userId,setuserId] = useState("");
+
+    useEffect(()=>{
+        if(currentUser){
+            setuserId(currentUser.uid);
+        }
+    },[currentUser]);
+    
+
     const handleImageUpload = async (image) => {
         const response = await fetch(image);
         const blob = await response.blob();
@@ -109,7 +120,7 @@ function Post({ navigation }) {
         console.log(images);
     };
 
-      const handlePostListing = async () => {
+    const handlePostListing = async () => {
         console.log("Posting listing... ");
         try {
           const imageUrls = [];
@@ -125,6 +136,7 @@ function Post({ navigation }) {
             price,
             tags: tags.split(',').map(tag => tag.trim()), // Convert comma-separated string to array of tags
             images: imageUrls,
+            userId
            };
 
            if (sellType == 'Item') {

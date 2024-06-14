@@ -101,8 +101,10 @@ function Carousel() {
                             <SimpleLineIcons name="arrow-left" size={24} color="white" style={{marginLeft: 13}} />
                         </Pressable>
                     </View>
-                    <View style={{alignSelf: "flex-end", flex: 1}}>
-                        <Pagination paginationIndex={index} />
+                    <View style={{flex: 1, flexDirection: "row", justifyContent: "center"}}>
+                        <View style={{alignSelf: "flex-end", height: 36}}>
+                            <Pagination paginationIndex={index}/>
+                        </View>
                     </View>
                     <View style={{flex: 1, justifyContent: "center", alignItems: "flex-end"}}>
                         <Pressable style={{width: 37}} onPress={() => setCurrentIndex(index + 1 > 4 ? 0 : index + 1)}>
@@ -126,7 +128,7 @@ function Carousel() {
     }
 
     return (
-        <View style={{flex: 1, alignSelf: "center"}}>
+        <View style={{flex: 1, alignSelf: "center", marginTop: 10}}>
             <StatusBar translucent backgroundColor={'transparent'} />
            {CarouselScreens.map((screen, index) => {
             return (

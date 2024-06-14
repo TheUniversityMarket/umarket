@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, Text, Image, Pressable, Dimensions, StyleSheet, TurboModuleRegistry, useWindowDimensions } from 'react-native';
-import { MaterialIcons, Entypo } from '@expo/vector-icons';
+import { MaterialIcons, Entypo, Ionicons } from '@expo/vector-icons';
 import SearchBar from './SearchBar'; // Import the SearchBar component from its correct location
 import { AntDesign } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, DrawerActions } from '@react-navigation/native';
 import { useState } from "react"
 import { useRoute } from "@react-navigation/native";
 
@@ -19,6 +19,11 @@ const guidelineBaseHeight = 680;
 const companyName = "Market";
 
 const MainHeader = ({isListing, onInput}) => {
+
+    const toggleDrawer = () => {
+      navigation.dispatch(DrawerActions.toggleDrawer());
+    };
+
     const { width, height } = useWindowDimensions();
     const [searchText, setSearchText] = useState('');
     const navigation = useNavigation()
@@ -55,7 +60,7 @@ const MainHeader = ({isListing, onInput}) => {
                       {companyName}
                   </Text>}
                   <View style={styles.search}>
-                    <AntDesign name="search1" size={24} color="rgb(34 197 94)" />
+                    <AntDesign name="search1" size={24} color="rgb(34 197 94)" style={{left: 40}}/>
                     <SearchBar isListings={isListing} onSearch={handleSearch}/>
                   </View>
 
@@ -69,11 +74,11 @@ const MainHeader = ({isListing, onInput}) => {
                         </View>
                       </Pressable>}
 
-                      <Pressable onPress={() => navigation.navigate('Chat')} >
+                      {!isSmall && <Pressable onPress={() => navigation.navigate('Chat')} >
                         <View style={{alignItems: "flex-end", marginRight: 30, marginTop: 17}}>
                           <Entypo name="chat" size={43} color="rgb(34 197 94)" />
                         </View>
-                      </Pressable>
+                      </Pressable>}
 
                       {!isSmall && <Pressable onPress={() => navigation.navigate('Post')} >
                         <View style={{
@@ -96,6 +101,12 @@ const MainHeader = ({isListing, onInput}) => {
                           </Text>
                         </View>
                     </Pressable>}
+
+                    {isSmall && <Pressable onPress={toggleDrawer}>
+                          <View style={{alignItems: "flex-end", marginTop: 17}}>
+                            <Ionicons name="menu" size={43} color="rgb(34 197 94)" />
+                          </View>
+                      </Pressable>}
 
                     </View>
 
@@ -145,22 +156,23 @@ const styles = StyleSheet.create({
       paddingTop: 0,
     },
     search: {
-      //width: scale(130),
-      // borderWidth: 10,
-      borderWidth: 1,
-      borderColor: "#A9A9A9",
-      backgroundColor: "#fbfbfb",
-      borderRadius: 30,
+      //borderWidth: 1,
+      height: "100%",
+      // //width: scale(130),
+      // // borderWidth: 10,
+      // borderWidth: 1,
+      // borderColor: "#A9A9A9",
+      // backgroundColor: "#fbfbfb",
+      // borderRadius: 30,
       flexDirection: "row",
-      padding: 10,
-      marginTop: 15,
-      height: 50,
+      // padding: 10,
+      marginTop: 17,
+      // //height: 50,
       alignItems: "center",
-      justifyContent: "flex-start",
-      marginRight: 20,
-      marginLeft: 50,
+      // justifyContent: "flex-start",
+      // marginRight: 20,
+      // marginLeft: 50,
       flex: 4,
-
     },
     shoppingCart: {
       //backgroundColor: "black",

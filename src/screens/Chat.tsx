@@ -1,13 +1,16 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { StatusBar } from 'expo-status-bar'
 import { StyleSheet, Text, View, SafeAreaView, ScrollView, Image, FlatList, Dimensions, useWindowDimensions, Pressable, TouchableOpacity } from 'react-native'
 import { AntDesign } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native';
 import { TextInput } from 'react-native-gesture-handler';
 import SearchBar from "../components/SearchBar";
 import MainHeader from "../components/MainHeader";
+import { useAuth } from '../context/AuthContext';
+import { db } from '../firebase/firebaseConfig';
+import { Timestamp, collection, doc, getDoc, getDocs, onSnapshot, orderBy, query, setDoc, where } from 'firebase/firestore';
 
 // import { scale, verticalScale, moderateScale, moderateVerticalScale } from "/Users/jevontwitty/Documents/GitHub/UMarket/src/components/Scaling"
 // import { FlatList } from 'react-native-gesture-handler';
@@ -17,11 +20,13 @@ const CHATS = [
   {id: "1", otherUser: "Jevon Twitty", lastMessage: "Hey, how are you?", time: "7:37 PM"},
   {id: "2", otherUser: "Nash Moore", lastMessage: "No", time: "10:41 PM"},
   {id: "3", otherUser: "Paul Evans", lastMessage: "lmaooo", time: "9:52 PM"},
-  {id: "4", otherUser: "Yubin Kim", lastMessage: "Thx bro", time: "10:33 AM"},
+  {id: "4", otherUser: "JD Suarez", lastMessage: "Alright, thanks", time: "12:00 PM"},
   {id: "5", otherUser: "Dylan Holley", lastMessage: "It means a lot you even agreed to sit down", time: "6:56 PM"},
   {id: "6", otherUser: "Enrique Iglesias", lastMessage: "Food?", time: "8:16 PM"},
   {id: "7", otherUser: "King Ladzekpo", lastMessage: "Lmk what you're thinking before you do anything", time: "3:43 PM"},
-  {id: "8", otherUser: "Bob", lastMessage: "Hey, I'm Bob", time: "12:00 PM"},
+  {id: "8", otherUser: "Yubin Kim", lastMessage: "Thx bro", time: "10:33 AM"},
+  {id: "9", otherUser: "Nicholas Stone", lastMessage: "Great Job", time: "5:35 PM"},
+  {id: "10", otherUser: "David Adamashvili", lastMessage: "Working on it", time: "12:42 PM"},
 ]
 
 
@@ -52,6 +57,26 @@ const numberOfColumns = Math.round(width/215
 
 
 function Chat() {
+
+  const {height, width, scale, fontScale} = useWindowDimensions();
+  const [shortDimension, longDimension] = width < height ? [width, height] : [height, width];
+
+  //Default guideline sizes are based on standard ~5" screen mobile device
+  const guidelineBaseWidth = 350;
+  const guidelineBaseHeight = 680;
+
+  function scaleIt(size: number) {
+      return shortDimension / guidelineBaseWidth * size;
+  }
+  function verticalScale(size: number) {
+      return longDimension / guidelineBaseHeight * size;
+  }
+  function moderateScale(size: number, factor = 0.5) {
+      return size + (scaleIt(size) - size) * factor;
+  }
+  function moderateVerticalScale(size: number, factor = 0.5) {
+      return size + (verticalScale(size) - size) * factor;
+  }
 
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState('');
@@ -142,7 +167,7 @@ function Chat() {
                       />
                     </View>
                     
-                    <View style={{flex: 12, backgroundColor: "white"}}>
+                    { width >= 700 ? <View style={{flex: 12, backgroundColor: "white"}}>
                     <FlatList
                         contentContainerStyle={{justifyContent: 'flex-end', flex: 1}}
                         data={messages}
@@ -161,7 +186,7 @@ function Chat() {
                             <Text style={styles.sendButtonText}>Send</Text>
                           </TouchableOpacity>
                       </View>
-                    </View>
+                    </View> : null}
 
                 </View>
 
