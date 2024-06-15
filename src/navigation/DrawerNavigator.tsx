@@ -4,6 +4,7 @@ import Listings from '../screens/Listings'
 import Chat from '../screens/Chat';
 import Post from '../screens/Post'
 import Settings from '../screens/Settings'
+import ListingItem from '../screens/ListingItem';
 import React from 'react';
 import { useWindowDimensions, Text, View, SafeAreaView } from 'react-native';
 import { Ionicons, AntDesign, FontAwesome6 } from '@expo/vector-icons';
@@ -51,6 +52,8 @@ function DrawerHome() {
             <Drawer.Screen name={'Chat'} component={Chat} options={{headerShown: false, drawerActiveBackgroundColor: "rgb(34 197 94)", drawerLabel: ({focused}) => {return <Text style={{color: focused ? "white" : "rgb(34 197 94)", fontWeight: "bold"}}>Chat</Text>}, drawerIcon: ({focused}) => {return <Ionicons name="chatbox" style={{marginRight: -20}} size={focused ? (moderateScale(23) > 30 ? 30 : moderateScale(23)) : (moderateScale(20) > 27 ? 27 : moderateScale(20))} color={focused ? "white" : "rgb(34 197 94)"} />}}}/>
             <Drawer.Screen name={'Post'} component={Post} options={{headerShown: false, drawerActiveBackgroundColor: "rgb(34 197 94)", drawerLabel: ({focused}) => {return <Text style={{color: focused ? "white" : "rgb(34 197 94)", fontWeight: "bold"}}>Post</Text>}, drawerIcon: ({focused}) => {return <AntDesign name="pluscircleo" style={{marginRight: -20}} size={focused ? (moderateScale(23) > 30 ? 30 : moderateScale(23)) : (moderateScale(20) > 27 ? 27 : moderateScale(20))} color={focused ? "white" : "rgb(34 197 94)"} />}}}/>
             <Drawer.Screen name={'Settings'} component={Settings} options={{headerShown: false, drawerActiveBackgroundColor: "rgb(34 197 94)", drawerLabel: ({focused}) => {return <Text style={{color: focused ? "white" : "rgb(34 197 94)", fontWeight: "bold"}}>Settings</Text>}, drawerIcon: ({focused}) => {return <Ionicons name="settings-sharp" style={{marginRight: -20}} size={focused ? (moderateScale(23) > 30 ? 30 : moderateScale(23)) : (moderateScale(20) > 27 ? 27 : moderateScale(20))} color={focused ? "white" : "rgb(34 197 94)"} />}}}/>
+            <Drawer.Screen name={'ListingItem'} component={ListingItem} options={{headerShown: false, drawerLabel: () => null, drawerActiveBackgroundColor: "white"}}/>
+
         </Drawer.Navigator>
     );
 }
