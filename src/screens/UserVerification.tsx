@@ -3,6 +3,7 @@ import { Text, View, StyleSheet, SafeAreaView, Pressable, ImageBackground, Dimen
 import { TextInput } from "react-native";
 import { FontAwesome6 } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
+import { verifyCode } from '../api/api';
 
 //const school = "https://images.genius.com/018e964bd737e5d4600162dbcac48ce5.1000x1000x1.png" // School image will vary with different schools if we decide to expand later on.
 const school = "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Solid_white_bordered.svg/2048px-Solid_white_bordered.svg.png"
@@ -42,41 +43,22 @@ function UserVerification({ navigation, route }) {
     const companyName = "UMarket";
     const { email } = route.params;
 
+    const [verificationCode, setVerificationCode] = useState('');
+
     console.log(email);
 
     const handleContinue = () => {
-        navigation.navigate('AccountInformation', { email }); // Correct usage as per type definition
+        verifyCode(email, verificationCode).then((response) => {
+            if (response === true) {
+                navigation.navigate('AccountInformation', { email });
+            } else {
+               console.error("Error verifying code");
+            }
+        }
+        );
       };
 
-    if (width < 700) {    
-        return (
-            <SafeAreaView style={styles.safeContainer}>
-                <View style={styles.container}>
-                    {/* <ImageBackground source={{uri: school}} style={styles.schoolBackGround}>
-                        <Text style={styles.signUp}>UMarket</Text>
-                    </ImageBackground> */}
-                    <View style={styles.header}>
-                        <Text style={styles.signUp}>UMarket</Text>
-                    </View>
-                    <View style={styles.registrationContainer}>
-                        <Text style={{fontWeight: "bold", fontSize: moderateScale(25), marginBottom: 17, color:"rgb(17 24 39)"}}>Verification Code</Text>
-                        <View style={{ gap: 3, marginBottom: verticalScale(17)}}>
-                            <TextInput style={styles.verificationCode} placeholder="Enter School Email" keyboardType="email-address" placeholderTextColor={"#B3B3B3"}/>
-                            <Pressable style={ ({ pressed }) => [
-                            styles.button,
-                            pressed && {backgroundColor: "green"}
-                            ]}
-                            onPress={() => navigation.navigate('AccountInformation', { email })}>
-                            <Text style={styles.buttonText}>Continue</Text>
-                        </Pressable>
-                        </View>
-                    </View>
-                </View>
-            </SafeAreaView>
-        )
-    }
-    else {
-        return (
+          return (
             <SafeAreaView style={styles.safeContainer}>
             <View style={{flex: 1, backgroundColor: "rgb(34 197 94)", width: "100%", height: "100%"}}>
 
@@ -91,7 +73,7 @@ function UserVerification({ navigation, route }) {
                     <View style={styles.registrationContainer}>
                         <Text style={{fontWeight: "bold", fontSize: moderateScale(25), marginBottom: 17, color:"rgb(17 24 39)"}}>Verification Code</Text>
                         <View style={{ gap: 3, marginBottom: verticalScale(17)}}>
-                            <TextInput style={styles.verificationCode} placeholder="Enter Verification Code" keyboardType="email-address" placeholderTextColor={"#B3B3B3"}/>
+                            <TextInput style={styles.verificationCode} placeholder="Enter Verification Code" keyboardType="email-address" placeholderTextColor={"#B3B3B3"} onChangeText={setVerificationCode} value={verificationCode}/>
                             <Pressable style={ ({ pressed }) => [
                             styles.button,
                             pressed && {backgroundColor: "green"}
@@ -105,7 +87,7 @@ function UserVerification({ navigation, route }) {
         </SafeAreaView>
         )
     }
-}
+
 
 const styles = StyleSheet.create({
     safeContainer: {
