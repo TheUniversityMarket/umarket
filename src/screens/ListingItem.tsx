@@ -1,8 +1,12 @@
 import { StyleSheet, Text, View, SafeAreaView, ScrollView, Image, FlatList, Dimensions, useWindowDimensions, Pressable, ImageBackground, TextInput, StatusBar } from 'react-native';
-import { useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import MainHeader from '../components/MainHeader';
+import React from 'react';
+import { Firestore, Timestamp, collection, doc, getDocs, getFirestore, query, runTransaction, setDoc, where } from 'firebase/firestore';
+import { useAuth } from '../context/AuthContext';
+import { db } from '../firebase/firebaseConfig';
 
 const USERS = [
     { id: '1', name: "Jevon", image: "https://www.pngitem.com/pimgs/m/146-1462217_profile-icon-orange-png-transparent-png.png", description: 'I am a student at Georgia Tech.', tags: ['student', 'computer science'] },
@@ -41,6 +45,7 @@ function returnTags(tagList) {
 function ListingItem({ navigation }) {
     const route = useRoute();
     const { item } = route.params;
+    console.log(item);
     const companyName = "UMarket";
 
     const {height, width, scale, fontScale} = useWindowDimensions();
@@ -84,7 +89,7 @@ function ListingItem({ navigation }) {
                         <View style={{}}>
                             <View style={{ alignItems: "center", gap: 0 }}>
                                 <Text style={{ fontWeight: "bold", fontSize: scaleIt(20) }}>{item.title}</Text>
-                                <Image source={{ uri: item.image }} style={[styles.productImage, {height: moderateScale(300), width: scaleIt(237)}]} resizeMode="contain" />
+                                <Image source={{ uri: item.images[0] }} style={[styles.productImage, {height: moderateScale(300), width: scaleIt(237)}]} resizeMode="contain" />
                             </View>
                         </View>
                         <View style={[styles.productInformation, {width: scaleIt(237)}]}>
@@ -109,7 +114,7 @@ function ListingItem({ navigation }) {
                             <View style={{ marginTop: 10 }}>
                                 <View>
                                     <Text style={{ fontSize: moderateScale(13) }}>
-                                        Price: {item.price}
+                                        Price: ${item.price}
                                     </Text>
                                 </View>
                                 <Pressable style={{ marginTop: 7 }}>

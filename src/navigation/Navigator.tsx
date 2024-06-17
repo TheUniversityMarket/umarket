@@ -10,6 +10,7 @@ import AccountInformation from '../screens/AccountInformation'
 import ListingsLoggedOut from '../screens/ListingsLoggedOut'
 import Chat from '../screens/Chat'
 import Home from './TabNavigator'
+import DrawerHome from './DrawerNavigator'
 
 import { AntDesign } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
@@ -37,7 +38,8 @@ const Navigator: React.FC = () => {
       <Stack.Navigator>
         {currentUser ? (
             <>
-                {width > 700 ? (
+                {/* {width > 700 ? ( */}
+                  {false ? (
                     <>
                         <Stack.Screen name={'Listings'} component={Listings} options={{headerShown: false}}/>
                         <Stack.Screen name={'Chat'} component={Chat} options={{headerShown: false}}/>
@@ -45,7 +47,8 @@ const Navigator: React.FC = () => {
                         <Stack.Screen name={'Settings'} component={Settings} options={{headerShown: false}}/>
                     </>
                 ) : (
-                    <Stack.Screen name={'Home'} component={Home} options={{headerShown: false}}/>
+                    // <Stack.Screen name={'Home'} component={Home} options={{headerShown: false}}/>
+                    <Stack.Screen name={'DrawerHome'} component={DrawerHome} options={{headerShown: false}}/>
                 )}
                 <Stack.Screen name={'ListingsLoggedOut'} component={ListingsLoggedOut} options={{headerShown: false}}/>
                 <Stack.Screen name={'ListingItem'} component={ListingItem} options={{headerShown: false}}/>
