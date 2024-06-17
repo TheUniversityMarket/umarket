@@ -580,8 +580,8 @@ function Post({ navigation }) {
                             </View>
                         </View>}
                     </View>
-                    {sellType=="Ticket" && <View style={{marginTop: 30,
-                        width:  200,
+                    {sellType=="Ticket" && <View style={{marginTop: shortDimension/(600/30),
+                        width:  width/(1200/200),
                         borderWidth:1,
                         borderColor: "green",
                         alignItems: "flex-start",
