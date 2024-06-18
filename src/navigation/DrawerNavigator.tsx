@@ -40,7 +40,7 @@ function DrawerHome() {
                 return (
                     <SafeAreaView>
                         <View style={{width: "100%", height: 100, justifyContent: "center", alignItems: "center", backgroundColor: "rgb(34 197 94)", marginBottom: 10}}>
-                            <Text style={{fontWeight: "bold", color: "white", fontSize: moderateScale(53)}}>UMarket</Text>
+                            {width < 700 ? <Text style={{fontWeight: "bold", color: "white", fontSize: moderateScale(53)}}>UMarket</Text> : null}
                         </View>
                         <DrawerItemList {...props} />
                     </SafeAreaView>
