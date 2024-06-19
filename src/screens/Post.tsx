@@ -547,7 +547,8 @@ function Post({ navigation }) {
                                 placeholder="Eg: Streetwear, Books, Fridges..."
                                 placeholderTextColor={"#B3B3B3"}
                                 value={tags}
-                                onChangeText={setTags}>
+                                onChangeText={setTags}/>
+                            </View>
                             <View style={styles.prodTagsContainer}>
                                 <TextInput style= {styles.prodTagsIn}
                                 placeholder="Eg: Books, Appliances, Fridges..."
