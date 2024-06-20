@@ -94,8 +94,26 @@ function Post({ navigation }) {
     const [date, setDate] = useState(new Date());
     const [showDatePicker, setShowDatePicker] = useState(false);
     const fadeAnim = useRef(new Animated.Value(0)).current;
-    const {height, width, scale, fontScale} = useWindowDimensions();
+    const {height, width, fontScale} = useWindowDimensions();
     const [shortDimension, longDimension] = width < height ? [width, height] : [height, width];
+    const guidelineBaseWidth = 350;
+    const guidelineBaseHeight = 680;
+    function scale(size: number) {
+        return shortDimension / guidelineBaseWidth * size;
+    }
+    function verticalScale(size: number) {
+        return longDimension / guidelineBaseHeight * size;
+    }
+    function moderateScale(size: number, factor = 0.5) {
+        return size + (scale(size) - size) * factor;
+    }
+    function moderateVerticalScale(size: number, factor = 0.5) {
+        return size + (verticalScale(size) - size) * factor;
+    }
+
+    function fontSizeScale(size: number) {
+        return size/(width/1200)
+    }
 
     const {currentUser} = useAuth();
 
@@ -286,102 +304,115 @@ function Post({ navigation }) {
             <MainHeader isListing={false} onInput={true}></MainHeader>
             <ScrollView contentContainerStyle={{flex: 1}}>
                 <View style={{backgroundColor: (width < height && width < 500) ? "white" : "#E1E1E1", zIndex:1}}>
-                    <View style={{alignSelf: "center", borderRadius:20, width:(width*5)/6, height: (height*3)/2, borderColor: "red", borderWidth: 1, opacity:1, backgroundColor:"white", zIndex:999}}>
+                    <View style={{alignSelf: "center", borderRadius:20, width: width<450 ? width : (width*5)/6, height: (height*4)/2, borderColor: "red", borderWidth: 1, opacity:1, backgroundColor:"white", zIndex:999}}>
                 <Text style={{fontSize: width/25, marginLeft: width/(800/40), marginTop:height/25, fontWeight: 2}}>Post Your Item:</Text>
                 <View style={styles.container}>
-                    <View style={{borderColor:"red", borderWidth: 1, width: width*3/4, height: height/3, borderRadius: 30, marginTop: height/30}}>
-                        <Text style={{fontSize: width/30, marginLeft: 300/(width/100), fontWeight: 2}}>What type of item are you listing?</Text>
-                        <View style={{alignSelf:"center", flexDirection: "row", justifyContent: "space-evenly", borderColor:"red", borderWidth: 1, width: width*2/3, height: height/(700/140), borderRadius: 30, marginTop: height/40, alignItems: "center"}}>
+                    <View style={{borderColor:"red", borderWidth: 1, width: width*3/4, height: width/(1200/300), borderRadius: 30, marginTop: width/60}}>
+                        <Text style={{fontSize: width/30, alignSelf:"center", fontWeight: 2}}>What type of item are you listing?</Text>
+                        <View style={{alignSelf:"center", flexDirection: "row", justifyContent: "space-evenly", borderColor:"red", borderWidth: 1, width: width*2/3, height: width/(1200/140), borderRadius: 30, marginTop: height/40, alignItems: "center"}}>
                         <Pressable
                             onPress={() => handlePress("Item")}>
-                            <View style={{borderColor: "red", minHeight:130, flex:1, borderWidth: 1, height: width/12, borderRadius: 20/((1200*600)/(height*width))}}>
-                                {sellType!="Item" && <View style={{borderColor: "red", borderWidth: 1, minHeight:70, minWidth:55, width: width/12, height: width/12, borderRadius: 20, alignItems: "center", justifyContent: "center",}}>
+                            <View style={{borderColor: "red", width:width/8, borderWidth: 1, height: width/8, borderRadius: 20/((1200*600)/(height*width))}}>
+                                {sellType!="Item" && <View style={{borderColor: "red", borderWidth: 1, flex:1, borderRadius: 20/((1200*600)/(height*width)), alignItems: "center", justifyContent: "center",}}>
                                 <AntDesign>
                                     <MaterialIcons name="computer" size={Math.round(50*Math.sqrt(width)/Math.sqrt(1200))} color="black" />
                                 </AntDesign>
                                 </View>}
-                                {sellType=="Item" && <View style={{borderColor: "red", borderWidth: 1, width: 100, height: 100, borderRadius: 20, alignItems: "center", justifyContent: "center", backgroundColor:"rgb(34 197 94)"}}>
+                                {sellType=="Item" && <View style={{borderColor: "red", borderWidth: 1, flex:1, borderRadius: 20/((1200*600)/(height*width)), alignItems: "center", justifyContent: "center", backgroundColor:"rgb(34 197 94)"}}>
                                 <AntDesign>
-                                    <MaterialIcons name="computer" size={50} color="white" />
+                                    <MaterialIcons name="computer" size={Math.round(50*Math.sqrt(width)/Math.sqrt(1200))} color="white" />
                                 </AntDesign>
                                 </View>}
-                                <Text style={{fontSize:18, alignSelf:"center", fontWeight: 2}}>Items</Text>
+                                <Text style={{fontSize:width/50, alignSelf:"center", fontWeight: 2}}>Items</Text>
                             </View>
                         </Pressable>
                         <Pressable
                             onPress={() => handlePress("Clothing")}>
-                            <View style={{borderColor: "red", minHeight:130, flex:1, borderWidth: 1, height: width/12, borderRadius: 20/((1200*600)/(height*width))}}>
-                                {sellType!="Clothing" && <View style={{borderColor: "red", borderWidth: 1, minHeight:70, minWidth:55, width: width/12, height: width/12, borderRadius: 20, alignItems: "center", justifyContent: "center",}}>
+                            <View style={{borderColor: "red", width:width/8, borderWidth: 1, height: width/8, borderRadius: 20/((1200*600)/(height*width))}}>
+                                {sellType!="Clothing" && <View style={{borderColor: "red", borderWidth: 1, flex:1, borderRadius: 20/((1200*600)/(height*width)), alignItems: "center", justifyContent: "center",}}>
                                 <AntDesign>
                                     <Ionicons name="shirt-outline" size={Math.round(50*Math.sqrt(width)/Math.sqrt(1200))} color="black" />
                                 </AntDesign>
                                 </View>}
-                                {sellType=="Clothing" && <View style={{borderColor: "red", borderWidth: 1, width: 100, height: 100, borderRadius: 20, alignItems: "center", justifyContent: "center", backgroundColor:"rgb(34 197 94)"}}>
+                                {sellType=="Clothing" && <View style={{borderColor: "red", borderWidth: 1, flex:1, borderRadius: 20/((1200*600)/(height*width)), alignItems: "center", justifyContent: "center", backgroundColor:"rgb(34 197 94)"}}>
                                 <AntDesign>
-                                    <Ionicons name="shirt-outline" size={50} color="white" />
+                                    <Ionicons name="shirt-outline" size={Math.round(50*Math.sqrt(width)/Math.sqrt(1200))} color="white" />
                                 </AntDesign>
                                 </View>}
-                                <Text style={{fontSize:18, alignSelf:"center", fontWeight: 2}}>Clothing</Text>
+                                <Text style={{fontSize:width/50, alignSelf:"center", fontWeight: 2}}>Clothing</Text>
                             </View>
                         </Pressable>
                         <Pressable
                             onPress={() => handlePress("Housing")}>
-                            <View style={{borderColor: "red", minHeight:130, flex:1, borderWidth: 1, height: width/12, borderRadius: 20/((1200*600)/(height*width))}}>
-                                {sellType!="Housing" &&<View style={{borderColor: "red", borderWidth: 1, minHeight:70, minWidth:55, width: width/12, height: width/12, borderRadius: 20, alignItems: "center", justifyContent: "center",}}>
+                            <View style={{borderColor: "red", width:width/8, borderWidth: 1, height: width/8, borderRadius: 20/((1200*600)/(height*width))}}>
+                                {sellType!="Housing" &&<View style={{borderColor: "red", borderWidth: 1, flex:1, borderRadius: 20/((1200*600)/(height*width)), alignItems: "center", justifyContent: "center",}}>
                                 <AntDesign>
                                     <AntDesign name="home" size={Math.round(50*Math.sqrt(width)/Math.sqrt(1200))} color="black" />
                                 </AntDesign>
                                 </View>}
-                                {sellType=="Housing" && <View style={{borderColor: "red", borderWidth: 1, width: 100, height: 100, borderRadius: 20, alignItems: "center", justifyContent: "center", backgroundColor:"rgb(34 197 94)"}}>
+                                {sellType=="Housing" && <View style={{borderColor: "red", borderWidth: 1, flex:1, borderRadius: 20/((1200*600)/(height*width)), alignItems: "center", justifyContent: "center", backgroundColor:"rgb(34 197 94)"}}>
                                 <AntDesign>
-                                    <AntDesign name="home" size={50} color="white" />
+                                    <AntDesign name="home" size={Math.round(50*Math.sqrt(width)/Math.sqrt(1200))} color="white" />
                                 </AntDesign>
                                 </View>}
-                                <Text style={{fontSize:18, alignSelf:"center", fontWeight: 2}}>Housing</Text>
+                                <Text style={{fontSize:width/50, alignSelf:"center", fontWeight: 2}}>Housing</Text>
                             </View>
                         </Pressable>
                         <Pressable
-                            onPress={() => handlePress("Tickets")}>
-                            <View style={{borderColor: "red", minHeight:130, flex:1, borderWidth: 1, height: width/12, borderRadius: 20/((1200*600)/(height*width))}}>
-                                {sellType!="Tickets" && <View style={{borderColor: "red", borderWidth: 1,minHeight:70, minWidth:55, width: width/12, height: width/12, borderRadius: 20, alignItems: "center", justifyContent: "center",}}>
+                            onPress={() => handlePress("Ticket")}>
+                            <View style={{borderColor: "red", width:width/8, borderWidth: 1, height: width/8, borderRadius: 20/((1200*600)/(height*width))}}>
+                                {sellType!="Ticket" && <View style={{borderColor: "red", borderWidth: 1, flex:1, borderRadius: 20/((1200*600)/(height*width)), alignItems: "center", justifyContent: "center",}}>
                                 <AntDesign>
                                     <Ionicons name="ticket-outline" size={Math.round(50*Math.sqrt(width)/Math.sqrt(1200))} color="black" />
                                 </AntDesign>
                                 </View>}
-                                {sellType=="Tickets" && <View style={{borderColor: "red", borderWidth: 1, width: 100, height: 100, borderRadius: 20, alignItems: "center", justifyContent: "center", backgroundColor:"rgb(34 197 94)"}}>
+                                {sellType=="Ticket" && <View style={{borderColor: "red", borderWidth: 1, flex:1, borderRadius: 20/((1200*600)/(height*width)), alignItems: "center", justifyContent: "center", backgroundColor:"rgb(34 197 94)"}}>
                                 <AntDesign>
-                                    <Ionicons name="ticket-outline" size={50} color="white" />
+                                    <Ionicons name="ticket-outline" size={Math.round(50*Math.sqrt(width)/Math.sqrt(1200))} color="white" />
                                 </AntDesign>
                                 </View>}
-                                <Text style={{fontSize:18, alignSelf:"center", fontWeight: 2}}>Tickets</Text>
+                                <Text style={{fontSize:width/50, alignSelf:"center", fontWeight: 2}}>Tickets</Text>
                             </View>
                         </Pressable>
                         <Pressable
-                            onPress={() => handlePress("Services")}>
-                            <View style={{borderColor: "red", minHeight:130, flex:1, borderWidth: 1, height: width/12, borderRadius: 20/((1200*600)/(height*width))}}>
-                                {sellType!="Services" && <View style={{borderColor: "red", borderWidth: 1, minHeight:70, minWidth:55, width: width/12, height: width/12, borderRadius: 20, alignItems: "center", justifyContent: "center",}}>
+                            onPress={() => handlePress("Service")}>
+                            <View style={{borderColor: "red", width:width/8, borderWidth: 1, height: width/8, borderRadius: 20/((1200*600)/(height*width))}}>
+                                {sellType!="Service" && <View style={{borderColor: "red", borderWidth: 1, flex:1, borderRadius: 20/((1200*600)/(height*width)), alignItems: "center", justifyContent: "center",}}>
                                 <AntDesign>
                                     <Feather name="scissors" size={Math.round(50*Math.sqrt(width)/Math.sqrt(1200))} color="black" />
                                 </AntDesign>
                                 </View>}
-                                {sellType=="Services" && <View style={{borderColor: "red", borderWidth: 1, width: 100, height: 100, borderRadius: 20, alignItems: "center", justifyContent: "center", backgroundColor:"rgb(34 197 94)"}}>
+                                {sellType=="Service" && <View style={{borderColor: "red", borderWidth: 1, flex:1, borderRadius: 20/((1200*600)/(height*width)), alignItems: "center", justifyContent: "center", backgroundColor:"rgb(34 197 94)"}}>
                                 <AntDesign>
-                                    <Feather name="scissors" size={50} color="white" />
+                                    <Feather name="scissors" size={Math.round(50*Math.sqrt(width)/Math.sqrt(1200))} color="white" />
                                 </AntDesign>
                                 </View>}
-                                <Text style={{fontSize:18, alignSelf:"center", fontWeight: 2}}>Services</Text>
+                                <Text style={{fontSize:width/50, alignSelf:"center", fontWeight: 2}}>Services</Text>
                             </View>
                         </Pressable>
                         </View>
                     </View>
                     <FadeInView>
                     {sellType!="none" && <View style={{borderWidth:1,
-        borderColor: "red", width: 600, alignItems: "center"}}>
-                        <View style={styles.prodNameSuperContainer}>
-                        <Text style={styles.prodNameTxt}>
+        borderColor: "red", width: width/2, alignItems: "center", flex: 1,}}>
+                        <View style={[styles.prodNameSuperContainer,{borderWidth:1,
+                        borderColor: "purple",
+                        display: "flex",
+                        flexDirection: width <600 ? "column" : "row",
+                        flexWrap: "wrap",
+                        flex: 1,
+                        minHeight: width < 600 ? shortDimension/8 : 1,
+                        
+                        justifyContent:"center",
+                        alignContent: width < 600 ? "flex-start" : "center", width:width/2, marginTop: shortDimension/(600/20), height: width < 600 ? height/(1000/200) : shortDimension/(600/70),}]}>
+                        <Text style={[styles.prodNameTxt, {fontSize:width < 600 ? width/(700/20) : width/(1200/20), marginLeft:width/(1200/10)}]}>
                             Listing Title:
-                            <View style={styles.prodNameContainer}>
-                                <TextInput style={styles.prodNameIn}
+                            <View style={[styles.prodNameContainer, {marginLeft: width < 600 ? width/(600/10) : width < 600 ? width/2 - width/(344/80): width/(1200/10),
+                                    borderRadius: 5/((1200*600)/(height*width)),
+                                    width: width < 600 ? width/(900/190) : width/(1200/190), 
+                                    height: width < 600 ? shortDimension/(800/40) : shortDimension/(700/40),}]}>
+                                <TextInput style={[styles.prodNameIn, {fontSize: width < 600 ? width/(950/20) : width/(1200/17),
+                                    padding: (Math.sqrt(3*width/(1200/10))), textAlign: "center", textAlignVertical: "center"}]}
                                 placeholder="Enter Title"
                                 placeholderTextColor={"#B3B3B3"}
                                 value={title}
@@ -391,10 +422,17 @@ function Post({ navigation }) {
                         </Text>   
                     {/* </View> */}
                     {/* <View style={styles.prodPriceSuperContainer}>   */}
-                        {(sellType=="Clothing" || sellType=="Item" || sellType=="Tickets") && <Text style={styles.prodPriceTxt}>
+                        {(sellType=="Clothing" || sellType=="Item" || sellType=="Ticket") && <Text style={[styles.prodPriceTxt, { marginLeft: width < 600 ? width/(1200/10) : width/(1200/55),
+                            fontSize: width < 600 ? width/(700/20) : width/(1200/20)}]}>
                             Listing Price:  
-                            <View style={styles.prodPriceContainer}>
-                                <TextInput style={styles.prodPriceIn}
+                            <View style={[styles.prodPriceContainer, {
+                                    marginTop: width < 600 ? 5: 0,
+                                    marginLeft: width/(1200/10),
+                                    borderRadius: width/(1200/5),
+                                    width: width < 600 ? width/(400/50) : width/(800/50),
+                                    height: width < 600 ? shortDimension/(800/40) : shortDimension/(700/40),}]}>
+                                <TextInput style={[styles.prodPriceIn, {fontSize: width < 600 ? width/(950/20) : width/(1200/17),
+                                    padding: (Math.sqrt(3*width/(1200/10))), textAlign: "center", textAlignVertical: "center"}]}
                                 placeholder="$$$"
                                 placeholderTextColor={"#B3B3B3"}
                                 value={price}
@@ -404,96 +442,144 @@ function Post({ navigation }) {
                                 {/* <Text style={styles.prodPrice$}>$</Text>   */}
                             </View>
                         </Text>}
-                        {sellType=="Housing" && <Text style={styles.prodPriceTxt}>
+                        {sellType=="Housing" && <Text style={[styles.prodPriceTxt, { marginLeft: width < 600 ? width/(1200/10) : width/(1200/55),
+                                fontSize: width < 600 ? width/(700/20) : width/(1200/20),}]}>
                             Price:
-                            <View style={styles.prodPriceContainer}>
-                                <TextInput style={styles.prodPriceIn}
+                            <View style={[styles.prodPriceContainer, {
+                                    marginLeft: width/(1200/10),
+                                    marginTop: width < 600 ? 5: 0,
+                                    borderRadius: width/(1200/5),
+                                    width: width < 600 ? width/(400/50) : width/(800/50),
+                                    height: width < 600 ? shortDimension/(800/40) : shortDimension/(700/40),}]}>
+                                <TextInput style={[styles.prodPriceIn, {fontSize: width < 600 ? width/(950/20) : width/(1200/17),
+                                    padding: (Math.sqrt(3*width/(1200/10)))}]}
                                 placeholder="$$$"
                                 placeholderTextColor={"#B3B3B3"}>
                                 </TextInput>
                                 {/* <Text style={styles.prodPrice$}>$</Text>   */}
                             </View>
-                            {housingOption==null && <Text style={{marginLeft: 10,
-                                fontSize: 20,
+                            {housingOption==null && <Text style={{marginLeft: width/(1200/10),
+                                fontSize: width < 600 ? width/(700/20) : width/(1200/20),
                                 color: "rgb(34 197 94)",
                                 textAlign: "auto",
                                 fontWeight:2}}></Text>}
-                            {housingOption=='Yearly' && <Text style={{marginLeft: 10,
-                                fontSize: 20,
+                            {housingOption=='Yearly' && <Text style={{marginLeft: width/(1200/10),
+                                fontSize: width < 600 ? width/(700/20) : width/(1200/20),
                                 color: "rgb(34 197 94)",
                                 textAlign: "auto",
                                 fontWeight:2}}>/ Year</Text>}
-                            {housingOption=='Weekly' && <Text style={{marginLeft: 10,
-                                fontSize: 20,
+                            {housingOption=='Weekly' && <Text style={{marginLeft: width/(1200/10),
+                                fontSize: width < 600 ? width/(700/20) : width/(1200/20),
                                 color: "rgb(34 197 94)",
                                 textAlign: "auto",
                                 fontWeight:2}}>/ Week</Text>}
-                            {housingOption=='Monthly' && <Text style={{marginLeft: 10,
-                                fontSize: 20,
+                            {housingOption=='Monthly' && <Text style={{marginLeft: width/(1200/10),
+                                fontSize: width < 600 ? width/(700/20) : width/(1200/20),
                                 color: "rgb(34 197 94)",
                                 textAlign: "auto",
                                 fontWeight:2}}>/ Month</Text>}
-                            {housingOption=='Daily' && <Text style={{marginLeft: 10,
-                                fontSize: 20,
+                            {housingOption=='Daily' && <Text style={{marginLeft: width/(1200/10),
+                                fontSize: width < 600 ? width/(700/20) : width/(1200/20),
                                 color: "rgb(34 197 94)",
                                 textAlign: "auto",
                                 fontWeight:2}}>/ Day</Text>}
-                            {housingOption=='Biannual' && <Text style={{marginLeft: 10,
-                                fontSize: 18,
+                            {housingOption=='Biannual' && <Text style={{marginLeft: width/(1200/10),
+                                fontSize: width < 600 ? width/(700/20) : width/(1200/20),
                                 color: "rgb(34 197 94)",
                                 textAlign: "auto",
                                 fontWeight:2}}>/ 6 Months</Text>}
                         </Text>}
-                        {sellType=="Services" && <Text style={styles.prodPriceTxt}>
+                        {sellType=="Service" && <Text style={[styles.prodPriceTxt, { marginLeft: width/(1200/55),
+        fontSize: width/(1200/20),}]}>
                             Price:
-                            <View style={styles.prodPriceContainer}>
-                                <TextInput style={styles.prodPriceIn}
+                            <View style={[styles.prodPriceContainer, {
+                                   marginLeft: width/(1200/10),
+                                   marginTop: width < 600 ? 5: 0,
+                                   borderRadius: width/(1200/5),
+                                   width: width < 600 ? width/(400/50) : width/(800/50),
+                                   height: width < 600 ? shortDimension/(800/40) : shortDimension/(700/40)}]}>
+                                <TextInput style={[styles.prodPriceIn, {fontSize: width < 600 ? width/(950/20) : width/(1200/17),
+                                    padding: (Math.sqrt(3*width/(1200/10)))}]}
                                 placeholder="$$$"
                                 placeholderTextColor={"#B3B3B3"}>
                                 </TextInput>
                                 {/* <Text style={styles.prodPrice$}>$</Text>   */}
                             </View>
-                            {serviceOption==null && <Text style={{marginLeft: 10,
-                                fontSize: 20,
+                            {serviceOption==null && <Text style={{marginLeft: width/(1200/10),
+                                fontSize: width < 600 ? width/(700/20) : width/(1200/20),
                                 color: "rgb(34 197 94)",
-                                textAlign: "auto",}}></Text>}
-                            {serviceOption=="Per Minute" && <Text style={{marginLeft: 10,
-                                fontSize: 20,
+                                textAlign: "auto",
+                                fontWeight:2}}></Text>}
+                            {serviceOption=="Per Minute" && <Text style={{marginLeft: width/(1200/10),
+                                fontSize: width < 600 ? width/(700/20) : width/(1200/20),
                                 color: "rgb(34 197 94)",
-                                textAlign: "auto",}}>/ Minute</Text>}
-                            {serviceOption=="Hourly" && <Text style={{marginLeft: 10,
-                                fontSize: 20,
+                                textAlign: "auto",
+                                fontWeight:2}}>/ Minute</Text>}
+                            {serviceOption=="Hourly" && <Text style={{marginLeft: width/(1200/10),
+                                fontSize: width < 600 ? width/(700/20) : width/(1200/20),
                                 color: "rgb(34 197 94)",
-                                textAlign: "auto",}}>/ Hour</Text>}
-                            {serviceOption=="Daily" && <Text style={{marginLeft: 10,
-                                fontSize: 20,
+                                textAlign: "auto",
+                                fontWeight:2}}>/ Hour</Text>}
+                            {serviceOption=="Daily" && <Text style={{marginLeft: width/(1200/10),
+                                fontSize: width < 600 ? width/(700/20) : width/(1200/20),
                                 color: "rgb(34 197 94)",
-                                textAlign: "auto",}}>/ Day</Text>}
-                            {serviceOption=="Flat" && <Text style={{marginLeft: 10,
-                                fontSize: 20,
+                                textAlign: "auto",
+                                fontWeight:2}}>/ Day</Text>}
+                            {serviceOption=="Flat" && <Text style={{marginLeft: width/(1200/10),
+                                fontSize: width < 600 ? width/(700/20) : width/(1200/20),
                                 color: "rgb(34 197 94)",
-                                textAlign: "auto",}}>/ Service</Text>}
+                                textAlign: "auto",
+                                fontWeight:2}}>/ Service</Text>}
                         </Text>}
                     </View>
-                    <View style={styles.prodTagsSuperContainer}>  
-                        <Text style={styles.prodTagsTxt}>
+                    <View style={[styles.prodTagsSuperContainer, {marginTop: shortDimension/(600/30),
+                            width: width/2,
+                            height: width/(1200/70),}]}>  
+                        <Text style={[styles.prodTagsTxt, {marginLeft: width < 600 ? width/(1200/10) : width/(1200/35),
+                            fontSize: width < 600 ? width/(700/20) : width/(1200/20),}]}>
                             Add Tags:
+                            <View style={[styles.prodTagsContainer, {marginLeft: width < 600 ? width/(600/10) : width < 600 ? width/2 - width/(344/80): width/(1200/10),
+                                    borderRadius: 5/((1200*600)/(height*width)),
+                                    width: width/(1200/390), 
+                                    height: width < 600 ? shortDimension/(800/40) : shortDimension/(700/40),}]}>
+                                <TextInput style= {[styles.prodTagsIn, {fontSize: width < 600 ? width/(950/20) : width/(1200/17),
+                                    padding: (Math.sqrt(3*width/(1200/10)))}]}
+                                placeholder="Eg: Streetwear, Books, Fridges..."
+                                placeholderTextColor={"#B3B3B3"}
+                                value={tags}
+                                onChangeText={setTags}/>
+                            </View>
                             <View style={styles.prodTagsContainer}>
                                 <TextInput style= {styles.prodTagsIn}
                                 placeholder="Eg: Books, Appliances, Fridges..."
                                 placeholderTextColor={"#B3B3B3"}
                                 value={tags}
-                                onChangeText={setTags}
-                                >
+                                onChangeText={setTags}>
                                 </TextInput>
                             </View>
                         </Text> 
                     </View>
-                    <View style={[styles.prodDesSuperContainer]}>  
-                        <Text style={styles.prodDesTxt}>
+                    <View style={[styles.prodDesSuperContainer, {
+                            width: width*600/1200,
+                            borderWidth:1,
+                            marginTop: shortDimension/(600/30),
+                            borderColor: "green",
+                            height: sellType=="Ticket" && width<600 ? shortDimension/(1.5) : shortDimension/(600/200),
+                            alignItems: width < 600 ? "center" : "center",
+                            flexDirection: width < 600 ? "column": "row",
+                            justifyContent: width < 600 ? "center" : "space-evenly"}]}>
+                                {/* marginLeft: width < 600 ? width/(1200/10) : width/(1200/35),  */}
+                        <Text style={[styles.prodDesTxt, {fontSize: width < 600 ? width/(700/20): width/(1200/20)}]}>
                             Enter Brief Description:{"\n"}
-                            <View style={styles.prodDesContainer}>
-                                <TextInput style={styles.prodDesIn}
+                            <View style={[styles.prodDesContainer, {marginLeft: 0,
+                                    borderRadius: 7,
+                                    borderWidth: 1,
+                                    borderColor: "brown",
+                                    marginBottom: width > 600 && sellType=="Ticket"? 80 : 20,
+                                    width: width < 600 ? width/(2.5) :width/(1200/300),
+                                    height: width < 600 ? shortDimension/(600/50) : shortDimension/(600/100),}]}>
+                                <TextInput style={[styles.prodDesIn, {fontSize: width < 600 ? width/(950/20) : width/(1200/17),
+                                    padding: (Math.sqrt(3*width/(1200/10)))}]}
                                 placeholder="Enter Descrition"
                                 placeholderTextColor={"#B3B3B3"}
                                 value={description}
@@ -502,72 +588,100 @@ function Post({ navigation }) {
                                 </TextInput>
                             </View>
                         </Text> 
-                        {(sellType=="Clothing" || sellType=="Item") && <View style={{borderColor: "red", borderWidth: 1, marginLeft: 50, height: 200, width: 200}}>
-                        <View style={styles.container}>
-                            <TouchableOpacity onPress={toggleDropdown} style={styles.dropdownButton}>
-                                {selectedOption==null && <Text style={styles.buttonText}>{`${sellType} Condition:`}</Text>}
-                                {selectedOption=="New" && <Text style={{fontSize:17, color:"green"}}>{selectedOption}</Text>}
-                                {selectedOption=="Used" && <Text style={{fontSize:17, color:"light-grey"}}>{selectedOption}</Text>}
-                                {selectedOption=="Worn" && <Text style={{fontSize:17, color:"grey"}}>{selectedOption}</Text>}
+                        {(sellType=="Clothing" || sellType=="Item") && <View style={{borderColor: "red", borderWidth: 1, height: width < 600 ? shortDimension/(6) : shortDimension/(1200/200), width: width < 600 ? width/6 : width/8,}}>
+                        <View style={[styles.container, {color : "white",
+                            borderWidth: 1,
+                            flexWrap: "nowrap",
+                            flexDirection: "column"}]}>
+                            <TouchableOpacity onPress={toggleDropdown} style={[styles.dropdownButton, {paddingVertical: 8,
+                                paddingHorizontal: width/(1200/30),
+                                borderRadius: width < 600 ? width/(800/30) : width/(1200/20),
+                                borderWidth:1,
+                                borderColor:"red",
+                                } ]}>
+                                {selectedOption==null && <Text style={[styles.buttonText, {color: "white",
+                                    textAlign: "center",
+                                    textAlignVertical: "center",
+                                    fontSize: width < 600 ? width/(950/20) : width/(1200/17),
+                                    fontWeight:2,}]}>{`${sellType} Condition:`}</Text>}
+                                {selectedOption=="New" && <Text style={{fontSize: width < 600 ? width/(950/20) : width/(1200/17), color:"green"}}>{selectedOption}</Text>}
+                                {selectedOption=="Used" && <Text style={{fontSize: width < 600 ? width/(950/20) : width/(1200/17), color:"light-grey"}}>{selectedOption}</Text>}
+                                {selectedOption=="Worn" && <Text style={{fontSize: width < 600 ? width/(950/20) : width/(1200/17), color:"grey"}}>{selectedOption}</Text>}
                             </TouchableOpacity>
                             {isOpen && (
-                                <View style={styles.dropdown}>
+                                <View style={[styles.dropdown]}>
                                 {options.map((option, index) => (
                                     <TouchableOpacity
                                     key={index}
-                                    style={styles.option}
+                                    style={[styles.option, {paddingVertical: shortDimension/(600/8),
+                                        paddingHorizontal: width/(1200/30),}]}
                                     onPress={() => handleSelectOption(option)}
                                     >
-                                    <Text>{option}</Text>
+                                    <Text style={{fontSize: width < 600 ? width/(950/17) : width/(1200/13), fontWeight: 2} }>{option}</Text>
                                     </TouchableOpacity>
                                 ))}
                                 </View>
                             )}
                             </View>
                         </View>}
-                        {sellType=="Housing" && <View style={{borderColor: "red", borderWidth: 1, marginLeft: 50, height: 200, width: 200}}>
-                        <View style={styles.container}>
-                            <TouchableOpacity onPress={toggleDropdown} style={styles.dropdownButton}>
-                                {housingOption==null && <Text style={styles.buttonText}>{'Payment Timing:'}</Text>}
-                                {housingOption=="Daily" && <Text style={{fontSize:17, color:"black"}}>{housingOption}</Text>}
-                                {housingOption=="Weekly" && <Text style={{fontSize:17, color:"black"}}>{housingOption}</Text>}
-                                {housingOption=="Monthly" && <Text style={{fontSize:17, color:"black"}}>{housingOption}</Text>}
-                                {housingOption=="Biannual" && <Text style={{fontSize:17, color:"black"}}>{housingOption}</Text>}
-                                {housingOption=="Yearly" && <Text style={{fontSize:17, color:"black"}}>{housingOption}</Text>}
+                        {sellType=="Housing" && <View style={{borderColor: "red", height: width < 600 ? shortDimension/(6) : shortDimension/(1200/200), width: width < 600 ? width/6 : width/8, borderWidth: 2}}>
+                        <View style={[styles.container, {borderWidth: 1,
+                            flexWrap: "nowrap",
+                            flexDirection: "column"}]}>
+                            <TouchableOpacity onPress={toggleDropdown} style={[styles.dropdownButton, {paddingVertical: 8,
+                                paddingHorizontal: width/(1200/30),
+                                borderRadius: width < 600 ? width/(800/30) : width/(1200/20),
+                                borderWidth:1,
+                                borderColor:"red",
+                                } ]}>
+                                {housingOption==null && <Text style={[styles.buttonText, {color: "white",
+                                    textAlign: "center",
+                                    textAlignVertical: "center",
+                                    fontSize: width < 600 ? width/(950/20) : width/(1200/17),
+                                    fontWeight:2,}]}>{'Payment Timing:'}</Text>}
+                                {housingOption=="Daily" && <Text style={{fontSize: width < 600 ? width/(950/20) : width/(1200/17), color:"black", fontWeight: 2}}>{housingOption}</Text>}
+                                {housingOption=="Weekly" && <Text style={{fontSize: width < 600 ? width/(950/20) : width/(1200/17), color:"black", fontWeight: 2}}>{housingOption}</Text>}
+                                {housingOption=="Monthly" && <Text style={{fontSize: width < 600 ? width/(950/20) : width/(1200/17), color:"black", fontWeight: 2}}>{housingOption}</Text>}
+                                {housingOption=="Biannual" && <Text style={{fontSize: width < 600 ? width/(950/20) : width/(1200/17), color:"black", fontWeight: 2}}>{housingOption}</Text>}
+                                {housingOption=="Yearly" && <Text style={{fontSize: width < 600 ? width/(950/20) : width/(1200/17), color:"black", fontWeight: 2}}>{housingOption}</Text>}
                             </TouchableOpacity>
                             {isOpen && (
                                 <View style={styles.dropdown}>
                                 {options2.map((option, index) => (
                                     <TouchableOpacity
                                     key={index}
-                                    style={styles.option}
+                                    style={[styles.option, {paddingVertical: shortDimension/(600/8),
+                                        paddingHorizontal: width/(1200/30),}]}
                                     onPress={() => handleHousingOption(option)}
                                     >
-                                    <Text>{option}</Text>
+                                    <Text style={{fontSize: width < 600 ? width/(950/17) : width/(1200/13), fontWeight: 2}}>{option}</Text>
                                     </TouchableOpacity>
                                 ))}
                                 </View>
                             )}
                             </View>
                         </View>}
-                        {(sellType=="Tickets") && <View style={{flexDirection: "column", borderColor: "red", borderWidth: 1, marginLeft: 30, height: 200, width: 240}}>
+                        {(sellType=="Ticket") && <View style={{flexDirection: "column", borderColor: "red", borderWidth: 1, height: width < 600 ? height/4.5 : height/(800/200), width: width < 600 ? width/3 : width/(1200/240)}}>
                         <View style={{ flex:1, alignItems: 'center', opacity: 1, zIndex:999, borderWidth:1, borderColor:"red"}}>
-                        <Text style={{fontSize:20, color:"green", marginTop: 10}}>Event Date:</Text>
-                        <DateSelector></DateSelector>
+                        <Text style={{marginTop: 10, fontSize: width < 600 ? width/(700/20): width/(1200/20), color:"green", fontWeight: 2}}>Event Date:</Text>
+                        <DateSelector width={width} height={height} />
                         </View>
-                        <View style={{flexDirection:"row", alignItems:"center", justifyContent:"center", flex:1}}>
-                        <Text style={{fontSize: 20,
+                        <View style={{flexDirection:"row", alignItems:"center", justifyContent:"center", flex:1, flexWrap: "nowrap"}}>
+                        <Text style={{fontSize: width < 600 ? width/(700/20): width/(1200/20),
                             color: "rgb(34 197 94)",
                             textAlign: "auto",
+                            fontWeight: 2,
                            }}>Event Time:</Text>
-                        <View style={{marginLeft: 10,
-                                    borderRadius: 5,
+                        <View style={{
                                     borderWidth: 1,
                                     borderColor: "red",
-                                    width: 90,
-                                    height: 40,
+                                    width: width < 600 ? width/(600/90) : width/(1200/90),
+                                    height: width < 600 ? shortDimension/(800/40) : shortDimension/(700/40),
+                                    borderRadius: 10,
+                                    marginLeft: width < 600 ? 0 : 10
                                 }}>
-                                <TextInput style={styles.prodPriceIn}
+                                <TextInput style={[styles.prodPriceIn, {fontSize: width < 600 ? width/(950/20) : width/(1200/17),
+                                    padding: (Math.sqrt(3*width/(1200/10)))}]}
                                 placeholder="12:00 pm"
                                 placeholderTextColor={"#B3B3B3"}>
                                 </TextInput>
@@ -575,25 +689,37 @@ function Post({ navigation }) {
                         </View>
                         </View>
                         </View>}
-                        {sellType=="Services" && <View style={{borderColor: "red", borderWidth: 1, marginLeft: 50, height: 200, width: 200}}>
-                        <View style={styles.container}>
-                            <TouchableOpacity onPress={toggleDropdown} style={styles.dropdownButton}>
-                                {serviceOption==null && <Text style={styles.buttonText}>{'Pricing:'}</Text>}
-                                {serviceOption=="Flat" && <Text style={{fontSize:17, color:"black"}}>{serviceOption}</Text>}
-                                {serviceOption=="Per Minute" && <Text style={{fontSize:17, color:"black"}}>{serviceOption}</Text>}
-                                {serviceOption=="Hourly" && <Text style={{fontSize:17, color:"black"}}>{serviceOption}</Text>}
-                                {serviceOption=="Daily" && <Text style={{fontSize:17, color:"black"}}>{serviceOption}</Text>}
-                                {serviceOption=="Yearly" && <Text style={{fontSize:17, color:"black"}}>{serviceOption}</Text>}
+                        {sellType=="Service" && <View style={{borderColor: "red", height: width < 600 ? shortDimension/(6) : shortDimension/(1200/200), width: width < 600 ? width/6 : width/8, borderWidth: 2}}>
+                        <View style={[styles.container, {borderWidth: 1,
+                            flexWrap: "nowrap",
+                            flexDirection: "column"}]}>
+                            <TouchableOpacity onPress={toggleDropdown} style={[styles.dropdownButton, {paddingVertical: 8,
+                                paddingHorizontal: width/(1200/30),
+                                borderRadius: width < 600 ? width/(800/30) : width/(1200/20),
+                                borderWidth:1,
+                                borderColor:"red",
+                                } ]}>
+                                {serviceOption==null && <Text style={[styles.buttonText, {color: "white",
+                                    textAlign: "center",
+                                    textAlignVertical: "center",
+                                    fontSize: width < 600 ? width/(950/20) : width/(1200/17),
+                                    fontWeight:2,}]}>{'Pricing:'}</Text>}
+                                {serviceOption=="Flat" && <Text style={{fontSize: width < 600 ? width/(950/20) : width/(1200/17), color:"black"}}>{serviceOption}</Text>}
+                                {serviceOption=="Per Minute" && <Text style={{fontSize: width < 600 ? width/(950/20) : width/(1200/17), color:"black"}}>{serviceOption}</Text>}
+                                {serviceOption=="Hourly" && <Text style={{fontSize: width < 600 ? width/(950/20) : width/(1200/17), color:"black"}}>{serviceOption}</Text>}
+                                {serviceOption=="Daily" && <Text style={{fontSize: width < 600 ? width/(950/20) : width/(1200/17), color:"black"}}>{serviceOption}</Text>}
+                                {serviceOption=="Yearly" && <Text style={{fontSize: width < 600 ? width/(950/20) : width/(1200/17), color:"black"}}>{serviceOption}</Text>}
                             </TouchableOpacity>
                             {isOpen && (
                                 <View style={styles.dropdown}>
                                 {options3.map((option, index) => (
                                     <TouchableOpacity
                                     key={index}
-                                    style={styles.option}
+                                    style={[styles.option, {paddingVertical: shortDimension/(600/8),
+                                        paddingHorizontal: width/(1200/30),}]}
                                     onPress={() => handleServiceOption(option)}
                                     >
-                                    <Text>{option}</Text>
+                                    <Text style={{fontSize: width < 600 ? width/(950/17) : width/(1200/13), fontWeight: 2} }>{option}</Text>
                                     </TouchableOpacity>
                                 ))}
                                 </View>
@@ -601,8 +727,8 @@ function Post({ navigation }) {
                             </View>
                         </View>}
                     </View>
-                    {sellType=="Tickets" && <View style={{marginTop: 30,
-                        width:  200,
+                    {sellType=="Ticket" && <View style={{marginTop: shortDimension/(600/30),
+                        width:  width/(1200/200),
                         borderWidth:1,
                         borderColor: "green",
                         alignItems: "flex-start",
@@ -620,7 +746,7 @@ function Post({ navigation }) {
                             </Pressable>
                         </Text> 
                     </View>}
-                    {sellType!="Tickets" && <View style={styles.prodImgSuperContainer}>
+                    {sellType!="Ticket" && <View style={styles.prodImgSuperContainer}>
                         <View style={{alignContent:"center", flexDirection:"row", alignItems: "center", borderWidth:1, borderColor:'red'}}>  
                         <Text style={{fontSize: 20,
                             color: "rgb(34 197 94)",
@@ -651,8 +777,13 @@ function Post({ navigation }) {
                             textAlign: "auto",
                             marginLeft:70,
                             fontWeight:2}}>Size:</Text>
-                            <View style={styles.prodPriceContainer}>
-                                <TextInput style={styles.prodPriceIn}
+                            <View style={[styles.prodPriceContainer, {
+                                    marginLeft: width/(1200/10),
+                                    borderRadius: width/(1200/5),
+                                    width: width/(1200/50),
+                                    height: shortDimension/(600/40),}]}>
+                                <TextInput style={[styles.prodPriceIn, {fontSize: width/(1200/17),
+                                    padding: 10}]}
                                 placeholder="XS"
                                 placeholderTextColor={"#B3B3B3"}>
                                 </TextInput>
@@ -672,7 +803,8 @@ function Post({ navigation }) {
                                     width: 95,
                                     height: 40,
                                 }}>
-                                <TextInput style={styles.prodPriceIn}
+                                <TextInput style={[styles.prodPriceIn, {fontSize: width/(1200/17),
+                                    padding: 10}]}
                                 placeholder="6 months"
                                 placeholderTextColor={"#B3B3B3"}>
                                 </TextInput>
@@ -728,7 +860,7 @@ const styles = StyleSheet.create({
     container: {
         color : "white",
         alignItems: "center",
-        borderWidth: 1
+        borderWidth: 1,
     },
 
     compName: {
@@ -739,40 +871,21 @@ const styles = StyleSheet.create({
     },
 
     prodNameSuperContainer: {
-        marginTop: 20,
-        width: 600,
-        height: 70,
-        borderWidth:1,
-        borderColor: "purple",
-        flexDirection: "row",
-        flexWrap: "wrap",
-        alignItems: "center",
-        flex:1,
-        alignContent:"center"
 
     },
 
     prodNameTxt: {
-        fontSize: 20,
         color: "rgb(34 197 94)",
-        textAlign: "auto",
-        marginLeft: 10,
         fontWeight: 2
     },
 
     prodNameContainer: {
-        marginLeft: 10,
-        borderRadius: 5,
         borderWidth: 1,
         borderColor: "red",
-        width: 190, 
-        height: 40,
         
     },
 
     prodNameIn: {
-        fontSize: 17,
-        padding: 10
     },
 
     prodPriceSuperContainer: {
@@ -790,28 +903,20 @@ const styles = StyleSheet.create({
     },
 
     prodPriceTxt: {
-        marginLeft: 55,
-        fontSize: 20,
         color: "rgb(34 197 94)",
         textAlign: "auto",
+        fontWeight: 2
     },
 
     prodPriceContainer: {
-        marginLeft: 10,
-        borderRadius: 5,
         borderWidth: 1,
         borderColor: "red",
-        width: 60,
-        height: 40,
     },
 
     prodPriceIn: {
-        fontSize: 17,
-        padding: 10,
     },
 
     prodDesSuperContainer: {
-        marginTop: 30,
         width: 600,
         borderWidth:1,
         borderColor: "red",
@@ -821,7 +926,6 @@ const styles = StyleSheet.create({
 
     prodDesTxt: {
         fontSize: 20,
-        marginTop: 10,
         color: "rgb(34 197 94)",
         textAlign: "auto",
         marginLeft: 10,
@@ -882,9 +986,6 @@ const styles = StyleSheet.create({
     },
 
     prodTagsSuperContainer: {
-        marginTop: 30,
-        width: 600,
-        height: 70,
         borderWidth:1,
         borderColor: "purple",
         flexDirection: "row",
@@ -896,8 +997,6 @@ const styles = StyleSheet.create({
     },
 
     prodTagsTxt: {
-        marginLeft: 10,
-        fontSize: 20,
         color: "rgb(34 197 94)",
         textAlign: "auto",
         fontWeight:2
@@ -1028,8 +1127,6 @@ const styles = StyleSheet.create({
         zIndex: 9999,
       },
       option: {
-        paddingVertical: 8,
-        paddingHorizontal: 30,
         borderBottomWidth: 1,
         borderBottomColor: '#ccc',
         fontWeight:2
