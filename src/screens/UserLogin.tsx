@@ -92,7 +92,7 @@ function UserLogin( {navigation} ) {
               <View style={{width: "90%", flex: 1, justifyContent: "center"}}>
 
                   <View style={{alignItems: "center", justifyContent: "center"}}>
-                    <Text style={{color: "rgb(34 197 94)", fontSize: (width < 940) ? 80 : moderateScale(43), fontWeight: "bold"}} adjustsFontSizeToFit={true} numberOfLines={1}>
+                    <Text style={{color: "rgb(34 197 94)", fontSize: (width < 940) ? 79 : moderateScale(43), fontWeight: "bold"}} adjustsFontSizeToFit={true} numberOfLines={1}>
                       UMarket
                     </Text>
                   </View>
