@@ -18,6 +18,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { enableScreens } from 'react-native-screens'
 import { FontAwesome5 } from '@expo/vector-icons';
 
+import { createURL } from 'expo-linking';
+
 enableScreens();
 
 import { NavigationContainer, TabRouter } from "@react-navigation/native"
@@ -30,11 +32,23 @@ const { width, height } = Dimensions.get('window');
 
 const Stack = createStackNavigator();
 
+const prefix = createURL('https://umarket.tech/');
+
 const Navigator: React.FC = () => {
   const { currentUser } = useAuth();
 
   return (
-    <NavigationContainer>
+    <NavigationContainer
+      linking={{
+        prefixes: [prefix],
+        config: {
+          screens: {
+            Home: '',
+            Details: 'details/:id',
+          },
+        },
+      }}
+    >
       <Stack.Navigator>
         {currentUser ? (
             <>
@@ -48,7 +62,7 @@ const Navigator: React.FC = () => {
                     </>
                 ) : (
                     // <Stack.Screen name={'Home'} component={Home} options={{headerShown: false}}/>
-                    <Stack.Screen name={'DrawerHome'} component={DrawerHome} options={{headerShown: false}}/>
+                    <Stack.Screen name={'UMarket'} component={DrawerHome} options={{headerShown: false}}/>
                 )}
                 <Stack.Screen name={'ListingsLoggedOut'} component={ListingsLoggedOut} options={{headerShown: false}}/>
                 <Stack.Screen name={'ListingItem'} component={ListingItem} options={{headerShown: false}}/>
