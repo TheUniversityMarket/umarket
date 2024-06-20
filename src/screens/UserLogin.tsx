@@ -79,7 +79,7 @@ function UserLogin( {navigation} ) {
   };
   
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: "rgb(34 197 94)"}}>
+    <SafeAreaView style={{flex: 1, backgroundColor: (width < 600) ? "white" : "rgb(34 197 94)"}}>
       <StatusBar translucent backgroundColor="transparent" />
       <View style={{flex: 1, backgroundColor: "transparent"}}></View> 
 
@@ -88,7 +88,7 @@ function UserLogin( {navigation} ) {
 
             <View style={{flex: 1, backgroundColor: "transparent"}}></View> 
 
-            <View style={{flex: 7, alignItems: "center", justifyContent: "center", backgroundColor: "white", minWidth: 350, maxWidth: 800, minHeight: 575, borderRadius: 20, borderWidth: 3, borderColor: "rgb(34 197 94)"}}>
+            <View style={{flex: 7, alignItems: "center", justifyContent: "center", backgroundColor: "white", minWidth: 350, maxWidth: 800, minHeight: 575, borderRadius: 20, borderWidth: 3, borderColor: (width < 600) ? "white" : "rgb(34 197 94)"}}>
               <View style={{width: "90%", flex: 1, justifyContent: "center"}}>
 
                   <View style={{alignItems: "center", justifyContent: "center"}}>
