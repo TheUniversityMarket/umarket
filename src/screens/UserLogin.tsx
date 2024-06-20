@@ -79,7 +79,7 @@ function UserLogin( {navigation} ) {
   };
   
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: (width < 600) ? "white" : "rgb(34 197 94)"}}>
+    <SafeAreaView style={{flex: 1, backgroundColor: "rgb(34 197 94)"}}>
       <StatusBar translucent backgroundColor="transparent" />
       <View style={{flex: 1, backgroundColor: "transparent"}}></View> 
 
@@ -92,7 +92,7 @@ function UserLogin( {navigation} ) {
               <View style={{width: "90%", flex: 1, justifyContent: "center"}}>
 
                   <View style={{alignItems: "center", justifyContent: "center"}}>
-                    <Text style={{color: "rgb(34 197 94)", fontSize: (width < 940) ? 80 : moderateScale(43), fontWeight: "bold"}} adjustsFontSizeToFit={true} numberOfLines={1}>
+                    <Text style={{color: "rgb(34 197 94)", fontSize: moderateScale(43), fontWeight: "bold"}} adjustsFontSizeToFit={true} numberOfLines={1}>
                       UMarket
                     </Text>
                   </View>
