@@ -48,6 +48,16 @@ function Chat() {
         setChatRoom(ChatRooms[0]);
       })
 
+      query2SnapShot.forEach((doc) => {
+        // console.log("working?");
+        //console.log(doc);
+        // console.log(doc.data().id);
+        ChatIds.push(doc.data().id);
+        ChatRoomsTemp.push(doc.data());
+        setChatRooms(ChatRoomsTemp);
+        setChatRoom(ChatRooms[0]);
+      })
+
       // console.log("THIS DOWN BELOW");
       // console.log(ChatIds[0]);
       // console.log(ChatRooms);
