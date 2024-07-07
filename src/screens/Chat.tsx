@@ -17,6 +17,8 @@ function Chat() {
 
   const { currentUser } = useAuth();
 
+  const isFirstLoad = useRef(true);
+
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [inputText, setInputText] = useState("");
@@ -33,6 +35,8 @@ function Chat() {
   async function reload() {
 
     ChatIds = [];
+    ChatRoomsTemp = [];
+    setChatRooms([])
 
     async function getChatIds() {
       var query1 = query(collection(db, "chats"), where("user1_id", "==", currentUser?.uid));
@@ -97,7 +101,9 @@ function Chat() {
 
   useFocusEffect(
     useCallback(() => {
-      reload();
+      if (!isFirstLoad.current) {
+        reload();
+      }
     }, [route])
   );
 
@@ -136,6 +142,7 @@ function Chat() {
       setChatRoom(ChatRooms[0]);
     }
 
+    isFirstLoad.current = false;
     getChatIds();
   }, []);
   
