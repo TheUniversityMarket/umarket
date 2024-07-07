@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { StatusBar } from 'expo-status-bar'
 import { StyleSheet, Text, View, SafeAreaView, ScrollView, Image, FlatList, Dimensions, useWindowDimensions, Pressable, TouchableOpacity, ActivityIndicator } from 'react-native'
 import { AntDesign } from '@expo/vector-icons';
@@ -29,6 +29,77 @@ function Chat() {
   var ChatIds = [];
 
   const [chatId, setChatId] = useState(currentUser?.uid + currentUser?.uid);
+
+  async function reload() {
+
+    ChatIds = [];
+
+    async function getChatIds() {
+      var query1 = query(collection(db, "chats"), where("user1_id", "==", currentUser?.uid));
+      var query2 = query(collection(db, "chats"), where("user2_id", "==", currentUser?.uid));
+
+      const query1SnapShot = await getDocs(query1);
+      const query2SnapShot = await getDocs(query2);
+
+      query1SnapShot.forEach((doc) => {
+        // console.log("working?");
+        //console.log(doc);
+        // console.log(doc.data().id);
+        ChatIds.push(doc.data().id);
+        ChatRoomsTemp.push(doc.data());
+        setChatRooms(ChatRoomsTemp);
+        setChatRoom(ChatRooms[0]);
+      })
+
+      query2SnapShot.forEach((doc) => {
+        // console.log("working?");
+        //console.log(doc);
+        // console.log(doc.data().id);
+        ChatIds.push(doc.data().id);
+        ChatRoomsTemp.push(doc.data());
+        setChatRooms(ChatRoomsTemp);
+        setChatRoom(ChatRooms[0]);
+      })
+
+      // console.log("THIS DOWN BELOW");
+      // console.log(ChatIds[0]);
+      // console.log(ChatRooms);
+      setChatId(ChatIds[0]);
+      setChatRoom(ChatRooms[0]);
+    }
+
+    const fetchMessages = async (chatId) => {
+      try {
+        // console.log("NO WAY");
+        // console.log(chatId);
+        const chatDocRef = doc(db, 'chats', chatId);
+        const chatDoc = await getDoc(chatDocRef);
+
+        // console.log("GOOD");
+
+        if (chatDoc.exists()) {
+          const chatData = chatDoc.data();
+          setMessages(chatData.messages || []);
+        } else {
+          console.error('No such document!');
+        }
+      } catch (error) {
+        console.error('Error fetching chat messages: ', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getChatIds();
+    fetchMessages(chatId);
+
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      reload();
+    }, [route])
+  );
 
   useEffect(()=> {
     async function getChatIds() {
