@@ -131,7 +131,7 @@ function ListingItem({ navigation }) {
                                            Price: ${item.price}
                                        </Text>
                                    </View>
-                                   <Pressable onPress={async () => {
+                                   <Pressable onPress={(currentUser?.uid != item.userId) && (async () => {
                                        const currentUserId = currentUser?.uid;
                                        const otherUserId:string = item.userId;
                                        const chatsRef = collection(db,"chats");
@@ -148,7 +148,7 @@ function ListingItem({ navigation }) {
                                            }
                                        }
                                        nav.navigate('Chat', { item });
-                                   }} style={{ marginTop: 7 }}>
+                                   })} style={{ marginTop: 7 }}>
                                        <Text style={{ fontSize: moderateScale(13), color: "#22c55e" }}>Message</Text>
                                    </Pressable>
                                </View>
