@@ -13,6 +13,27 @@ import { db } from '../firebase/firebaseConfig';
 import { Timestamp, collection, doc, getDoc, getDocs, onSnapshot, orderBy, query, setDoc, where, QuerySnapshot, updateDoc, arrayUnion } from 'firebase/firestore';
 
 function Chat() {
+
+  const {height, width, scale, fontScale} = useWindowDimensions();
+  const [shortDimension, longDimension] = width < height ? [width, height] : [height, width];
+
+  //Default guideline sizes are based on standard ~5" screen mobile device
+  const guidelineBaseWidth = 350;
+  const guidelineBaseHeight = 680;
+
+  function scaleIt(size: number) {
+      return shortDimension / guidelineBaseWidth * size;
+  }
+  function verticalScale(size: number) {
+      return longDimension / guidelineBaseHeight * size;
+  }
+  function moderateScale(size: number, factor = 0.5) {
+      return size + (scaleIt(size) - size) * factor;
+  }
+  function moderateVerticalScale(size: number, factor = 0.5) {
+      return size + (verticalScale(size) - size) * factor;
+  }
+
   const route = useRoute();
 
   const { currentUser } = useAuth();
@@ -226,6 +247,17 @@ function Chat() {
     )
   };
 
+  function EmptyChat() {
+    return (
+      <View style={{alignItems: "center", flex: 1, margin: 20, justifyContent: "center"}}>
+        <Entypo name="chat" size={moderateScale(43)} color="#c3c3c3" />
+        <Text style={{color: "#c3c3c3", fontWeight: "bold"}}>
+          No Messages
+        </Text>
+      </View>
+    )
+  }
+
   // console.log(ChatRooms);
   // console.log("^^^^^^^")
 
@@ -242,11 +274,13 @@ function Chat() {
           <View style={{flex: 1, flexDirection: "row"}}>
             <View style={{flex: 3, borderRightWidth: 1, borderRightColor: "#cccccc"}}>
                 <FlatList
+                contentContainerStyle={{flex: 1}}
                   key={ChatRooms}
                   data={ChatRooms}
                   extraData={ChatRooms.length}
                   keyExtractor={(item, index) => index.toString()}
                   renderItem={ChatItem}
+                  ListEmptyComponent={EmptyChat}
                 />
             </View>
             <View style={{flex: 12, backgroundColor: "white"}}>
