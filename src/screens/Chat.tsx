@@ -285,7 +285,7 @@ function Chat() {
             </View>
             <View style={{flex: 12, backgroundColor: "white"}}>
                 <FlatList
-                  contentContainerStyle={{justifyContent: 'flex-end', flex: 1}}
+                  contentContainerStyle={{flex: 1}}
                   key={messages.length}
                   data={messages}
                   renderItem={renderMessage}
