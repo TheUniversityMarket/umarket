@@ -1,6 +1,6 @@
 import { Header } from "@react-navigation/stack";
 import React from 'react'
-import { Text, Button, View, useWindowDimensions, Dimensions, StyleSheet, SafeAreaView, Pressable, Image, Modal, TouchableOpacity, Platform, Animated} from "react-native";
+import { Text, Button, View, useWindowDimensions, Dimensions, StyleSheet, SafeAreaView, Pressable, Image, Modal, TouchableOpacity, Platform, Animated, FlatList} from "react-native";
 import { TextInput } from "react-native";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 import { useState, useEffect, useRef } from "react"
@@ -25,6 +25,7 @@ import { db, storage } from '../firebase/firebaseConfig';
 import { Listing, Item, Service, Clothing, Housing, Tickets } from '../models/listing';
 import { collection, setDoc, doc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { BlurView } from 'expo-blur';
 
 import {useAuth} from "../context/AuthContext"
 
@@ -84,6 +85,7 @@ function Post({ navigation }) {
     const [tags, setTags] = useState('');   
     const [images, setImages] = useState([]);
     const [isMenuVisible, setIsMenuVisible] = useState(false);
+    const [isModalVisible, setModalVisible] = useState(false);
     const options = ['New', 'Used', 'Worn'];
     const options2 = ['Monthly', 'Weekly', 'Daily', 'Biannual', 'Yearly'];
     const options3 = ['Flat', 'Per Minute', 'Hourly', 'Daily'];
@@ -98,6 +100,11 @@ function Post({ navigation }) {
     const [shortDimension, longDimension] = width < height ? [width, height] : [height, width];
     const guidelineBaseWidth = 350;
     const guidelineBaseHeight = 680;
+    const [firstImageOrder, setFirstImageOrder] = useState(0);
+    const [secondImageOrder, setSecondImageOrder] = useState(1);
+    const [thirdImageOrder, setThirdImageOrder] = useState(2);
+    const [fourthImageOrder, setFourthImageOrder] = useState(3);
+    const [fifthmageOrder, setFifthImageOrder] = useState(4);
     function scale(size: number) {
         return shortDimension / guidelineBaseWidth * size;
     }
@@ -115,9 +122,28 @@ function Post({ navigation }) {
         return size/(width/1200)
     }
 
+    const openModal = () => {
+        setModalVisible(true);
+    };
+    
+    const closeModal = () => {
+        setModalVisible(false);
+    };
+
     const {currentUser} = useAuth();
 
     const [userId,setuserId] = useState("");
+
+    const moveImage = (index: number, direction: 'up' | 'down') => {
+        const newImages = [...images];
+        const targetIndex = direction === 'up' ? index - 1 : index + 1;
+    
+        // Swap images if target index is within bounds
+        if (targetIndex >= 0 && targetIndex < newImages.length) {
+          [newImages[index], newImages[targetIndex]] = [newImages[targetIndex], newImages[index]];
+          setImages(newImages);
+        }
+      };
 
     useEffect(()=>{
         if(currentUser){
@@ -549,14 +575,6 @@ function Post({ navigation }) {
                                 value={tags}
                                 onChangeText={setTags}/>
                             </View>
-                            <View style={styles.prodTagsContainer}>
-                                <TextInput style= {styles.prodTagsIn}
-                                placeholder="Eg: Books, Appliances, Fridges..."
-                                placeholderTextColor={"#B3B3B3"}
-                                value={tags}
-                                onChangeText={setTags}>
-                                </TextInput>
-                            </View>
                         </Text> 
                     </View>
                     <View style={[styles.prodDesSuperContainer, {
@@ -728,40 +746,105 @@ function Post({ navigation }) {
                         </View>}
                     </View>
                     {sellType=="Ticket" && <View style={{marginTop: shortDimension/(600/30),
-                        width:  width/(1200/200),
+                        width: width < 600 ? width/2 : width/(1200/200),
+                        justifyContent: "center",
                         borderWidth:1,
                         borderColor: "green",
                         alignItems: "flex-start",
                         flexDirection:"row",
                         zIndex:1, alignSelf: "flex-start"}}>
-                        <Text style={styles.prodImgTxt}>
+                        <Text style={[styles.prodImgTxt, {fontSize: width/(1200/20),
+                            color: "rgb(34 197 94)",
+                            marginLeft:10,}]}>
                             Add Picture:
+                            <Pressable onPress={openModal} style={[styles.dropdownButton, {paddingVertical: 8,
+                                paddingHorizontal: width/(1200/30),
+                                borderRadius: width < 600 ? width/(800/30) : width/(1200/20),
+                                borderWidth:2,
+                                borderColor:"purple",
+                            }]}>
+                                <Text style={{color:"white", fontSize: width/(1200/20)}}>
+                                    Add Images:
+                                </Text>
+                            </Pressable>
+                            <Modal
+                            transparent={true}
+                            visible={isModalVisible}
+                            onRequestClose={closeModal}
+                            animationType="slide"
+                            >
+                                <BlurView style={{flex:1, alignItems: "center", justifyContent: "space-evenly"}} intensity={50} tint="dark">
                             <Pressable onPress={() => {ImagePicker}}>
                                 {/* <View style={styles.prodImgContainer}>
                                     <Text style= {{color: "white"}}>
                                         Img
                                     </Text>
                                 </View> */}
-                                <ImagePicker onImageSelected={handleImageUpload}/>
+                                
+                                <ImagePicker width={width} height={height} onImageSelected={handleImageUpload}/>
                             </Pressable>
+                            <FlatList
+                                data={images}
+                                inverted={width < height ? false : true}
+                                keyExtractor={(item, index) => index.toString()}
+                                renderItem={({ item, index }) => (
+                                <View style={{alignItems: 'center',
+                                    marginBottom: 20,}}>
+                                        <Image source={{ uri: item }} style={{width: 200,
+                                            height: 200,
+                                            borderRadius: 10,}} />
+                                        <Pressable onPress={() => moveImage(index, 'up')} style={{width:200, borderColor:"green", borderWidth:2, height:100}}>
+                                            <Text style={{fontSize:23}}>Move Higher</Text>
+                                        </Pressable>
+                                        <Pressable onPress={() => moveImage(index, 'down')} style={{width:200, borderColor:"green", borderWidth:2, height:100}}>
+                                            <Text style={{fontSize:23}}>Move Lower</Text>
+                                        </Pressable>
+                                </View>
+                                )}
+                                    style={{width:"100%", marginTop: 20}}
+                                />
+                            <Pressable onPress={closeModal} style={[styles.dropdownButton, {paddingVertical: 8,
+                                paddingHorizontal: width/(1200/30),
+                                borderRadius: width < 600 ? width/(800/30) : width/(1200/20),
+                                borderWidth:2,
+                                borderColor:"purple",
+                                width: width/(1200/150),
+                                height: width < height ? width/(600/40) : height/(600/40),
+                                justifyContent: "center",
+                                alignItems: "center"
+                            }]}>
+                                <Text style={{color:"white", fontSize: width/(1200/17)}}>
+                                    Submit Images
+                                </Text>
+                            </Pressable>
+                            </BlurView>
+                            </Modal>
                         </Text> 
                     </View>}
-                    {sellType!="Ticket" && <View style={styles.prodImgSuperContainer}>
-                        <View style={{alignContent:"center", flexDirection:"row", alignItems: "center", borderWidth:1, borderColor:'red'}}>  
-                        <Text style={{fontSize: 20,
+                    {sellType!="Ticket" && <View style={[styles.prodImgSuperContainer, { marginTop: height/20,
+                        width: width/2,
+                        borderWidth:1,
+                        borderColor: "green",
+                        alignItems: "center",
+                        flexDirection: width < 600 ? "column" : "row",
+                        justifyContent: width < 600 ? "center" : "space-evenly",
+                        zIndex:1,
+                        alignContent:"center",}]}>
+                        <View style={{alignContent:"center", flexDirection:"row", alignItems: "center", borderWidth:1, borderColor:'red', justifyContent: "center"}}>  
+                        <Text style={{fontSize: width/(1200/20),
                             color: "rgb(34 197 94)",
                             textAlign: "auto",
                             marginLeft:10,
                             fontWeight:2}}>
                             Add Picture:
                             <Pressable onPress={() => {ImagePicker}}>
-                                <View>
+                                <View style={{marginLeft: shortDimension/(600/10)}}>
                                 {/* <View style={styles.prodImgContainer}>
                                     <Text style= {{color: "white"}}>
                                         Img
                                     </Text>
                                 </View> */}
-                                <ImagePicker onImageSelected={handleImageUpload}/>
+                                <ImagePicker width={width} height={height} onImageSelected={handleImageUpload}/>
                                 </View>
                             </Pressable>
                         </Text> 
@@ -771,16 +854,15 @@ function Post({ navigation }) {
                             <Image key={index} source={{ uri: imageUrl }} style={{ width: 100, height: 100, marginRight: 10 }} />
                         ))}
                         </View>
-                        {sellType=="Clothing" && <View style={{marginLeft:150, borderColor:"red", borderWidth:1, width:250, height:40, flexDirection:"row", alignItems:"center"}}>
-                            <Text style={{fontSize: 20,
+                        {sellType=="Clothing" && <View style={{borderColor:"red", borderWidth:1, width: width < 600 ? width/(600/250) : width/(1200/250),flexDirection:"row", alignItems:"center", justifyContent: "center", marginTop: width < 600 ? height / (600/20) : 0,}}>
+                            <Text style={{fontSize: width < 600 ? width/(700/20): width/(1200/20),
                             color: "rgb(34 197 94)",
                             textAlign: "auto",
-                            marginLeft:70,
                             fontWeight:2}}>Size:</Text>
                             <View style={[styles.prodPriceContainer, {
                                     marginLeft: width/(1200/10),
                                     borderRadius: width/(1200/5),
-                                    width: width/(1200/50),
+                                    width: width/(1200/100),
                                     height: shortDimension/(600/40),}]}>
                                 <TextInput style={[styles.prodPriceIn, {fontSize: width/(1200/17),
                                     padding: 10}]}

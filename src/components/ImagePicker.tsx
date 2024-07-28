@@ -3,7 +3,27 @@ import { View, Pressable, StyleSheet, Text, Alert } from 'react-native';
 import { launchImageLibraryAsync, ImagePickerSuccessResult } from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
 
-export default function ImagePicker({ onImageSelected }) {
+interface CustomInputProps {
+  value: string;
+  onClick: () => void;
+  fontSize: number;
+}
+
+interface ImagePickerProps {
+  width: number;
+  height: number;
+  onImageSelected: (uri: string) => void;
+}
+const CustomInput: React.FC<CustomInputProps> = ({ value, onClick, fontSize }) => (
+  <input
+    style={{ fontSize: `${fontSize}px`, padding: '10px', border: '1px solid #ccc', borderRadius: '4px', fontWeight: 2}}
+    onClick={onClick}
+    value={value}
+    readOnly
+  />
+);
+
+const ImagePicker: React.FC<ImagePickerProps> = ({ width, height, onImageSelected }) => {
   const pickImageAsync = async () => {
     let result: ImagePickerSuccessResult = await launchImageLibraryAsync({
       allowsEditing: true,
@@ -39,8 +59,14 @@ export default function ImagePicker({ onImageSelected }) {
 
   return (
     <View>
-      <Pressable style={[styles.button, { backgroundColor: 'green' }]} onPress={pickImageAsync}>
-        <Text style={{ color: 'white' }}>Select Image</Text>
+      <Pressable style={[styles.button, { backgroundColor: 'green', marginTop: 10,
+        padding: (Math.sqrt(3*width/(1200/10))),
+        borderRadius: 20,
+        borderWidth: 1,
+        borderColor: 'grey',
+        width: width/(1200/150),
+        height: width < height ? width/(600/40) : height/(600/40), }]} onPress={pickImageAsync}>
+        <Text style={{ color: 'white', fontSize: width/(1200/17) }}>Add Image:</Text>
       </Pressable>
     </View>
   );
@@ -48,7 +74,6 @@ export default function ImagePicker({ onImageSelected }) {
 
 const styles = StyleSheet.create({
   button: {
-    marginTop: 10,
     padding: 10,
     borderRadius: 10,
     borderWidth: 1,
@@ -59,3 +84,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+export default ImagePicker;
